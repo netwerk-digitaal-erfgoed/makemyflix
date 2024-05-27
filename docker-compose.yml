@@ -1,0 +1,30 @@
+services:
+  nuxt:
+    build:
+      context: ./nuxt
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    volumes:
+      - ./nuxt:/app
+      - /app/node_modules
+    env_file:
+      - ./nuxt/.env
+    environment:
+      - PORT=${FRONTEND_PORT}
+      - NODE_ENV=development
+
+  strapi:
+    build:
+      context: ./strapi
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    volumes:
+      - ./strapi:/app
+      - /app/node_modules
+    env_file:
+      - ./strapi/.env
+    environment:
+      - PORT=${BACKEND_PORT}
+      - NODE_ENV=development
+    depends_on:
+      - nuxt

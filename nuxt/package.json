@@ -1,0 +1,45 @@
+{
+  "name": "heritageflix",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "format": "git diff --name-only --diff-filter=MA main | grep -E '\\.ts$|\\.vue$' | xargs npx prettier --write",
+    "format:all": "prettier './**/*.{vue,ts}' --write",
+    "generate": "nuxt generate",
+    "lint": "git diff --name-only --diff-filter=MA main | grep -E '\\.ts$|\\.vue$' | xargs eslint",
+    "lint:all": "eslint './**/*.{vue,ts}'",
+    "lint:fix": "git diff --name-only --diff-filter=MA main | grep -E '\\.ts$|\\.vue$' | xargs eslint --fix",
+    "lint:fix:all": "eslint --fix './**/*.{vue,ts}",
+    "preview": "nuxt preview",
+    "ts:check": "vue-tsc --noEmit -p ./tsconfig.check.json"
+  },
+  "overrides": {
+    "vue": "latest"
+  },
+  "dependencies": {
+    "@heroicons/vue": "~2.1.3",
+    "@nuxt/content": "^2.12.1",
+    "@nuxtjs/tailwindcss": "~6.12.0",
+    "@pinia/nuxt": "~0.5.1",
+    "@splidejs/vue-splide": "0.6.12",
+    "pinia": "^2.1.7"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config-typescript": "^12.1.0",
+    "@nuxtjs/google-fonts": "~3.2.0",
+    "@nuxtjs/i18n": "~8.3.1",
+    "@types/node": "^20.12.12",
+    "@typescript-eslint/eslint-plugin": "^7.10.0",
+    "@typescript-eslint/parser": "^7.10.0",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vue": "^9.26.0",
+    "nuxt": "^3.11.0",
+    "prettier": "^3.2.5",
+    "sass": "^1.77.2",
+    "vite-svg-loader": "3.6.0",
+    "vue-tsc": "^2.0.19"
+  }
+}

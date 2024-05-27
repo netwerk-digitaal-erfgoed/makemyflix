@@ -1,0 +1,10 @@
+{
+  "name": "Rijksmuseum",
+  "logo": "/config/logo-rijksmuseum.svg",
+  "banner": "/config/banner-rijksmuseum.svg",
+  "intro": {
+    "title": "RijksFlix, aan de slag met de meesterwerken",
+    "description": "Het Rijksmuseum is het museum van Nederland. We vertellen het verhaal van 800 jaar Nederlandse geschiedenis vanaf 1200 tot nu. Daarnaast organiseren we meerdere tentoonstellingen per jaar uit eigen collectie en met (inter)nationale bruiklenen.",
+    "footer": "BEZOEKERSINFORMATIE Elke dag van 9-17 uur Museumstraat 1, Amsterdam"
+  }
+}

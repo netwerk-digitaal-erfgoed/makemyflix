@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "flixes",
+  "info": {
+    "singularName": "flix",
+    "pluralName": "flixes",
+    "displayName": "Flix"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "required": true,
+      "unique": false
+    },
+    "backgroundcolor": {
+      "type": "string"
+    }
+  }
+}

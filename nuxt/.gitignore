@@ -1,0 +1,14 @@
+# Nuxt build output
+.nuxt
+dist
+
+# Logs
+logs
+*.log
+
+# Dependency directories
+node_modules/
+
+# IDEs
+.idea
+.vscode

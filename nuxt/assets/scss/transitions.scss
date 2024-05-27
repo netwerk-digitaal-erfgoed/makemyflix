@@ -1,0 +1,73 @@
+/**
+ * Transition to and from the art pages
+ */
+ .up {
+  &.slide-leave-active,
+  &.slide-enter-active {
+    transition: top 1s;
+  }
+
+  &.slide-enter-from {
+    top: calc(100vh + var(--scroll-offset));
+  }
+  &.slide-enter-to {
+    top: var(--scroll-offset);
+  }
+}
+
+.down {
+  &.slide-leave-active {
+    transition: top 1s;
+  }
+
+  &.slide-leave-from {
+    top: 0;
+  }
+  &.slide-leave-to {
+    top: 100%
+  }
+}
+
+/**
+ * Transition between the art pages
+ */
+.left {
+  &.slide-leave-active,
+  &.slide-enter-active {
+    transition: left 1s;
+  }
+
+  &.slide-enter-from {
+    left: 100%;
+  }
+  &.slide-enter-to {
+    left: 0
+  }
+  &.slide-leave-to {
+    left: -100%;
+  }
+  &.slide-leave-from {
+    left: 0;
+  }
+}
+
+.right {
+  &.slide-leave-active,
+  &.slide-enter-active {
+    transition: left 1s;
+  }
+
+  &.slide-enter-from {
+    left: -100%;
+  }
+
+  &.slide-enter-to {
+    left: 0%
+  }
+  &.slide-leave-to {
+    left: 100%;
+  }
+  &.slide-leave-from {
+    left: 0;
+  }
+}

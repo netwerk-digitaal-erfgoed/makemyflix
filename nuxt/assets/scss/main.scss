@@ -1,0 +1,51 @@
+// Default vue-splide theme
+@import '@splidejs/vue-splide/css';
+
+.no-scroll {
+  height: 100vh;
+  overflow:hidden;
+}
+
+.glass {
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0.25rem 1.875rem 0 rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.glass-noblur {
+  @extend .glass;
+  backdrop-filter: blur(0);
+}
+
+// Support multiple truncate lengths
+@for $j from 1 through 10 {
+  .truncate-lines-#{$j} {
+    display: -webkit-box;
+    -webkit-line-clamp: #{$j};
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: normal;
+  }
+}
+
+.hide-element {
+  display: none;
+}
+
+.custom-scroll {
+  scrollbar-color: white transparent;
+  scrollbar-width: thin;
+}
+.custom-scroll::-webkit-scrollbar {
+  width: .5rem;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: .25rem;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
