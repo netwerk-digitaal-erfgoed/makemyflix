@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col min-h-screen">
     <MoleculesHeader :title="title" dark-mode class="fixed top-0" />
-    <img v-if="categoryImage" :src="categoryImage" class="cover-image" />
+    <AtomsImage v-if="categoryImage" :identifier="categoryImage" class="cover-image" size="1000,256" format="webp"/>
 
     <section class="py-24 flex-auto">
       <div class="px-3">

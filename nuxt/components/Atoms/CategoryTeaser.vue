@@ -2,7 +2,7 @@
   <AtomsNavigation :to="path">
     <div class="teaser">
       <div v-if="category.image" class="teaser-img-wrapper">
-        <img class="teaser-img" :src="category.image" />
+        <AtomsImage class="teaser-img" :identifier="category.image" format="webp" size="400,1000"/>
       </div>
 
       <div class="teaser-body">
