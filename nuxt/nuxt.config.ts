@@ -7,12 +7,14 @@ export default defineNuxtConfig({
     layoutTransition: { name: 'layout', mode: 'out-in' }
   },
   ssr: false,
+  devtools: {
+    enabled: false
+  },
   css: [
     '@/assets/scss/main.scss',
     '@/assets/scss/transitions.scss'
   ],
   modules: [
-    '@nuxt/content',
     '@nuxtjs/google-fonts',
     '@nuxtjs/i18n',
     '@nuxtjs/tailwindcss',
@@ -45,9 +47,9 @@ export default defineNuxtConfig({
     defaultLocale: 'nl',
     strategy: 'no_prefix'
   },
-  content: {
-    experimental: {
-       clientDB: true
+  runtimeConfig: {
+    app: {
+      backendUrl: ''
     }
   }
 });

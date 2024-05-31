@@ -1,8 +1,8 @@
 <template>
   <AtomsNavigation :to="to" direction="up">
     <div class="teaser">
-      <div v-if="artworkImage" class="teaser-img-wrapper">
-        <img class="teaser-img" :src="artworkImage" />
+      <div v-if="artwork.image" class="teaser-img-wrapper">
+        <AtomsImage class="teaser-img" :identifier="artwork.image" region="square" size="400,400" format="webp" />
       </div>
 
       <div class="teaser-body">
@@ -19,26 +19,10 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   artwork: Artwork,
-  to: Object
+  to: object
 }>();
-
-/**
- * Image processing
- */
- const artworkImage = computed(() => {
-  if (!props.artwork?.image) {
-    return '';
-  }
-
-  const identifier = process.server ? Buffer.from(props.artwork.image, 'base64') : btoa(props.artwork.image);
-  // https://images.diaries.amsterdamtimemachine.nl/iiif/urn-gvn-EVDO01-IIAV002_IAV001000030-large_03.jpg/749,12,729,618/max/0/default.jpg
-  return `http://localhost:3000/images/${identifier}/square/400,400/0/default.webp`;
-
-});
-
-
 </script>
 
 <style lang="scss" scoped>

@@ -4,8 +4,8 @@
     <div class="row-start-2 h-full w-full overflow-hidden grid grid-cols-12 grid-rows-12">
       <MoleculesIconNavigation name="arrowLeft" :to="navPath(true)" v-if="state.prev" class="col-span-1 flex justify-center items-center row-start-1 row-span-8 col-start-1" />
       <div class="image-container col-start-2 col-span-10 row-start-1 row-span-8 flex justify-center items-center">
-        <img :src="artworkImage" v-if="artworkImage" class="w-auto max-h-full max-w-full" />
-        </div>
+        <AtomsImage v-if="currentArtwork?.image" :identifier="currentArtwork.image" class="w-auto max-h-full max-w-full" />
+      </div>
       <div class="col-start-2 col-span-6 row-start-9 row-span-4 flex flex-col m-4 mr-0" ref="descriptionContainer">
         <h2 class="text-2xl" ref="titleElement">{{ currentArtwork?.title }}</h2>
         <div :class="visualizeDescription">{{ currentArtwork?.description }}</div>
@@ -64,20 +64,6 @@ const title = computed(() => {
 });
 
 /**
- * Image processing
- */
-const artworkImage = computed(() => {
-  if (!currentArtwork?.image) {
-    return '';
-  }
-
-  const identifier = process.server ? Buffer.from(currentArtwork.image, 'base64') : btoa(currentArtwork.image);
-  // https://images.diaries.amsterdamtimemachine.nl/iiif/urn-gvn-EVDO01-IIAV002_IAV001000030-large_03.jpg/749,12,729,618/max/0/default.jpg
-  return `http://localhost:3000/images/${identifier}/full/max/0/default.jpg`;
-
-});
-
-/**
  * Description handlers
  */
 const descriptionContainer = ref();
@@ -101,7 +87,7 @@ const visualizeDescription = computed(() => {
 const currentArtwork = findById(artwork, category);
 
 // Nav paths for the navigation buttons
-const navPath = (prev: Boolean = false) => {
+const navPath = (prev: boolean = false) => {
   const propName = prev ? 'prev' : 'next'
   return { name: route.name, params: { category: category, artwork: state[propName]?.id } };
 };

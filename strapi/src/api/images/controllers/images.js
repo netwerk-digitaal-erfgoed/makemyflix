@@ -14,30 +14,27 @@ module.exports = {
       const id = `${identifier}-${region}-${size}-${rotation}-${quality}.${format}`;
       const url = atob(identifier);
 
-      // If the region is full, size is max, rotation is 0 and quality is default, just return it.
+      // Check if this image should be returned raw (full region, max size, no rotation, default quality)
       if (region === 'full' && size === 'max' && rotation === '0' && quality === 'default' && url.startsWith('http')) {
-        const response = await axios.get(url, { responseType: 'stream' });
-
-        for (const header in response.headers) {
-          ctx.set(header, response.headers[header]);
-        }
-
-        ctx.body = response.data;
-        return ctx;
+        console.warn(`[Images] - Redirect to raw image: ${url}`);
+        ctx.redirect(url);
+        return
       }
 
-      // Check if we have a cached version of this image
-      const cachedFile = await imageService.fetchMediaLibrary(id);
-      if (cachedFile) {
-        console.warn('[Cache Hit] - Return cached file');
-        ctx.type = `image/${format}`;
-        ctx.body = cachedFile;
-        return ctx;
+      // Check if we have an entry to redirect too
+      const images = await strapi.entityService.findMany('plugin::upload.file', {
+        filters: { alternativeText: id },
+        populate: '*',
+        limit: 1
+      });
+      if (images.length) {
+        console.warn(`[images] - Redirect to: ${images[0].url}`);
+        ctx.redirect(images[0].url);
+        return;
       }
-
-      console.warn('[Cache Miss] - Create new file and cache');
 
       // Fetch the external url as array buffer
+      console.warn('[images] - Create new file and cache');
       const response = await axios.get(url, { responseType: 'arraybuffer' });
       const buffer = Buffer.from(response.data);
 

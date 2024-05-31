@@ -7,8 +7,6 @@ services:
       - ./nuxt/.env
     environment:
       - PORT=${NUXT_PORT}
-    volumes:
-      - ./nuxt:/app
     ports:
       - "${NUXT_PORT}:${NUXT_PORT}"
 
@@ -26,9 +24,12 @@ services:
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_PORT=${DATABASE_PORT}
       - DATABASE_USERNAME=${DATABASE_USERNAME}
-    volumes:
-      - ./strapi:/app
-      - /app/node_modules
+      - S3_BUCKET=${S3_BUCKET}
+      - S3_ENDPOINT=${S3_ENDPOINT}
+      - S3_FORCE_PATH=${S3_FORCE_PATH}
+      - S3_KEY=${S3_KEY}
+      - S3_REGION=${S3_REGION}
+      - S3_SECRET=${S3_SECRET}
     ports:
       - "${STRAPI_PORT}:${STRAPI_PORT}"
     depends_on:

@@ -16,3 +16,4 @@ Thumbs.db
 
 # Docker
 **/node_modules
+minio-data

@@ -115,30 +115,6 @@ module.exports = {
   },
 
   /**
-   * Helper methods to read a file from the media library based on the alternativeText
-   *
-   * @param {string} id Unique identifier
-   * @returns {Promise<fs.ReadStream>}
-   */
-  fetchMediaLibrary: async (id) => {
-    try {
-      const images = await strapi.entityService.findMany('plugin::upload.file', {
-        filters: { alternativeText: id },
-        populate: '*',
-        limit: 1
-      });
-
-      if (images.length) {
-        const filePath = path.join(strapi.dirs.static.public, images[0].url);
-        return fs.createReadStream(filePath);
-      }
-    } catch (error) {
-      console.warn(error);
-      throw new Error(`Error fetching image: ${id}`);
-    }
-  },
-
-  /**
    * Helper function to upload a buffer into the cache folder
    *
    * @param {Buffer} buffer

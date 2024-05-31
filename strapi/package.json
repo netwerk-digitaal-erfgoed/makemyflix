@@ -13,6 +13,7 @@
     "@strapi/plugin-cloud": "4.24.3",
     "@strapi/plugin-i18n": "4.24.3",
     "@strapi/plugin-users-permissions": "4.24.3",
+    "@strapi/provider-upload-aws-s3": "^4.24.4",
     "@strapi/strapi": "4.24.3",
     "axios": "^1.7.2",
     "better-sqlite3": "8.6.0",
