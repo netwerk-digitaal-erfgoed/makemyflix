@@ -25,6 +25,7 @@ services:
 
   createbucket:
     image: minio/mc
+    container_name: oneoffminio
     depends_on:
       - mmfs3
     entrypoint: >

@@ -33,6 +33,7 @@ services:
       - S3_SECRET=${S3_SECRET}
     ports:
       - "${STRAPI_PORT}:${STRAPI_PORT}"
+    restart: unless-stopped
     depends_on:
       - postgres
 

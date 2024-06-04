@@ -10,7 +10,6 @@ module.exports = {
     try {
       const imageService = strapi.service('api::images.images');
       const { identifier, region, size, rotation, quality, format } = ctx.params;
-
       const id = `${identifier}-${region}-${size}-${rotation}-${quality}.${format}`;
       const url = atob(identifier);
 
@@ -27,6 +26,7 @@ module.exports = {
         populate: '*',
         limit: 1
       });
+      // @ts-ignore
       if (images.length) {
         console.warn(`[images] - Redirect to: ${images[0].url}`);
         ctx.redirect(images[0].url);
