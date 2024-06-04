@@ -124,19 +124,18 @@ module.exports = {
    */
   storeInMediaLibrary: async (buffer, extension, alternativeText) => {
     try {
-      const folderName = 'cache'
-      const name = uuidv4();
+      // Ensure the cache folder exists before we try to upload to the media library
       const folderService = strapi.plugins['upload'].services.folder;
-      const uploadService = strapi.plugins['upload'].services.upload;
       const folders = await folderService.getStructure();
+      let folder = (folders || []).find(folder => folder.name === 'cache');
 
-      // Create the folder if it doesn't exist
-      let folder = (folders || []).find(folder => folder.name === folderName);
+      // If we can't find the folder, just exit and don't store it
       if (!folder) {
-        folder = await folderService.create({ name: folderName });
+        return;
       }
 
       // Upload the file
+      const uploadService = strapi.plugins['upload'].services.upload;
       return await uploadService.upload({
         data: {
           fileInfo: {
@@ -146,7 +145,7 @@ module.exports = {
         },
         files: {
           path: buffer,
-          name: `${name}.${extension}`,
+          name: `${uuidv4()}.${extension}`,
           type: `image/${extension}`,
           size: buffer.length
         },
