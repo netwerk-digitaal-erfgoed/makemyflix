@@ -1,5 +1,6 @@
 services:
   nuxt:
+    image: make-my-flix-nuxt:latest
     build:
       context: ./nuxt
       dockerfile: Dockerfile
@@ -11,6 +12,7 @@ services:
       - "${NUXT_PORT}:${NUXT_PORT}"
 
   strapi:
+    image: make-my-flix-strapi:latest
     build:
       context: ./strapi
       dockerfile: Dockerfile

@@ -15,7 +15,12 @@ module.exports = [
       },
     },
   },
-  'strapi::cors',
+  {
+    name: 'strapi::cors',
+    config: {
+      headers: ['Content-Type', 'Authorization', 'X-Flix'],
+    }
+  },
   'strapi::poweredBy',
   'strapi::query',
   'strapi::body',

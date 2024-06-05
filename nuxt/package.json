@@ -22,6 +22,7 @@
     "@nuxtjs/tailwindcss": "~6.12.0",
     "@pinia/nuxt": "~0.5.1",
     "@splidejs/vue-splide": "0.6.12",
+    "marked": "^12.0.2",
     "pinia": "^2.1.7"
   },
   "devDependencies": {

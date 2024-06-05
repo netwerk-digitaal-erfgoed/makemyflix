@@ -1,13 +1,12 @@
 <template>
   <div class="header">
-    <img v-if="logo" :src="logo" class="header-image flex"/>
-    <span v-else-if="name" class="text-3xl text-white uppercase">{{ name }}</span>
+    <img v-if="branding?.logo" :src="branding.logo" class="header-image flex"/>
+    <span v-else-if="branding?.name" class="text-3xl text-white uppercase">{{ branding.name }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useBrandingStore } from "@/stores/branding";
-const { logo, name } = useBrandingStore();
+const { branding } = storeToRefs(useFlixStore());
 </script>
 
 <style lang="scss" scoped>

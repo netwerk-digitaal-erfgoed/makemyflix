@@ -2,9 +2,6 @@
 const axios = require('axios');
 const sharp = require('sharp');
 
-/**
- * A set of functions called "actions" for `images`
- */
 module.exports = {
   loadImage: async (ctx, next) => {
     try {

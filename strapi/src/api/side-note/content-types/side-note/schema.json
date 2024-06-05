@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "side_notes",
+  "info": {
+    "singularName": "side-note",
+    "pluralName": "side-notes",
+    "displayName": "Side note",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "body": {
+      "type": "richtext",
+      "required": false
+    },
+    "flix": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::flix.flix",
+      "private": true
+    }
+  }
+}
