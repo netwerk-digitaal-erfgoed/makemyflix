@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_branding_intros",
+  "info": {
+    "displayName": "intro",
+    "icon": "information"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "footer": {
+      "type": "text"
+    }
+  }
+}

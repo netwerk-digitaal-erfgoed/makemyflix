@@ -368,13 +368,46 @@ export interface ApiFlixFlix extends Schema.CollectionType {
     singularName: 'flix';
     pluralName: 'flixes';
     displayName: 'Flix';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    Title: Attribute.String & Attribute.Required;
-    backgroundcolor: Attribute.String;
+    title: Attribute.String & Attribute.Required;
+    backgroundColor: Attribute.String &
+      Attribute.CustomField<'plugin::color-picker.color'>;
+    branding: Attribute.Component<'branding.branding'>;
+    categoryQuery: Attribute.String;
+    itemsQuery: Attribute.String;
+    queryUrl: Attribute.String;
+    fonts: Attribute.JSON &
+      Attribute.CustomField<
+        'plugin::multi-select.multi-select',
+        [
+          'Roboto',
+          'Open Sans',
+          'Lato',
+          'Montserrat',
+          'Roboto Condensed',
+          'Oswald',
+          'Poppins',
+          'Raleway',
+          'Slabo 27px',
+          'PT Sans',
+          'Noto Sans',
+          'Roboto Mono',
+          'Roboto Slab',
+          'Ubuntu',
+          'Merriweather',
+          'Lora',
+          'Playfair Display',
+          'Inter',
+          'Nunito',
+          'PT Serif'
+        ]
+      >;
+    path: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@strapi/plugin-cloud": "4.24.3",
+    "@strapi/plugin-color-picker": "^4.24.4",
     "@strapi/plugin-i18n": "4.24.3",
     "@strapi/plugin-users-permissions": "4.24.3",
     "@strapi/provider-upload-aws-s3": "^4.24.4",
@@ -25,6 +26,7 @@
     "react-router-dom": "5.3.4",
     "sharp": "^0.33.4",
     "sqlite3": "^5.1.7",
+    "strapi-plugin-multi-select": "^1.2.3",
     "styled-components": "5.3.3",
     "uuid": "^9.0.1"
   },
