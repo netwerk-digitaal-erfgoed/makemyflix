@@ -1,4 +1,4 @@
-import { useArtworkStore } from "@/stores/artworks";
+import { useArtworkStore } from '@/stores/artworks';
 
 /**
  * Middleware which will redirect a user to the category page
@@ -6,11 +6,15 @@ import { useArtworkStore } from "@/stores/artworks";
  */
 export default defineNuxtRouteMiddleware((to, from) => {
   const { category, artwork } = to.params as unknown as Params;
+  const { path } = useFlixStore();
   const artworkStore = useArtworkStore();
   const currentArtwork = artworkStore.findById(artwork, category);
 
   if (currentArtwork) {
     return;
   }
-  return navigateTo({ name: 'category', params: { category: category } });
+  return navigateTo({
+    name: 'flix-category',
+    params: { flix: path, category: category },
+  });
 });

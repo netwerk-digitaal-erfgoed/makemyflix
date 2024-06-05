@@ -2,7 +2,12 @@
   <AtomsNavigation :to="path">
     <div class="teaser">
       <div v-if="category.image" class="teaser-img-wrapper">
-        <AtomsImage class="teaser-img" :identifier="category.image" format="webp" size="400,1000"/>
+        <AtomsImage
+          class="teaser-img"
+          :identifier="category.image"
+          format="webp"
+          size="400,1000"
+        />
       </div>
 
       <div class="teaser-body">
@@ -20,12 +25,15 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  category: Category
+  category: Category;
 }>();
 
+const { path: flixPath } = useFlixStore();
+
 const path = {
-  name: "category",
+  name: 'flix-category',
   params: {
+    flix: flixPath,
     category: props.category.id,
   },
 };
@@ -35,7 +43,7 @@ const path = {
 .teaser {
   position: relative;
   width: 100%;
-  height: calc(100vh - ($header-height + 1.5rem ));
+  height: calc(100vh - ($header-height + 1.5rem));
   word-wrap: break-word;
   overflow: hidden;
 
@@ -55,7 +63,7 @@ const path = {
   overflow: hidden;
 
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;

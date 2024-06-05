@@ -9,6 +9,11 @@
 </template>
 
 <script setup lang="ts">
-  const route = useRoute();
-  const categoryPath = { name: 'category', params: { category: route.params.category } };
+const route = useRoute();
+const { path } = useFlixStore();
+
+const categoryPath = {
+  name: 'flix-category',
+  params: { flix: path, category: route.params.category },
+};
 </script>

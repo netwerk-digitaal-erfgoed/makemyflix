@@ -4,19 +4,66 @@
   "info": {
     "singularName": "flix",
     "pluralName": "flixes",
-    "displayName": "Flix"
+    "displayName": "Flix",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "Title": {
+    "title": {
       "type": "string",
       "required": true,
       "unique": false
     },
-    "backgroundcolor": {
+    "backgroundColor": {
+      "type": "customField",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+      "customField": "plugin::color-picker.color"
+    },
+    "branding": {
+      "displayName": "branding",
+      "type": "component",
+      "repeatable": false,
+      "component": "branding.branding"
+    },
+    "categoryQuery": {
+      "type": "string"
+    },
+    "itemsQuery": {
+      "type": "string"
+    },
+    "queryUrl": {
+      "type": "string"
+    },
+    "fonts": {
+      "type": "customField",
+      "options": [
+        "Roboto",
+        "Open Sans",
+        "Lato",
+        "Montserrat",
+        "Roboto Condensed",
+        "Oswald",
+        "Poppins",
+        "Raleway",
+        "Slabo 27px",
+        "PT Sans",
+        "Noto Sans",
+        "Roboto Mono",
+        "Roboto Slab",
+        "Ubuntu",
+        "Merriweather",
+        "Lora",
+        "Playfair Display",
+        "Inter",
+        "Nunito",
+        "PT Serif"
+      ],
+      "customField": "plugin::multi-select.multi-select"
+    },
+    "path": {
       "type": "string"
     }
   }

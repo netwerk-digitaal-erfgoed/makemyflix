@@ -9,5 +9,6 @@
 </template>
 
 <script setup lang="ts">
-  const homePath = { name: 'index' };
+const { path } = useFlixStore();
+const homePath = { name: 'flix', params: { flix: path } };
 </script>

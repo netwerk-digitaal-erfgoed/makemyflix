@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_branding_brandings",
+  "info": {
+    "displayName": "branding",
+    "icon": "feather",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "banner": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "intro": {
+      "displayName": "intro",
+      "type": "component",
+      "repeatable": false,
+      "component": "branding.intro"
+    }
+  }
+}

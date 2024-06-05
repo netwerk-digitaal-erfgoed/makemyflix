@@ -6,24 +6,31 @@
       </div>
       <AtomsNavigation
         class="text-base font-medium uppercase"
-        :to="{ name: 'category', params: { category: category.id } }"
+        :to="{
+          name: 'flix-category',
+          params: { flix: path, category: category.id },
+        }"
       >
         Toon alles
       </AtomsNavigation>
     </div>
-    <div v-if="category.description" class="text-base tracking-wide uppercase font-light mb-7">
+    <div
+      v-if="category.description"
+      class="text-base tracking-wide uppercase font-light mb-7"
+    >
       {{ category.description }}
     </div>
-    <MoleculesSlider
-      class="artworks"
-      :slider-props="artworksSliderProps"
-    >
+    <MoleculesSlider class="artworks" :slider-props="artworksSliderProps">
       <SplideSlide v-for="artwork in artworks" :key="artwork.id">
         <AtomsArtworkTeaser
           :artwork="artwork"
           :to="{
-            name: 'category-artwork',
-            params: { category: category.id, artwork: artwork.id },
+            name: 'flix-category-artwork',
+            params: {
+              flix: path,
+              category: category.id,
+              artwork: artwork.id,
+            },
           }"
         />
       </SplideSlide>
@@ -32,23 +39,24 @@
 </template>
 
 <script setup lang="ts">
-import { SplideSlide } from "@splidejs/vue-splide";
-import { useArtworkStore } from "@/stores/artworks";
+import { SplideSlide } from '@splidejs/vue-splide';
+import { useArtworkStore } from '@/stores/artworks';
 
 const props = defineProps<{
-  category: Category
+  category: Category;
 }>();
 
 const { findByCategory } = useArtworkStore();
+const { path } = useFlixStore();
+
 const artworks = computed(() => findByCategory(props.category.id, 10, 0));
 const artworksSliderProps = {
-  gap: "4.5rem"
+  gap: '4.5rem',
 };
 </script>
 
 <style scoped lang="scss">
 .artworks {
-
   &.is-initialized,
   &.is-rendered {
     :deep(.splide__track) {
