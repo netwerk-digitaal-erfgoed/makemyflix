@@ -1,4 +1,4 @@
 'use strict';
 
 const { createCoreController } = require('@strapi/strapi').factories;
-module.exports = createCoreController('api::flix.flix');
+module.exports = createCoreController('api::side-note.side-note');

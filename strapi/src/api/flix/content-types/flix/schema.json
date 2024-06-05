@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -27,15 +27,6 @@
       "type": "component",
       "repeatable": false,
       "component": "branding.branding"
-    },
-    "categoryQuery": {
-      "type": "string"
-    },
-    "itemsQuery": {
-      "type": "string"
-    },
-    "queryUrl": {
-      "type": "string"
     },
     "fonts": {
       "type": "customField",
@@ -63,8 +54,13 @@
       ],
       "customField": "plugin::multi-select.multi-select"
     },
-    "path": {
+    "uri": {
       "type": "string"
+    },
+    "data": {
+      "type": "component",
+      "repeatable": false,
+      "component": "data-connection.data-connection"
     }
   }
 }

@@ -28,11 +28,25 @@ export interface BrandingIntro extends Schema.Component {
   };
 }
 
+export interface DataConnectionDataConnection extends Schema.Component {
+  collectionName: 'components_data_connection_data_connections';
+  info: {
+    displayName: 'Data connection';
+    icon: 'oneToMany';
+  };
+  attributes: {
+    endpointUrl: Attribute.Text;
+    categoryQuery: Attribute.Text;
+    itemsQuery: Attribute.Text;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
       'branding.branding': BrandingBranding;
       'branding.intro': BrandingIntro;
+      'data-connection.data-connection': DataConnectionDataConnection;
     }
   }
 }

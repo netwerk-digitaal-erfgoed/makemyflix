@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_data_connection_data_connections",
+  "info": {
+    "displayName": "Data connection",
+    "icon": "oneToMany"
+  },
+  "options": {},
+  "attributes": {
+    "endpointUrl": {
+      "type": "text"
+    },
+    "categoryQuery": {
+      "type": "text"
+    },
+    "itemsQuery": {
+      "type": "text"
+    }
+  }
+}

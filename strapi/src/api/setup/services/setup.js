@@ -1,46 +1,35 @@
-// @ts-nocheck
 'use strict';
 
-/**
- * setup service
- */
-
 module.exports = {
-  getFlix: async (path) => {
-    try {
-      const entry = (
-        await strapi.entityService.findMany('api::flix.flix', {
-          fields: ['id', 'title', 'backgroundColor', 'fonts'],
-          populate: {
-            branding: {
-              fields: ['id', 'name'],
-              populate: {
-                banner: {
-                  fields: ['url'],
-                },
-                logo: {
-                  fields: ['url'],
-                },
-                intro: {
-                  fields: ['id', 'title', 'description', 'footer'],
-                },
-              },
-            },
-          },
-          filters: { path },
-          limit: 1,
-        })
-      )?.[0];
-      // Make sure to return the URL of the banner and logo
-      if (entry?.branding?.banner) {
-        entry.branding.banner = entry.branding.banner.url;
-      }
-      if (entry?.branding?.logo) {
-        entry.branding.logo = entry.branding.logo.url;
-      }
-      return entry;
-    } catch (err) {
-      return err;
+  brandingData: (flix) => {
+    if (!flix.branding) {
+      return;
     }
+
+    const branding = {
+      name: flix.branding?.name
+    };
+    if (flix?.branding?.intro) {
+      branding.intro = flix.branding.intro;
+      delete branding.intro.id;
+    }
+    if (flix?.branding?.banner) {
+      branding.banner = flix.branding.banner.url;
+    }
+    if (flix?.branding?.logo) {
+      branding.logo = flix.branding.logo.url;
+    }
+    return branding;
   },
+  sidenoteData: async (flix) => {
+    const flixId = flix.id;
+    const notes = await strapi.entityService.findMany('api::side-note.side-note', {
+      filters: { flix: flixId },
+      fields: ['body'],
+      limit: 1
+    });
+    if (notes.length) {
+      return notes[0].body;
+    }
+  }
 };

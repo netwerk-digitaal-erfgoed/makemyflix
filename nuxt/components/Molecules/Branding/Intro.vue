@@ -1,26 +1,25 @@
 <template>
-  <div v-if="intro" :class="introClass" :style="introStyle">
+  <div v-if="branding?.intro" :class="introClass" :style="introStyle">
     <div class="grid grid-cols-12 gap-x-6 gap-y-6 justify-items-center items-center py-20 glass-noblur">
-      <span v-if="intro.title" class="text-3xl font-semibold uppercase row-start-1 col-span-8 col-start-3 overflow-hidden whitespace-nowrap max-w-full">
-        {{ intro.title }}
+      <span v-if="branding?.intro.title" class="text-3xl font-semibold uppercase row-start-1 col-span-8 col-start-3 overflow-hidden whitespace-nowrap max-w-full">
+        {{ branding?.intro.title }}
       </span>
-      <span v-if="intro.description" class="text-lg uppercase row-start-2 col-span-8 col-start-3">
+      <span v-if="branding?.intro.description" class="text-lg uppercase row-start-2 col-span-8 col-start-3">
         {{ description }}
       </span>
-      <span v-if="intro.footer" class="text-base uppercase row-start-3 col-span-8 col-start-3">
-        {{ intro.footer }}
+      <span v-if="branding?.intro.footer" class="text-base uppercase row-start-3 col-span-8 col-start-3">
+        {{ branding?.intro.footer }}
       </span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useBrandingStore } from "@/stores/branding";
-const { intro, banner } = useBrandingStore();
-const description = computed(() => intro.description?.substring(0, 300));
+const { branding } = storeToRefs(useFlixStore());
+const description = computed(() => branding.value?.intro.description?.substring(0, 300));
 const introStyle = computed(() => {
   return {
-    '--url': `url(${banner})`
+    '--url': `url(${branding.value?.banner})`
   }
 });
 const introClass = computed(() => {
@@ -28,7 +27,7 @@ const introClass = computed(() => {
     'intro': true,
     'bg-black': true,
     'text-white': true,
-    'intro-bg': !!banner
+    'intro-bg': !!branding.value?.banner
   };
 })
 </script>

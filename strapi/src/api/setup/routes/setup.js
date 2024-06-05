@@ -6,7 +6,7 @@ module.exports = {
       handler: 'setup.retrieveSetup',
       config: {
         policies: [],
-        middlewares: [],
+        middlewares: ['global::context'],
       },
     },
   ],

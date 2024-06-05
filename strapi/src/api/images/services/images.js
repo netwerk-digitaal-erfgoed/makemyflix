@@ -1,12 +1,7 @@
 'use strict';
 const sharp = require('sharp');
-const fs = require('fs-extra');
-const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
-/**
- * images service
- */
 module.exports = {
   /**
    * Helper function to process the format input

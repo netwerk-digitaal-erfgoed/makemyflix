@@ -362,62 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiFlixFlix extends Schema.CollectionType {
-  collectionName: 'flixes';
-  info: {
-    singularName: 'flix';
-    pluralName: 'flixes';
-    displayName: 'Flix';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    title: Attribute.String & Attribute.Required;
-    backgroundColor: Attribute.String &
-      Attribute.CustomField<'plugin::color-picker.color'>;
-    branding: Attribute.Component<'branding.branding'>;
-    categoryQuery: Attribute.String;
-    itemsQuery: Attribute.String;
-    queryUrl: Attribute.String;
-    fonts: Attribute.JSON &
-      Attribute.CustomField<
-        'plugin::multi-select.multi-select',
-        [
-          'Roboto',
-          'Open Sans',
-          'Lato',
-          'Montserrat',
-          'Roboto Condensed',
-          'Oswald',
-          'Poppins',
-          'Raleway',
-          'Slabo 27px',
-          'PT Sans',
-          'Noto Sans',
-          'Roboto Mono',
-          'Roboto Slab',
-          'Ubuntu',
-          'Merriweather',
-          'Lora',
-          'Playfair Display',
-          'Inter',
-          'Nunito',
-          'PT Serif'
-        ]
-      >;
-    path: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::flix.flix', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::flix.flix', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -844,6 +788,95 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiFlixFlix extends Schema.CollectionType {
+  collectionName: 'flixes';
+  info: {
+    singularName: 'flix';
+    pluralName: 'flixes';
+    displayName: 'Flix';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    backgroundColor: Attribute.String &
+      Attribute.CustomField<'plugin::color-picker.color'>;
+    branding: Attribute.Component<'branding.branding'>;
+    fonts: Attribute.JSON &
+      Attribute.CustomField<
+        'plugin::multi-select.multi-select',
+        [
+          'Roboto',
+          'Open Sans',
+          'Lato',
+          'Montserrat',
+          'Roboto Condensed',
+          'Oswald',
+          'Poppins',
+          'Raleway',
+          'Slabo 27px',
+          'PT Sans',
+          'Noto Sans',
+          'Roboto Mono',
+          'Roboto Slab',
+          'Ubuntu',
+          'Merriweather',
+          'Lora',
+          'Playfair Display',
+          'Inter',
+          'Nunito',
+          'PT Serif'
+        ]
+      >;
+    uri: Attribute.String;
+    data: Attribute.Component<'data-connection.data-connection'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::flix.flix', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::flix.flix', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSideNoteSideNote extends Schema.CollectionType {
+  collectionName: 'side_notes';
+  info: {
+    singularName: 'side-note';
+    pluralName: 'side-notes';
+    displayName: 'Side note';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    body: Attribute.RichText;
+    flix: Attribute.Relation<
+      'api::side-note.side-note',
+      'oneToOne',
+      'api::flix.flix'
+    > &
+      Attribute.Private;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::side-note.side-note',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::side-note.side-note',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -854,7 +887,6 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::flix.flix': ApiFlixFlix;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
@@ -863,6 +895,8 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::flix.flix': ApiFlixFlix;
+      'api::side-note.side-note': ApiSideNoteSideNote;
     }
   }
 }
