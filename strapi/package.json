@@ -7,7 +7,9 @@
     "develop": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "strapi-export": "./scripts/strapi-export.sh",
+    "strapi-import": "./scripts/strapi-import.sh"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "4.24.3",
@@ -17,7 +19,6 @@
     "@strapi/provider-upload-aws-s3": "^4.24.4",
     "@strapi/strapi": "4.24.3",
     "axios": "^1.7.2",
-    "better-sqlite3": "8.6.0",
     "fs-extra": "^11.2.0",
     "path": "^0.12.7",
     "pg": "^8.11.5",
@@ -25,7 +26,6 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "5.3.4",
     "sharp": "^0.33.4",
-    "sqlite3": "^5.1.7",
     "strapi-plugin-multi-select": "^1.2.3",
     "styled-components": "5.3.3",
     "uuid": "^9.0.1"
