@@ -33,11 +33,12 @@ export interface DataConnectionDataConnection extends Schema.Component {
   info: {
     displayName: 'Data connection';
     icon: 'oneToMany';
+    description: '';
   };
   attributes: {
-    endpointUrl: Attribute.Text;
-    categoryQuery: Attribute.Text;
-    itemsQuery: Attribute.Text;
+    endpointUrl: Attribute.Text & Attribute.Required;
+    categoryQuery: Attribute.Text & Attribute.Required;
+    itemsQuery: Attribute.Text & Attribute.Required;
   };
 }
 

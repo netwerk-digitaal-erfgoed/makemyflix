@@ -830,8 +830,9 @@ export interface ApiFlixFlix extends Schema.CollectionType {
           'PT Serif'
         ]
       >;
-    uri: Attribute.String;
-    data: Attribute.Component<'data-connection.data-connection'>;
+    uri: Attribute.String & Attribute.Required;
+    data: Attribute.Component<'data-connection.data-connection'> &
+      Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::flix.flix', 'oneToOne', 'admin::user'> &

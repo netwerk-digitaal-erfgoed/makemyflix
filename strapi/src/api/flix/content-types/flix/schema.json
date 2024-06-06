@@ -55,12 +55,14 @@
       "customField": "plugin::multi-select.multi-select"
     },
     "uri": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "data": {
       "type": "component",
       "repeatable": false,
-      "component": "data-connection.data-connection"
+      "component": "data-connection.data-connection",
+      "required": true
     }
   }
 }

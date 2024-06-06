@@ -8,9 +8,10 @@ module.exports = (config, { strapi }) => {
             populate: {
               banner: true,
               logo: true,
-              intro: true
+              intro: true,
             },
           },
+          data: true,
         },
         filters: { uri: flixUri },
         limit: 1

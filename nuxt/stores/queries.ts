@@ -7,24 +7,11 @@ const createQuery = (query: string = '', replacements: Record<string, string> = 
 
 export const useQueriesStore = defineStore('queries', () => {
   let apiUrl: string;
-  let categoryQuery: string;
   let itemsQuery: string;
   let disableLinks: string[];
 
   function getDisableLinks (): string[] {
     return disableLinks;
-  }
-
-  async function getCategoryQuery (limit: number = 1000): Promise<CategoryResponse[]> {
-    const query = createQuery(categoryQuery, {
-      "_LIMIT_": limit.toString()
-    });
-    return $fetch(apiUrl, {
-      method: 'POST',
-      body: {
-        query: query
-      }
-    });
   }
 
   async function getItemsQuery (limit: number, page: number, categoryId: string = ''): Promise<ArtworkResponse[]> {
@@ -48,10 +35,9 @@ export const useQueriesStore = defineStore('queries', () => {
     const jsonLocation = `${devPrefix}/config/queries.json`;
     const data:QueryData = await $fetch(jsonLocation);
     apiUrl = data.baseUrl;
-    categoryQuery = data.categoryQuery;
     itemsQuery = data.itemsQuery;
     disableLinks = Array.isArray(data.disableLinks) ? data.disableLinks : [];
   }
 
-  return { getCategoryQuery, getItemsQuery, loadQueries, getDisableLinks };
+  return { getItemsQuery, loadQueries, getDisableLinks };
 });

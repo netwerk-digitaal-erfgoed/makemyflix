@@ -2,18 +2,22 @@
   "collectionName": "components_data_connection_data_connections",
   "info": {
     "displayName": "Data connection",
-    "icon": "oneToMany"
+    "icon": "oneToMany",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "endpointUrl": {
-      "type": "text"
+      "type": "text",
+      "required": true
     },
     "categoryQuery": {
-      "type": "text"
+      "type": "text",
+      "required": true
     },
     "itemsQuery": {
-      "type": "text"
+      "type": "text",
+      "required": true
     }
   }
 }
