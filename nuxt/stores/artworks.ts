@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
 import { useCategoryStore } from "@/stores/categories";
-import { useQueriesStore } from '@/stores/queries';
 
 const defaultPageSize = 16;
 
 export const useArtworkStore = defineStore('artworks', () => {
+  const { app: { backendUrl, token } } = useRuntimeConfig();
+  const { currentFlix } = useFlixStore();
   const artworks = ref<Artwork[]>([]);
   const totalArtworks = computed(() => artworks.value.length);
 
@@ -65,63 +66,6 @@ export const useArtworkStore = defineStore('artworks', () => {
     return artworks.value.filter((art: Artwork) => art.categoryId === categoryId).length;
   }
 
-  function generateTitle ({name, provinceName, contentLocationNames}: ArtworkResponse): string {
-    if (name) {
-      return name;
-    }
-    const locationName = contentLocationNames?.split('; ').pop();
-    return `${locationName}, ${provinceName}`
-  }
-
-  function generateSubtitle ({dateCreated, creatorNames}: ArtworkResponse): string {
-    const creatorName = creatorNames?.split('; ').pop();
-    return [creatorName, dateCreated]
-      .filter(value => value)
-      .join(', ');
-  }
-
-  function generateName (input: string): string {
-    if (input.includes('URI')) {
-      return input.replace(/URI/, 'Name');
-    } else {
-      const hasPluralName = input.slice(-1) === 's';
-      const prepend = hasPluralName ? input.slice(0, -1) : input;
-      const append = `Name${hasPluralName ? 's' : ''}`;
-      return `${prepend}${append}`;
-    }
-  }
-
-  function generateProperties ({ heritageObject, name, identifier, description, imageURI, publisherHomepage, ...metadata  }: ArtworkResponse): ArtProperties {
-    const linkableProps = ['imageLicenseURI', 'provinceURI', 'publisherURI', 'creators', 'contentLocationURIs'];
-    return Object.keys(metadata).reduce((collection: ArtProperties, currentValue: string) => {
-      // @ts-ignore
-      const values = (metadata[currentValue] || '').split('; ');
-      const isPublisherURI = currentValue === 'publisherURI';
-
-      // Check if the property is linkable
-      if (linkableProps.includes(currentValue)) {
-        const name = generateName(currentValue);
-        // @ts-ignore
-        const names = metadata[name].split('; ');
-
-        const result = values.map((value: any, index: number) => {
-          return {
-            label: names[index],
-            value: (isPublisherURI && !value) ? publisherHomepage : value
-          }
-        });
-        collection[currentValue] = result.length > 1 ? result : result[0];
-      } else {
-        if (!currentValue.includes('Name')) {
-          collection[currentValue] = {
-            value: values[0]
-          }
-        }
-      }
-      return collection
-    }, {});
-  }
-
   function countById (): Record<string, number> {
     return artworks.value.reduce((collection: Record<string, number>, currentValue: Artwork) => {
       const id = currentValue.id.replace(/(.*)-\d*/i, "$1");
@@ -136,30 +80,31 @@ export const useArtworkStore = defineStore('artworks', () => {
     const category = findCategoryById(categoryId);
 
     // Only fetch if we have the category
-    if (category) {
-      const { getItemsQuery } = useQueriesStore();
-      const response = await getItemsQuery(limit, page, category.originalId).catch(error => console.error(error)) || [];
+    if (category && currentFlix?.uri) {
+      const response = (await $fetch(`${backendUrl}/items`, {
+        params: {
+          categoryId: category.originalId,
+          categorySlug: categoryId,
+          limit,
+          page,
+        },
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'X-flix': currentFlix.uri
+        }
+      }).catch(error => console.error(error))) as Artwork[] || [];
       const counts = countById();
-      artworks.value.push(...response.map((input: ArtworkResponse): Artwork => {
-        const id = input.identifier || useSlugify(input.name || '');
+      artworks.value.push(...response.map((input): Artwork => {
+        const id = input.id;
+        // TODO: Might need refactoring. Not sure if this part is needed. The way it's setup, this can only be done from the client, not from strapi
         const suffix = counts[id] ? `-${counts[id]}` : '';
         counts[id] = (id in counts) ? counts[id] + 1 : 1;
-        const properties = generateProperties(input);
-        return {
-          id: `${id}${suffix}`,
-          title: generateTitle(input),
-          subTitle: generateSubtitle(input),
-          description: input.description,
-          originalId: input.heritageObject,
-          image: input.imageURI,
-          categoryId,
-          properties
-        };
+        return { ...input, id: `${id}${suffix}` };
       }));
 
       // Update the category if needed
       if (response.length && !category.image) {
-        updateCategory({...category, image: response[0].imageURI});
+        updateCategory({...category, image: response[0].image});
       }
     }
   }
