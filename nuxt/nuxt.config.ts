@@ -11,12 +11,7 @@ export default defineNuxtConfig({
     enabled: false,
   },
   css: ['@/assets/scss/main.scss', '@/assets/scss/transitions.scss'],
-  modules: [
-    '@nuxtjs/google-fonts',
-    '@nuxtjs/i18n',
-    '@nuxtjs/tailwindcss',
-    '@pinia/nuxt',
-  ],
+  modules: ['@nuxtjs/i18n', '@nuxtjs/tailwindcss', '@pinia/nuxt'],
   vite: {
     plugins: [svgLoader()],
     css: {
@@ -25,11 +20,6 @@ export default defineNuxtConfig({
           additionalData: '@use "@/assets/scss/variables.scss" as *;',
         },
       },
-    },
-  },
-  googleFonts: {
-    families: {
-      Poppins: [300, 400, 600, 700],
     },
   },
   i18n: {
@@ -47,7 +37,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     app: {
       backendUrl: '',
-      token: ''
+      token: '',
     },
   },
 });

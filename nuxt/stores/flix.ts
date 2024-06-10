@@ -35,22 +35,22 @@ export const useFlixStore = defineStore('flix', () => {
     // Origin path is not retrievable from the backend so we need to pass it
     const setup: Flix = await $fetch(`${config.app.backendUrl}/setup`, {
       headers: {
-        'Authorization': `Bearer ${config.app.token}`,
-        'X-flix': flexUri
-      }
+        Authorization: `Bearer ${config.app.token}`,
+        'X-flix': flexUri,
+      },
     });
     // Add the flexUri for the guard
     setup.uri = flexUri;
 
     // Update the current flix
     currentFlix.value = setup;
-  }
+  };
 
   return {
     currentFlix,
     branding,
     sidenote,
     path,
-    setupFlix
-  }
+    setupFlix,
+  };
 });

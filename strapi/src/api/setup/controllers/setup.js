@@ -10,8 +10,9 @@ module.exports = {
       // @TODO: Colors/fonts should be moved to the setupService once there are more
       const data = {
         title: flix.title,
-        backgroundColor: flix.backgroundColor
-      }
+        backgroundColor: flix.backgroundColor,
+        fonts: flix.fonts,
+      };
 
       // Add branding data
       const brandingData = setupService.brandingData(flix);
