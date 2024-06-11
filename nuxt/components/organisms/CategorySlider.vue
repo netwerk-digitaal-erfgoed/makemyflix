@@ -1,30 +1,27 @@
 <template>
   <MoleculesSlider
     class="categories-slider"
-    :slider-props="categoriesSliderProps"
-  >
+    :slider-props="categoriesSliderProps">
     <SplideSlide
       v-for="category in categories"
       :key="category.id"
-      class="category-slide"
-    >
+      class="category-slide">
       <AtomsCategoryTeaser :category="category" />
     </SplideSlide>
   </MoleculesSlider>
 </template>
 
 <script setup lang="ts">
-import { SplideSlide } from "@splidejs/vue-splide";
+import { SplideSlide } from '@splidejs/vue-splide';
 
-const props = defineProps<{
-  categories: Array<Category>,
+defineProps<{
+  categories: Array<Category>;
 }>();
 
 const categoriesSliderProps = {
-  gap: "1.25rem",
-  padding: { right: "5%" }
+  gap: '1.25rem',
+  padding: { right: '5%' },
 };
-
 </script>
 
 <style scoped lang="scss">

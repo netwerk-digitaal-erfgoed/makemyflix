@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "nuxt"
+    },
+    {
+      "path": "strapi"
+    },
+    {
+      "path": ".",
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "nuxt/": true,
+      "strapi/": true
+    },
+  },
+}

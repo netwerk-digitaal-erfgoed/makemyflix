@@ -142,7 +142,7 @@ module.exports = {
           path: buffer,
           name: `${uuidv4()}.${extension}`,
           type: `image/${extension}`,
-          size: buffer.length
+          size: buffer.length,
         },
       });
     } catch (error) {

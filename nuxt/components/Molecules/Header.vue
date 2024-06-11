@@ -1,7 +1,9 @@
 <template>
-  <div :class="{ 'base': true, 'dark-mode': darkMode }">
+  <div :class="{ base: true, 'dark-mode': darkMode }">
     <MoleculesButtonsHome />
-    <span v-if="title" class="text-xl font-semibold uppercase col-span-10 col-start-2 flex justify-center">
+    <span
+      v-if="title"
+      class="title">
       {{ title }}
     </span>
     <MoleculesButtonsCategory v-if="showCategory" />
@@ -9,23 +11,44 @@
 </template>
 
 <script setup lang="ts">
-withDefaults(defineProps<{
-  darkMode?: boolean,
-  title?: string,
-  showCategory?: boolean
-}>(), {
-  darkMode: false,
-  title: '',
-  showCategory: false
-});
+withDefaults(
+  defineProps<{
+    darkMode?: boolean;
+    title?: string;
+    showCategory?: boolean;
+  }>(),
+  {
+    darkMode: false,
+    title: '',
+    showCategory: false,
+  },
+);
 </script>
 
 <style scoped lang="scss">
 .base {
-  @apply grid grid-cols-12 py-7 items-center bg-white text-black w-full z-10;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  padding-block: var(--space-7);
+  align-items: center;
+  background-color: var(--white);
+  color: var(--black);
+  width: 100%;
+  z-index: 10;
 
   &.dark-mode {
-    @apply bg-black text-white;
+    background-color: var(--black);
+    color: var(--white);
   }
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  grid-column: span 10 / span 10;
+  grid-column-start: 2;
 }
 </style>

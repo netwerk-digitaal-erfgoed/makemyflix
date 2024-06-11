@@ -16,10 +16,6 @@ export const useFlixStore = defineStore('flix', () => {
     return currentFlix.value?.sidenote;
   });
 
-  const path = computed<string>(() => {
-    return currentFlix.value?.uri?.split('/').pop() || '';
-  });
-
   /**
    * Methods
    */
@@ -41,6 +37,7 @@ export const useFlixStore = defineStore('flix', () => {
     });
     // Add the flexUri for the guard
     setup.uri = flexUri;
+    setup.id = flix;
 
     // Update the current flix
     currentFlix.value = setup;
@@ -50,7 +47,6 @@ export const useFlixStore = defineStore('flix', () => {
     currentFlix,
     branding,
     sidenote,
-    path,
     setupFlix,
   };
 });

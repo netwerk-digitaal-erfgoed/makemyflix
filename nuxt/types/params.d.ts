@@ -1,4 +1,4 @@
 declare interface Params {
-  category: string,
-  artwork: string
+  category: string;
+  artwork: string;
 }

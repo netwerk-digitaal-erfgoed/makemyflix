@@ -1,13 +1,11 @@
-import { useTransitionStore } from '@/stores/transition';
-
 export default defineNuxtPlugin(() => {
   return {
     provide: {
-      navigate: (to: Object, direction: string = '') => {
+      navigate: (to: object, direction: string = '') => {
         const { changeTransition } = useTransitionStore();
         changeTransition(direction);
         return navigateTo(to);
-      }
-    }
-  }
-})
+      },
+    },
+  };
+});

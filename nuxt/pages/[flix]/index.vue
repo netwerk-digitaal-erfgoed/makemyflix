@@ -1,18 +1,19 @@
 <template>
-  <div>
+  <div class="page">
     <MoleculesBrandingHeader />
-    <section>
-      <OrganismsCategorySlider :categories="categories" class="z-20" />
-    </section>
-    <MoleculesBrandingIntro class="z-20" />
-    <section class="py-8">
-      <div class="overflow-hidden px-3">
+    <OrganismsCategorySlider
+      :categories="categories"
+      class="elevated" />
+    <MoleculesBrandingIntro class="elevated" />
+    <section class="categories">
+      <div class="container">
         <div
           v-for="category in categories"
           :key="category.id"
-          class="flex justify-center mt-16"
-        >
-          <OrganismsArtworkSlider class="w-10/12" :category="category" />
+          class="category">
+          <OrganismsArtworkSlider
+            class="slider"
+            :category="category" />
         </div>
       </div>
     </section>
@@ -20,16 +21,37 @@
 </template>
 
 <script setup lang="ts">
-import { useCategoryStore } from '@/stores/categories';
-import { useArtworkStore } from '@/stores/artworks';
-import { storeToRefs } from 'pinia';
-
 const { categories } = storeToRefs(useCategoryStore());
 const { listOrFetchByCategory } = useArtworkStore();
 
 onMounted(async () => {
-  categories.value.forEach((category: Category) =>
-    listOrFetchByCategory(category.id),
-  );
+  categories.value.forEach((category: Category) => listOrFetchByCategory(category.id));
 });
 </script>
+
+<style lang="scss" scoped>
+.page {
+  .elevated {
+    z-index: 20;
+  }
+
+  .categories {
+    padding-block: var(--space-8);
+
+    .container {
+      padding-inline: var(--space-3);
+      overflow: hidden;
+
+      .category {
+        display: flex;
+        justify-content: center;
+        margin-top: var(--space-16);
+
+        .slider {
+          width: 83.33%;
+        }
+      }
+    }
+  }
+}
+</style>

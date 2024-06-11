@@ -1,5 +1,8 @@
 <template>
-  <Splide :has-track="false" :options="splideProps" aria-label="Slides">
+  <Splide
+    :has-track="false"
+    :options="splideProps"
+    aria-label="Slides">
     <SplideTrack class="slider-track">
       <slot />
     </SplideTrack>
@@ -17,10 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { Splide, SplideTrack } from "@splidejs/vue-splide";
+import { Splide, SplideTrack } from '@splidejs/vue-splide';
 
 const props = defineProps<{
-  sliderProps: Object,
+  sliderProps: object;
 }>();
 
 const splideProps = Object.assign(
@@ -30,7 +33,7 @@ const splideProps = Object.assign(
     perPage: 4,
     speed: 300,
   },
-  props.sliderProps
+  props.sliderProps,
 );
 </script>
 

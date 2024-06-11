@@ -12,6 +12,7 @@ declare interface Branding {
 }
 
 declare interface Flix {
+  id: string;
   title: string;
   backgroundColor: string;
   uri?: string;

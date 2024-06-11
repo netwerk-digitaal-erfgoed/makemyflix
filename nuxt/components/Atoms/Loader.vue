@@ -10,7 +10,7 @@
 
 <style scoped lang="scss">
 @keyframes scaling {
-
+  // Note: Move colors to theming
   0%,
   100% {
     transform: scale(0.2);
@@ -19,12 +19,12 @@
 
   40% {
     transform: scale(1);
-    background-color: #2E2E2E;
+    background-color: #2e2e2e;
   }
 
   50% {
     transform: scale(1);
-    background-color: #0D1933;
+    background-color: #0d1933;
   }
 }
 
@@ -35,7 +35,7 @@
   align-content: center;
   justify-items: center;
   align-items: center;
-  column-gap: 0.25rem;
+  column-gap: var(--space-1);
 }
 
 .dot {
@@ -48,7 +48,7 @@
 
   @for $j from 0 through 5 {
     &:nth-child(0n + #{$j}) {
-      animation-delay: #{ $j * 0.2 }s;
+      animation-delay: #{$j * 0.2}s;
     }
   }
 }

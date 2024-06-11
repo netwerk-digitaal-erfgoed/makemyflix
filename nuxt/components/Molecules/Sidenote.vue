@@ -1,18 +1,27 @@
 <template>
   <template v-if="hasSidenote">
-    <div class="bg-black text-white flex justify-center items-center fixed left-0 bottom-20 rounded-b-3xl origin-top-left h-8 w-40 cursor-pointer select-none z-10 rotate-270" @click="openAbout">
+    <div
+      class="about-label"
+      @click="openAbout">
       About
     </div>
-    <div v-if="isOpen" class="backdrop fixed left-0 top-0 w-full h-full overflow-hidden flex items-center justify-center z-50 bg-black/40" @click.self="closeAbout">
-      <div class="modal bg-black text-white pt-4 pb-0 px-8 max-w-5xl overflow-hidden relative grid">
-        <div class="header row-start-1 flex justify-center items-center">
-          <span class="text-2xl text-white ">About</span>
-          <button @click="closeAbout" class="w-4 h-4 text-white absolute right-0 top-0 m-6">
+    <div
+      v-if="isOpen"
+      class="backdrop"
+      @click.self="closeAbout">
+      <div class="modal">
+        <div class="header">
+          <span class="title">About</span>
+          <button
+            @click="closeAbout"
+            class="close-button">
             <AtomsIcon name="close" />
           </button>
         </div>
-        <div class="content row-start-2 overflow-y-scroll custom-scroll" v-html="sidenote" />
-        <div class="footer h-20 flex justify-center items-center row-start-3">
+        <div
+          class="content custom-scroll"
+          v-html="sidenote" />
+        <div class="footer">
           <AtomsIcon name="ndeLogo" />
         </div>
       </div>
@@ -53,22 +62,109 @@ const closeAbout = () => {
   isOpen.value = false;
   document.body.style.overflow = '';
   document.body.style.paddingRight = '';
-}
+};
 </script>
 
 <style lang="scss" scoped>
-.modal {
-  max-height: 90vh;
-  grid-template-rows: 3rem 1fr 5rem;
+// Collapsed sidenote styline
+.about-label {
+  background-color: var(--black);
+  color: var(--white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  bottom: var(--space-20);
+  border-bottom-left-radius: var(--space-6);
+  border-bottom-right-radius: var(--space-6);
+  transform-origin: top left;
+  height: var(--space-8);
+  width: var(--space-40);
+  user-select: none;
+  cursor: pointer;
+  z-index: 10;
+  transform: rotate(270deg);
 }
+
+// Modal styling
+.backdrop {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.4);
+
+  .modal {
+    background-color: var(--black);
+    color: var(--white);
+    padding: var(--space-4) var(--space-8) 0 var(--space-8);
+    max-width: var(--max-modal-width);
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    max-height: var(--max-modal-height);
+    grid-template-rows: var(--space-12) 1fr var(--space-20);
+
+    .header {
+      grid-row-start: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .title {
+        font-size: var(--font-size-2xl);
+        color: var(--white);
+      }
+
+      .close-button {
+        width: var(--space-4);
+        height: var(--space-4);
+        color: var(--white);
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin: var(--space-6);
+      }
+    }
+
+    .content {
+      grid-row-start: 2;
+      overflow-y: scroll;
+    }
+
+    .footer {
+      height: var(--space-20);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      grid-row-start: 3;
+    }
+  }
+}
+
+// Markdown styling
 :deep(h1) {
-  @apply text-2xl text-white mb-5;
+  font-size: var(--font-size-2xl);
+  color: var(--white);
+  margin-bottom: var(--space-5);
 }
 :deep(h2) {
-  @apply font-semibold;
+  font-weight: var(--font-weight-semibold);
 }
 :deep(p),
 :deep(ul) {
-  @apply font-light mb-4;
+  font-weight: var(--font-weight-light);
+  margin-bottom: var(--space-4);
+}
+:deep(a) {
+  color: inherit;
+  text-decoration: inherit;
 }
 </style>

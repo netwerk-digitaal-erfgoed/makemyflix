@@ -1,5 +1,8 @@
 <template>
-  <img v-if="imageUrl" :src="imageUrl" :alt="alt" />
+  <img
+    v-if="imageUrl"
+    :src="imageUrl"
+    :alt="alt" />
 </template>
 
 <script setup lang="ts">
@@ -19,7 +22,7 @@ const props = withDefaults(
     size: 'max',
     rotation: '0',
     quality: 'default',
-    format: 'jpg',
+    format: 'webp',
   },
 );
 

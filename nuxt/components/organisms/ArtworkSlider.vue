@@ -1,38 +1,40 @@
 <template>
-  <div class="artwork-slider" v-if="artworks.length">
-    <div class="flex justify-between items-center mb-2">
-      <div class="text-3xl uppercase">
-        {{ category.title }} {{ category.period }}
-      </div>
+  <div
+    class="artwork-slider"
+    v-if="artworks.length">
+    <div class="artwork-header">
+      <div class="artwork-title">{{ category.title }} {{ category.period }}</div>
       <AtomsNavigation
-        class="text-base font-medium uppercase"
+        class="navigation-link"
         :to="{
           name: 'flix-category',
-          params: { flix: path, category: category.id },
-        }"
-      >
+          params: {
+            category: category.id,
+          },
+        }">
         Toon alles
       </AtomsNavigation>
     </div>
     <div
       v-if="category.description"
-      class="text-base tracking-wide uppercase font-light mb-7"
-    >
+      class="artwork-description">
       {{ category.description }}
     </div>
-    <MoleculesSlider class="artworks" :slider-props="artworksSliderProps">
-      <SplideSlide v-for="artwork in artworks" :key="artwork.id">
+    <MoleculesSlider
+      class="artworks"
+      :slider-props="artworksSliderProps">
+      <SplideSlide
+        v-for="artwork in artworks"
+        :key="artwork.id">
         <AtomsArtworkTeaser
           :artwork="artwork"
           :to="{
             name: 'flix-category-artwork',
             params: {
-              flix: path,
               category: category.id,
               artwork: artwork.id,
             },
-          }"
-        />
+          }" />
       </SplideSlide>
     </MoleculesSlider>
   </div>
@@ -40,15 +42,12 @@
 
 <script setup lang="ts">
 import { SplideSlide } from '@splidejs/vue-splide';
-import { useArtworkStore } from '@/stores/artworks';
 
 const props = defineProps<{
   category: Category;
 }>();
 
 const { findByCategory } = useArtworkStore();
-const { path } = useFlixStore();
-
 const artworks = computed(() => findByCategory(props.category.id, 10, 0));
 const artworksSliderProps = {
   gap: '4.5rem',
@@ -71,5 +70,32 @@ const artworksSliderProps = {
   :deep(.splide__arrow--next) {
     right: -4.75rem;
   }
+}
+
+.artwork-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.artwork-title {
+  font-size: var(--font-size-3xl);
+  text-transform: uppercase;
+}
+
+.artwork-description {
+  font-size: var(--font-size-base);
+  text-transform: uppercase;
+  font-weight: var(--font-weight-light);
+  margin-bottom: vafr(--space-7);
+}
+
+.navigation-link {
+  color: inherit;
+  text-decoration: inherit;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
 }
 </style>

@@ -1,9 +1,17 @@
+@use 'defaults';
+@use 'theme';
+
 // Default vue-splide theme
 @import '@splidejs/vue-splide/css';
 
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.25;
+}
+
 .no-scroll {
   height: 100vh;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 .glass {
@@ -35,17 +43,22 @@
   display: none;
 }
 
+// Note only used by the sidenote, more there?
+// Custom scroll
 .custom-scroll {
-  scrollbar-color: white transparent;
+  scrollbar-color: var(--white) transparent;
   scrollbar-width: thin;
 }
+
 .custom-scroll::-webkit-scrollbar {
-  width: .5rem;
+  width: var(--space-2);
 }
+
 .custom-scroll::-webkit-scrollbar-thumb {
-  background: white;
-  border-radius: .25rem;
+  background: var(--white);
+  border-radius: var(--space-1);
 }
+
 .custom-scroll::-webkit-scrollbar-track {
   background: transparent;
 }

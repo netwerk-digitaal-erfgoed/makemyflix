@@ -11,5 +11,4 @@ node_modules/
 
 # IDEs
 .idea
-.vscode
 .env

@@ -1,21 +1,29 @@
 <template>
-  <AtomsNavigation :to="path">
+  <AtomsNavigation
+    :to="{
+      name: 'flix-category',
+      params: { category: category.id },
+    }">
     <div class="teaser">
-      <div v-if="category.image" class="teaser-img-wrapper">
+      <div
+        v-if="category.image"
+        class="img-wrapper">
         <AtomsImage
-          class="teaser-img"
+          class="img"
           :identifier="category.image"
-          format="webp"
-          size="400,1000"
-        />
+          size="400,1000" />
       </div>
 
-      <div class="teaser-body">
-        <div v-if="category.title" class="text-2xl font-semibold uppercase">
+      <div class="body">
+        <div
+          v-if="category.title"
+          class="title">
           {{ category.title }}
         </div>
 
-        <div v-if="category.period" class="text-xl">
+        <div
+          v-if="category.period"
+          class="period">
           {{ category.period }}
         </div>
       </div>
@@ -24,26 +32,16 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   category: Category;
 }>();
-
-const { path: flixPath } = useFlixStore();
-
-const path = {
-  name: 'flix-category',
-  params: {
-    flix: flixPath,
-    category: props.category.id,
-  },
-};
 </script>
 
 <style lang="scss" scoped>
 .teaser {
   position: relative;
   width: 100%;
-  height: calc(100vh - ($header-height + 1.5rem));
+  height: calc(100vh - (var(--header-height) + var(--space-6)));
   word-wrap: break-word;
   overflow: hidden;
 
@@ -52,43 +50,53 @@ const path = {
       filter: blur(0);
     }
   }
-}
 
-.teaser-img-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-
-  &:after {
-    content: '';
+  .img-wrapper {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 0.15s ease-in-out;
+      filter: blur(0.625rem);
+    }
   }
-}
 
-.teaser-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: 0.15s ease-in-out;
-  filter: blur(0.625rem);
-}
+  .body {
+    position: absolute;
+    left: 0;
+    bottom: 10%;
+    width: 100%;
+    padding: var(--space-2) var(--space-5);
+    background-color: rgba(0, 0, 0, 0.3);
+    color: var(--white);
+    text-align: center;
 
-.teaser-body {
-  position: absolute;
-  left: 0;
-  bottom: 10%;
-  width: 100%;
-  padding: 0.5rem 1.25rem;
-  background-color: rgba(0, 0, 0, 0.3);
-  color: #ffffff;
-  text-align: center;
+    .title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-semibold);
+      text-transform: uppercase;
+    }
+
+    .period {
+      font-size: var(--font-size-xl);
+    }
+  }
 }
 </style>

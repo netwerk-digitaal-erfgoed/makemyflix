@@ -1,16 +1,27 @@
 <template>
-  <AtomsNavigation :to="to" direction="up">
+  <AtomsNavigation
+    :to="to"
+    direction="up">
     <div class="teaser">
-      <div v-if="artwork.image" class="teaser-img-wrapper">
-        <AtomsImage class="teaser-img" :identifier="artwork.image" region="square" size="400,400" format="webp" />
+      <div
+        v-if="artwork.image"
+        class="img-wrapper">
+        <AtomsImage
+          class="img"
+          :identifier="artwork.image"
+          region="square"
+          size="400,400" />
       </div>
 
-      <div class="teaser-body">
-        <div v-if="artwork.title" class="text-base font-semibold">
+      <div class="body">
+        <div
+          v-if="artwork.title"
+          class="title">
           {{ artwork.title }}
         </div>
-
-        <div v-if="artwork.subTitle" class="text-sm font-light">
+        <div
+          v-if="artwork.subTitle"
+          class="subtitle">
           {{ artwork.subTitle }}
         </div>
       </div>
@@ -20,8 +31,8 @@
 
 <script setup lang="ts">
 defineProps<{
-  artwork: Artwork,
-  to: object
+  artwork: Artwork;
+  to: To;
 }>();
 </script>
 
@@ -39,36 +50,46 @@ defineProps<{
   }
 
   &:before {
-    content: "";
+    content: '';
     display: block;
     padding-top: 100%;
   }
-}
 
-.teaser-img-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
+  .img-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 
-.teaser-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: 0.15s ease-in-out;
-}
+    .img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 0.15s ease-in-out;
+    }
+  }
 
-.teaser-body {
-  position: absolute;
-  left: 0;
-  bottom: 1.5rem;
-  width: 100%;
-  padding: 0.5rem 1.25rem;
-  background-color: rgba(0, 0, 0, 0.3);
-  color: #ffffff;
-  backdrop-filter: blur(0.25rem);
+  .body {
+    position: absolute;
+    left: 0;
+    bottom: var(--space-6);
+    width: 100%;
+    padding: var(--space-2) var(--space-5);
+    background-color: rgba(0, 0, 0, 0.3);
+    color: var(--white);
+    backdrop-filter: blur(var(--space-1));
+
+    .title {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .subtitle {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-light);
+    }
+  }
 }
 </style>
