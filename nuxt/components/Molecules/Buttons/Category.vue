@@ -3,9 +3,7 @@
     class="category-button"
     :to="categoryPath"
     direction="down">
-    <AtomsIcon
-      name="close"
-      class="icon" />
+    <Icon icon="mdi:close" class="icon"/>
   </AtomsNavigation>
 </template>
 
@@ -26,8 +24,8 @@ const categoryPath = {
   text-decoration: inherit;
 
   .icon {
-    width: var(--space-4);
-    height: var(--space-4);
+    width: var(--space-7);
+    height: var(--space-7);
   }
 }
 </style>

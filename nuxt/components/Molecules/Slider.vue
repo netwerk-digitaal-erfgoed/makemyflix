@@ -9,11 +9,11 @@
 
     <div class="splide__arrows">
       <button class="splide__arrow splide__arrow--prev">
-        <AtomsIcon name="arrowLeft" />
+        <Icon icon="mdi:arrow-left" />
       </button>
 
       <button class="splide__arrow splide__arrow--next">
-        <AtomsIcon name="arrowRight" />
+        <Icon icon="mdi:arrow-right" />
       </button>
     </div>
   </Splide>
@@ -45,8 +45,8 @@ const splideProps = Object.assign(
   opacity: 1 !important;
 
   svg {
-    width: 1.25rem;
-    height: 0.875rem;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 }
 

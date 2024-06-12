@@ -5,20 +5,12 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'layout', mode: 'out-in' },
-    head: {
-      link: [
-        {
-          rel: 'stylesheet',
-          href: 'https://unpkg.com/ress/dist/ress.min.css',
-        },
-      ],
-    },
   },
   ssr: false,
   devtools: {
     enabled: false,
   },
-  css: ['@/assets/scss/main.scss', '@/assets/scss/transitions.scss'],
+  css: ['ress/ress.css', '@/assets/scss/main.scss', '@/assets/scss/transitions.scss'],
   modules: ['@nuxtjs/i18n', '@pinia/nuxt'],
   vite: {
     plugins: [svgLoader()],

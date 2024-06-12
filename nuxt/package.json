@@ -4,14 +4,11 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "diff": "git diff --name-only --diff-filter=MA main --relative",
-    "format": "npm run diff | grep -E '\\.ts$|\\.vue$' | xargs npx prettier --write",
-    "format:all": "prettier './**/*.{vue,ts}' --write",
+    "format": "prettier './**/*.{vue,ts}'",
+    "format:fix": "prettier --fix './**/*.{vue,ts}'",
     "generate": "nuxt generate",
-    "lint": "npm run diff | grep -E '\\.ts$|\\.vue$' | xargs eslint",
-    "lint:all": "eslint './**/*.{vue,ts}'",
-    "lint:fix": "npm run diff | grep -E '\\.ts$|\\.vue$' | xargs eslint --fix",
-    "lint:fix:all": "eslint --fix './**/*.{vue,ts}",
+    "lint": "eslint './**/*.{vue,ts}'",
+    "lint:fix": "eslint --fix './**/*.{vue,ts}'",
     "preview": "nuxt preview",
     "ts:check": "vue-tsc --noEmit -p ./tsconfig.check.json"
   },
@@ -19,11 +16,12 @@
     "vue": "latest"
   },
   "dependencies": {
-    "@heroicons/vue": "~2.1.3",
+    "@iconify/vue": "^4.1.2",
     "@pinia/nuxt": "~0.5.1",
     "@splidejs/vue-splide": "0.6.12",
     "marked": "^12.0.2",
-    "pinia": "^2.1.7"
+    "pinia": "^2.1.7",
+    "ress": "^5.0.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^12.1.0",

@@ -8,7 +8,7 @@
       class="header" />
     <div class="content">
       <MoleculesIconNavigation
-        name="arrowLeft"
+        icon="mdi:arrow-left"
         :to="navPath(true)"
         v-if="state.prev"
         class="navigation-arrow-left" />
@@ -37,7 +37,7 @@
           :groupName="name.toString()" />
       </div>
       <MoleculesIconNavigation
-        name="arrowRight"
+        icon="mdi:arrow-right"
         :to="navPath()"
         v-if="state.next"
         class="navigation-arrow-right" />

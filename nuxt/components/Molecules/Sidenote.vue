@@ -15,14 +15,15 @@
           <button
             @click="closeAbout"
             class="close-button">
-            <AtomsIcon name="close" />
+            <Icon icon="mdi:close" class="icon" />
           </button>
         </div>
         <div
           class="content custom-scroll"
           v-html="sidenote" />
         <div class="footer">
-          <AtomsIcon name="ndeLogo" />
+          <!-- TODO: Load this from Strapi using the setup call -->
+          [[ About logo here ]]
         </div>
       </div>
     </div>
@@ -124,13 +125,21 @@ const closeAbout = () => {
       }
 
       .close-button {
-        width: var(--space-4);
-        height: var(--space-4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: var(--space-6);
+        height: var(--space-6);
         color: var(--white);
         position: absolute;
         right: 0;
         top: 0;
-        margin: var(--space-6);
+        margin: var(--space-4);
+
+        .icon {
+          width: var(--space-6);
+          height: var(--space-6);
+        }
       }
     }
 

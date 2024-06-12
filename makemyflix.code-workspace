@@ -1,13 +1,16 @@
 {
   "folders": [
     {
+      "name": "nuxt",
       "path": "nuxt"
     },
     {
+      "name": "strapi",
       "path": "strapi"
     },
     {
-      "path": ".",
+      "name": "make-my-flix",
+      "path": "."
     }
   ],
   "settings": {
