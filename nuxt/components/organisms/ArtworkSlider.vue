@@ -23,7 +23,7 @@
     <MoleculesSlider
       class="artworks"
       :slider-props="artworksSliderProps">
-      <SplideSlide
+      <swiper-slide
         v-for="artwork in artworks"
         :key="artwork.id">
         <AtomsArtworkTeaser
@@ -35,14 +35,12 @@
               artwork: artwork.id,
             },
           }" />
-      </SplideSlide>
+      </swiper-slide>
     </MoleculesSlider>
   </div>
 </template>
 
 <script setup lang="ts">
-import { SplideSlide } from '@splidejs/vue-splide';
-
 const props = defineProps<{
   category: Category;
 }>();
@@ -50,24 +48,24 @@ const props = defineProps<{
 const { findByCategory } = useArtworkStore();
 const artworks = computed(() => findByCategory(props.category.id, 10, 0));
 const artworksSliderProps = {
-  gap: '4.5rem',
+  spaceBetween: 72,
+  injectStyles: [
+    `
+      .swiper {
+        overflow: visible;
+      }
+    `,
+  ],
 };
 </script>
 
 <style scoped lang="scss">
 .artworks {
-  &.is-initialized,
-  &.is-rendered {
-    :deep(.splide__track) {
-      overflow: visible;
-    }
-  }
-
-  :deep(.splide__arrow--prev) {
+  :deep(.swiper-button-prev) {
     left: -4.75rem;
   }
 
-  :deep(.splide__arrow--next) {
+  :deep(.swiper-button-next) {
     right: -4.75rem;
   }
 }
