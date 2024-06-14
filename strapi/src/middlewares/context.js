@@ -11,6 +11,14 @@ module.exports = (config, { strapi }) => {
               intro: true,
             },
           },
+          theme: {
+            populate: {
+              primary: true,
+              secondary: true,
+              tertiary: true,
+              font: true,
+            },
+          },
           data: true,
         },
         filters: { uri: flixUri },

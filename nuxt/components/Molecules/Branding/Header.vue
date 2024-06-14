@@ -4,11 +4,11 @@
       v-if="branding?.logo"
       :src="branding.logo"
       class="header-image" />
-    <span
+    <h1
       v-else-if="branding?.name"
       class="header-name">
       {{ branding.name }}
-    </span>
+    </h1>
   </div>
 </template>
 
@@ -18,7 +18,8 @@ const { branding } = storeToRefs(useFlixStore());
 
 <style lang="scss" scoped>
 .header {
-  background-color: var(--black);
+  background-color: var(--inverse-background-color);
+  color: var(--inverse-text-color);
   padding-block: var(--space-8);
   display: flex;
   justify-content: center;
@@ -31,8 +32,6 @@ const { branding } = storeToRefs(useFlixStore());
 }
 
 .header-name {
-  font-size: var(--font-size-3xl);
   text-transform: uppercase;
-  color: var(--white);
 }
 </style>

@@ -17,42 +17,11 @@
       "required": true,
       "unique": false
     },
-    "backgroundColor": {
-      "type": "customField",
-      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
-      "customField": "plugin::color-picker.color"
-    },
     "branding": {
       "displayName": "branding",
       "type": "component",
       "repeatable": false,
       "component": "branding.branding"
-    },
-    "fonts": {
-      "type": "customField",
-      "options": [
-        "Roboto",
-        "Open Sans",
-        "Lato",
-        "Montserrat",
-        "Roboto Condensed",
-        "Oswald",
-        "Poppins",
-        "Raleway",
-        "Slabo 27px",
-        "PT Sans",
-        "Noto Sans",
-        "Roboto Mono",
-        "Roboto Slab",
-        "Ubuntu",
-        "Merriweather",
-        "Lora",
-        "Playfair Display",
-        "Inter",
-        "Nunito",
-        "PT Serif"
-      ],
-      "customField": "plugin::multi-select.multi-select"
     },
     "uri": {
       "type": "string",
@@ -63,6 +32,11 @@
       "repeatable": false,
       "component": "data-connection.data-connection",
       "required": true
+    },
+    "theme": {
+      "type": "component",
+      "repeatable": false,
+      "component": "theming.theming"
     }
   }
 }

@@ -9,25 +9,6 @@
 </template>
 
 <style scoped lang="scss">
-@keyframes scaling {
-  // Note: Move colors to theming
-  0%,
-  100% {
-    transform: scale(0.2);
-    background-color: #d2ddde;
-  }
-
-  40% {
-    transform: scale(1);
-    background-color: #2e2e2e;
-  }
-
-  50% {
-    transform: scale(1);
-    background-color: #0d1933;
-  }
-}
-
 .loader {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

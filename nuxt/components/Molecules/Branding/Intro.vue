@@ -4,11 +4,11 @@
     :class="introClass"
     :style="introStyle">
     <div class="wrapper glass-noblur">
-      <span
+      <h3
         v-if="branding?.intro.title"
         class="title">
         {{ branding?.intro.title }}
-      </span>
+      </h3>
       <span
         v-if="branding?.intro.description"
         class="description">
@@ -44,10 +44,10 @@ const introClass = computed(() => {
 <style lang="scss" scoped>
 .intro {
   position: relative;
-  max-height: 32rem;
+  max-height: var(--branding-intro-height);
   overflow: hidden;
-  background-color: var(--black);
-  color: var(--white);
+  background-color: var(--inverse-background-color);
+  color: var(--inverse-text-color);
 
   .wrapper {
     display: grid;
@@ -59,8 +59,6 @@ const introClass = computed(() => {
     padding-block: var(--space-20);
 
     .title {
-      font-size: var(--font-size-xl);
-      font-weight: var(--font-weight-semibold);
       text-transform: uppercase;
       grid-row-start: 1;
       grid-column: span 8 / span 8;
@@ -71,7 +69,6 @@ const introClass = computed(() => {
     }
 
     .description {
-      font-size: var(--font-size-base);
       text-transform: uppercase;
       grid-row-start: 2;
       grid-column: span 8 / span 8;

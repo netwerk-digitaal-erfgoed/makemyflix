@@ -11,12 +11,18 @@ declare interface Branding {
   intro: Intro;
 }
 
+declare interface Theme {
+  primaryColor: string;
+  secondaryColor: string;
+  tertiaryColor: string;
+  fontFamily: string;
+}
+
 declare interface Flix {
   id: string;
   title: string;
-  backgroundColor: string;
   uri?: string;
   branding?: Branding;
   sidenote?: string;
-  fonts?: string[];
+  theme?: Theme;
 }

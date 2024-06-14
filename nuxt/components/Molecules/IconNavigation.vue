@@ -30,8 +30,8 @@ withDefaults(
   align-items: center;
   height: var(--space-11);
   width: var(--space-11);
-  background-color: var(--blue);
-  color: var(--black);
+  background-color: var(--tertiary-color);
+  color: var(--text-color);
   border-radius: var(--space-11);
 
   .icon {

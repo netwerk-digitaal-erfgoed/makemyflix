@@ -1,11 +1,11 @@
 <template>
   <div :class="{ base: true, 'dark-mode': darkMode }">
     <MoleculesButtonsHome />
-    <span
+    <h3
       v-if="title"
       class="title">
       {{ title }}
-    </span>
+    </h3>
     <MoleculesButtonsCategory v-if="showCategory" />
   </div>
 </template>
@@ -31,22 +31,20 @@ withDefaults(
   grid-template-columns: repeat(12, minmax(0, 1fr));
   padding-block: var(--space-7);
   align-items: center;
-  background-color: var(--white);
-  color: var(--black);
+  background-color: var(--background-color);
+  color: var(--text-color);
   width: 100%;
   z-index: 10;
 
   &.dark-mode {
-    background-color: var(--black);
-    color: var(--white);
+    background-color: var(--inverse-background-color);
+    color: var(--inverse-text-color);
   }
 }
 
 .title {
   display: flex;
   justify-content: center;
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   grid-column: span 10 / span 10;
   grid-column-start: 2;

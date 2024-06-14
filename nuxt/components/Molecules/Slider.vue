@@ -76,15 +76,15 @@ const setNavBtnVisibility = (event: CustomEvent) => {
   &::after {
     content: '';
   }
-  width: 2.75rem;
-  height: 2.75rem;
-  background: var(--blue);
-  color: var(--black);
+  width: var(--space-11);
+  height: var(--space-11);
+  background: var(--tertiary-color);
+  color: var(--text-color);
   border-radius: 50%;
 
   svg {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: var(--space-7);
+    height: var(--space-7);
   }
 }
 .is-hidden {

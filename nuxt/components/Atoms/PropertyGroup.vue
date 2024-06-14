@@ -1,6 +1,6 @@
 <template>
   <div class="property">
-    <label class="property-label">{{ t(label) }}</label>
+    <label class="label">{{ t(label) }}</label>
     <AtomsProperty
       v-for="property in properties"
       :key="property"
@@ -37,10 +37,11 @@ const properties = computed(() => {
 .property {
   display: flex;
   flex-direction: column;
-}
-
-.property-label {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-light);
+
+  .label {
+    font-weight: var(--font-weight-bold);
+  }
 }
 </style>

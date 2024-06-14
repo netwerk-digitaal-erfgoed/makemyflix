@@ -1,16 +1,12 @@
 <template>
-  <span
-    v-if="isLink && allowLink"
-    class="property">
+  <span v-if="isLink && allowLink">
     <NuxtLink
       :to="value"
       class="link"
       >{{ label }}</NuxtLink
     >
   </span>
-  <span
-    v-else
-    class="property">
+  <span v-else>
     {{ propertyValue }}
   </span>
 </template>
@@ -41,10 +37,6 @@ const propertyValue = computed(() => {
 </script>
 
 <style scoped lang="scss">
-.property {
-  font-size: var(--font-size-sm);
-}
-
 .link {
   color: inherit;
   text-decoration: inherit;

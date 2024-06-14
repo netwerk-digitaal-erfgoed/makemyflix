@@ -1,9 +1,18 @@
 :root {
+  // Theme specific dimensions (snowflakes)
   --header-height: 7.5rem;
   --cover-image-height: 16rem;
   --max-modal-width: 64rem;
   --max-modal-height: 90vh;
+  --branding-intro-height: 32rem;
 
-  // Note: Define in defaults
-  --artwork-container-background: #f8fafb;
+  // Theme colors
+  --background-color: var(--primary-color);
+  --text-color: var(--secondary-color);
+  --inverse-background-color: var(--text-color);
+  --inverse-text-color: var(--background-color);
+
+  // TODO: Should create more variables to allow better fine tuning
+  --modal-background-color: var(--text-color);
+  --modal-text-color: var(--background-color);
 }

@@ -11,11 +11,13 @@
       @click.self="closeAbout">
       <div class="modal">
         <div class="header">
-          <span class="title">About</span>
+          <h2 class="title">About</h2>
           <button
             @click="closeAbout"
             class="close-button">
-            <Icon icon="mdi:close" class="icon" />
+            <Icon
+              icon="mdi:close"
+              class="icon" />
           </button>
         </div>
         <div
@@ -69,8 +71,8 @@ const closeAbout = () => {
 <style lang="scss" scoped>
 // Collapsed sidenote styline
 .about-label {
-  background-color: var(--black);
-  color: var(--white);
+  background-color: var(--inverse-background-color);
+  color: var(--inverse-text-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,11 +102,11 @@ const closeAbout = () => {
   align-items: center;
   justify-content: center;
   z-index: 50;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--black-40);
 
   .modal {
-    background-color: var(--black);
-    color: var(--white);
+    background-color: var(--modal-background-color);
+    color: var(--modal-text-color);
     padding: var(--space-4) var(--space-8) 0 var(--space-8);
     max-width: var(--max-modal-width);
     position: relative;
@@ -120,8 +122,7 @@ const closeAbout = () => {
       align-items: center;
 
       .title {
-        font-size: var(--font-size-2xl);
-        color: var(--white);
+        text-transform: uppercase;
       }
 
       .close-button {
@@ -130,7 +131,7 @@ const closeAbout = () => {
         align-items: center;
         width: var(--space-6);
         height: var(--space-6);
-        color: var(--white);
+        color: var(--inverse-text-color);
         position: absolute;
         right: 0;
         top: 0;
@@ -146,6 +147,21 @@ const closeAbout = () => {
     .content {
       grid-row-start: 2;
       overflow-y: scroll;
+      scrollbar-color: var(--inverse-text-color) transparent;
+      scrollbar-width: thin;
+
+      &::-webkit-scrollbar {
+        width: var(--space-2);
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--inverse-background-color);
+        border-radius: var(--space-1);
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
     }
 
     .footer {
@@ -158,22 +174,23 @@ const closeAbout = () => {
   }
 }
 
-// Markdown styling
-:deep(h1) {
-  font-size: var(--font-size-2xl);
-  color: var(--white);
-  margin-bottom: var(--space-5);
-}
-:deep(h2) {
-  font-weight: var(--font-weight-semibold);
-}
-:deep(p),
-:deep(ul) {
-  font-weight: var(--font-weight-light);
-  margin-bottom: var(--space-4);
-}
-:deep(a) {
-  color: inherit;
-  text-decoration: inherit;
+/**
+ * Markdown styling
+ * Note: Some specific styling is required for the markdown content
+ */
+.content {
+  :deep(h1) {
+    margin-bottom: var(--space-5);
+  }
+
+  :deep(p),
+  :deep(ul) {
+    font-weight: var(--font-weight-light);
+    margin-bottom: var(--space-4);
+  }
+
+  :deep(a) {
+    color: var(--modal-text-color);
+  }
 }
 </style>

@@ -15,17 +15,17 @@
       </div>
 
       <div class="body">
-        <div
+        <h2
           v-if="category.title"
           class="title">
           {{ category.title }}
-        </div>
+        </h2>
 
-        <div
+        <h3
           v-if="category.period"
           class="period">
           {{ category.period }}
-        </div>
+        </h3>
       </div>
     </div>
   </AtomsNavigation>
@@ -46,8 +46,10 @@ defineProps<{
   overflow: hidden;
 
   &:hover {
-    .teaser-img {
-      filter: blur(0);
+    .img-wrapper {
+      .img {
+        filter: blur(0);
+      }
     }
   }
 
@@ -66,7 +68,7 @@ defineProps<{
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.02);
+      background: var(--black-20);
     }
 
     .img {
@@ -83,19 +85,18 @@ defineProps<{
     left: 0;
     bottom: 10%;
     width: 100%;
-    padding: var(--space-2) var(--space-5);
-    background-color: rgba(0, 0, 0, 0.3);
-    color: var(--white);
     text-align: center;
+    padding: var(--space-2) var(--space-5);
+    color: var(--background-color);
+    background-color: var(--black-30);
+    backdrop-filter: blur(var(--space-1));
 
     .title {
-      font-size: var(--font-size-2xl);
-      font-weight: var(--font-weight-semibold);
       text-transform: uppercase;
     }
 
     .period {
-      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-medium);
     }
   }
 }

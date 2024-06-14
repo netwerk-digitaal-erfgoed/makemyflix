@@ -110,7 +110,7 @@ const calculateDescription = () => {
 };
 
 const visualizeDescription = computed(() => {
-  return ['text-sm', 'mt-4', maxLines.value < 3 ? 'hide-element' : `truncate-lines-${maxLines.value}`];
+  return ['description-content', maxLines.value < 3 ? 'hide-element' : `truncate-lines-${maxLines.value}`];
 });
 
 // Find the current artwork
@@ -177,7 +177,6 @@ loadNext(artwork, category);
 .page {
   position: absolute;
   z-index: 10;
-  background-color: var(--white);
   height: 100vh;
   width: 100vw;
   display: grid;
@@ -219,7 +218,7 @@ loadNext(artwork, category);
 
     .artwork-container {
       grid-area: c;
-      background-color: var(--artwork-container-background);
+      background-color: var(--tertiary-color);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -238,8 +237,10 @@ loadNext(artwork, category);
       margin: var(--space-4);
       margin-right: 0;
 
-      .title {
-        font-size: var(--font-size-2xl);
+      .description-content {
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-light);
+        margin-top: var(--space-4);
       }
     }
 

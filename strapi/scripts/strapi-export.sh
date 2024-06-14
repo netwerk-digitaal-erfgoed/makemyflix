@@ -1,7 +1,7 @@
 npx strapi config:dump -f 'strapi-config.json'
 
 export_config () {
-  jq '.[] | select(.key==\"$1\")' strapi-config.json > export/"$1".json
+  jq ".[] | select(.key==\"$1\")" strapi-config.json > export/"$1".json
 }
 
 export_config "plugin_content_manager_configuration_components::branding.branding"

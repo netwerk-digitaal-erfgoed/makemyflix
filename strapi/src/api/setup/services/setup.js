@@ -1,6 +1,18 @@
 'use strict';
 
 module.exports = {
+  themeData: (flix) => {
+    if (!flix.theme) {
+      return;
+    }
+
+    return {
+      primaryColor: flix.theme.primary ?? '#000000',
+      secondaryColor: flix.theme.secondary ?? '#ffffff',
+      tertiaryColor: flix.theme.tertiary ?? '#f2f5ff',
+      fontFamily: flix.theme.font ?? 'Poppins',
+    };
+  },
   brandingData: (flix) => {
     if (!flix.branding) {
       return;

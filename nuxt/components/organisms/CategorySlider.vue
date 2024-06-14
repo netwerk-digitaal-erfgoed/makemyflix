@@ -23,22 +23,22 @@ const categoriesSliderProps = {
 
 <style scoped lang="scss">
 .categories-slider {
-  background-color: #000000;
+  background-color: var(--primary-color);
 
   .category-slide {
     transition: 0.15s ease-in-out;
 
     &:hover {
-      width: calc(((100% + 1.25rem) / 3) - 1.25rem) !important;
+      width: calc(((100% + var(--space-5)) / 3) - var(--space-5)) !important;
     }
   }
 
   :deep(.swiper-button-prev) {
-    left: 2rem;
+    left: var(--space-8);
   }
 
   :deep(.swiper-button-next) {
-    right: 2rem;
+    right: var(--space-8);
   }
 }
 </style>

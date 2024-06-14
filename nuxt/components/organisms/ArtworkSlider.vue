@@ -3,7 +3,7 @@
     class="artwork-slider"
     v-if="artworks.length">
     <div class="artwork-header">
-      <div class="artwork-title">{{ category.title }} {{ category.period }}</div>
+      <h1 class="artwork-title">{{ category.title }} {{ category.period }}</h1>
       <AtomsNavigation
         class="navigation-link"
         :to="{
@@ -62,11 +62,11 @@ const artworksSliderProps = {
 <style scoped lang="scss">
 .artworks {
   :deep(.swiper-button-prev) {
-    left: -4.75rem;
+    left: calc(var(--space-1) - var(--space-20));
   }
 
   :deep(.swiper-button-next) {
-    right: -4.75rem;
+    right: calc(var(--space-1) - var(--space-20));
   }
 }
 
@@ -78,22 +78,18 @@ const artworksSliderProps = {
 }
 
 .artwork-title {
-  font-size: var(--font-size-3xl);
   text-transform: uppercase;
 }
 
 .artwork-description {
-  font-size: var(--font-size-base);
-  text-transform: uppercase;
   font-weight: var(--font-weight-light);
-  margin-bottom: vafr(--space-7);
+  text-transform: uppercase;
+  margin-bottom: var(--space-7);
 }
 
 .navigation-link {
   color: inherit;
   text-decoration: inherit;
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
   text-transform: uppercase;
 }
 </style>

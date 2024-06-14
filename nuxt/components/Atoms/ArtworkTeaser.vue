@@ -44,7 +44,7 @@ defineProps<{
   overflow: hidden;
 
   &:hover {
-    .teaser-img {
+    .img {
       transform: scale(1.1);
     }
   }
@@ -77,12 +77,11 @@ defineProps<{
     bottom: var(--space-6);
     width: 100%;
     padding: var(--space-2) var(--space-5);
-    background-color: rgba(0, 0, 0, 0.3);
-    color: var(--white);
+    background-color: var(--black-30);
+    color: var(--background-color);
     backdrop-filter: blur(var(--space-1));
 
     .title {
-      font-size: var(--font-size-base);
       font-weight: var(--font-weight-semibold);
     }
 
