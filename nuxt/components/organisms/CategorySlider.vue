@@ -5,7 +5,8 @@
     <swiper-slide
       v-for="category in categories"
       :key="category.id"
-      class="category-slide">
+      class="category-slide"
+      :style="slideStyles">
       <AtomsCategoryTeaser :category="category" />
     </swiper-slide>
   </MoleculesSlider>
@@ -19,6 +20,12 @@ defineProps<{
 const categoriesSliderProps = {
   spaceBetween: 20,
 };
+
+const slideStyles = computed(() => {
+  return {
+    '--max-width-slide': window.innerWidth / 3 + 'px',
+  };
+});
 </script>
 
 <style scoped lang="scss">
@@ -29,7 +36,7 @@ const categoriesSliderProps = {
     transition: 0.15s ease-in-out;
 
     &:hover {
-      width: calc(((100% + var(--space-5)) / 3) - var(--space-5)) !important;
+      width: var(--max-width-slide) !important;
     }
   }
 
