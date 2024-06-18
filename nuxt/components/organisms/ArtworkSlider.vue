@@ -9,7 +9,7 @@
         :to="{
           name: 'flix-category',
           params: {
-            category: category.id,
+            category: category.slug,
           },
         }">
         Toon alles
@@ -31,8 +31,8 @@
           :to="{
             name: 'flix-category-artwork',
             params: {
-              category: category.id,
-              artwork: artwork.id,
+              category: category.slug,
+              artwork: artwork.slug,
             },
           }" />
       </swiper-slide>

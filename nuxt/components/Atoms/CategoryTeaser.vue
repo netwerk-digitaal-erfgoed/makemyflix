@@ -2,7 +2,7 @@
   <AtomsNavigation
     :to="{
       name: 'flix-category',
-      params: { category: category.id },
+      params: { category: category.slug },
     }">
     <div class="teaser">
       <div

@@ -1,24 +1,23 @@
+// @ts-nocheck
 'use strict';
 const axios = require('axios');
 const { createQuery } = require('../../../utils/query');
 const { slugify } = require('../../../utils/text');
 
-const generateTitle = ({name, provinceName, contentLocationNames}) => {
+const generateTitle = ({ name, provinceName, contentLocationNames }) => {
   if (name) {
     return name;
   }
   const locationName = contentLocationNames?.split('; ').pop();
-  return `${locationName}, ${provinceName}`
-}
+  return `${locationName}, ${provinceName}`;
+};
 
-const generateSubtitle = ({dateCreated, creatorNames}) => {
+const generateSubtitle = ({ dateCreated, creatorNames }) => {
   const creatorName = creatorNames?.split('; ').pop();
-  return [creatorName, dateCreated]
-    .filter(value => value)
-    .join(', ');
-}
+  return [creatorName, dateCreated].filter(value => value).join(', ');
+};
 
-const generateName = (input) => {
+const generateName = input => {
   if (input.includes('URI')) {
     return input.replace(/URI/, 'Name');
   } else {
@@ -27,9 +26,17 @@ const generateName = (input) => {
     const append = `Name${hasPluralName ? 's' : ''}`;
     return `${prepend}${append}`;
   }
-}
+};
 
-const generateProperties = ({ heritageObject, name, identifier, description, imageURI, publisherHomepage, ...metadata  }) => {
+const generateProperties = ({
+  heritageObject,
+  name,
+  identifier,
+  description,
+  imageURI,
+  publisherHomepage,
+  ...metadata
+}) => {
   const linkableProps = ['imageLicenseURI', 'provinceURI', 'publisherURI', 'creators', 'contentLocationURIs'];
   return Object.keys(metadata).reduce((collection, currentValue) => {
     const values = (metadata[currentValue] || '').split('; ');
@@ -43,55 +50,69 @@ const generateProperties = ({ heritageObject, name, identifier, description, ima
       const result = values.map((value, index) => {
         return {
           label: names[index],
-          value: (isPublisherURI && !value) ? publisherHomepage : value
-        }
+          value: isPublisherURI && !value ? publisherHomepage : value,
+        };
       });
       collection[currentValue] = result.length > 1 ? result : result[0];
     } else {
       if (!currentValue.includes('Name')) {
         collection[currentValue] = {
-          value: values[0]
-        }
+          value: values[0],
+        };
       }
     }
-    return collection
+    return collection;
   }, {});
-}
+};
+
+const addItemMeta = async (categoryId, uri) => {
+  const record = await strapi.entityService.create('api::item-meta.item-meta', {
+    data: {
+      categoryId,
+      uri,
+    },
+  });
+  return record.id;
+};
 
 module.exports = () => ({
-  getItemsByCategory: async (
-    queryString,
-    queryUrl,
-    categoryId,
-    page,
-    limit
-  ) => {
+  getCategoryMeta: async categoryId => {
+    return await strapi.entityService.findOne('api::category-meta.category-meta', categoryId);
+  },
+  getItemsByCategory: async (queryString, queryUrl, categoryUri, page, limit) => {
     try {
       const query = createQuery(queryString, {
         _LIMIT_: limit.toString(),
         _OFFSET_: (page * limit).toString(),
-        _CATEGORYID_: categoryId,
+        _CATEGORYID_: categoryUri,
       });
-
       return (await axios.post(queryUrl, { query })).data || [];
     } catch (err) {
       return err;
     }
   },
-  transformItems: (categoryId, items) => {
-    return items.map((item) => {
-      const id = item.identifier || slugify(item.name || '');
+  transformItems: async (categoryId, items) => {
+    const itemMetas = await strapi.entityService.findMany('api::item-meta.item-meta', {
+      filters: { $or: items.map(item => ({ uri: item.heritageObject })), categoryId },
+    });
+
+    const transformedItems = [];
+    for (const item of items) {
       const properties = generateProperties(item);
-      return {
+      const slug = slugify(item.name || '');
+      const id =
+        itemMetas.find(meta => meta.uri === item.heritageObject)?.id ||
+        (await addItemMeta(categoryId, item.heritageObject));
+      transformedItems.push({
         id,
         title: generateTitle(item),
+        slug: `${slug}-${id}`,
         subTitle: generateSubtitle(item),
-        description: item.description,
-        originalId: item.heritageObject,
+        description: item.description || '',
         image: item.imageURI,
-        categoryId,
-        properties
-      };
-    });
+        properties,
+      });
+    }
+    return transformedItems;
   },
 });

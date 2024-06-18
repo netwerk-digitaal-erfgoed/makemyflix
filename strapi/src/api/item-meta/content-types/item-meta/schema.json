@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "item_metas",
+  "info": {
+    "singularName": "item-meta",
+    "pluralName": "item-metas",
+    "displayName": "Item Meta"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": false
+    }
+  },
+  "attributes": {
+    "uri": {
+      "type": "string",
+      "required": true
+    },
+    "categoryId": {
+      "type": "biginteger",
+      "required": true
+    }
+  }
+}

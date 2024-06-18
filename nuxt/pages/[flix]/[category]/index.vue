@@ -18,7 +18,7 @@
               v-for="artwork in state.artworks"
               :key="artwork.id"
               :artwork="artwork"
-              :to="artworkPath(artwork.id)" />
+              :to="artworkPath(artwork.slug)" />
           </div>
 
           <AtomsObserver
@@ -39,7 +39,7 @@
 /**
  * Store deps
  */
-const { findCategoryById } = useCategoryStore();
+const { findCategoryBySlug } = useCategoryStore();
 const { listOrFetchByCategory } = useArtworkStore();
 
 /**
@@ -65,8 +65,10 @@ const state = reactive<ArtworkState>({
 // Load the category
 const route = useRoute();
 const category = route.params.category as string;
-state.artworks = await listOrFetchByCategory(category, state.pageSize, state.page);
-state.category = findCategoryById(category);
+state.category = findCategoryBySlug(category);
+if (state.category) {
+  state.artworks = await listOrFetchByCategory(state.category.id, state.pageSize, state.page);
+}
 
 /**
  * Computed Properties
@@ -86,19 +88,21 @@ const hasMore = computed(() => {
 /**
  * Methods
  */
-const artworkPath = (artworkId: string) => {
+const artworkPath = (artworkSlug: string) => {
   return {
     name: 'flix-category-artwork',
     params: {
       category,
-      artwork: artworkId,
+      artwork: artworkSlug,
     },
   };
 };
 
 const loadMore = async () => {
-  state.page += 1;
-  state.artworks.push(...(await listOrFetchByCategory(category, state.pageSize, state.page)));
+  if (state.category) {
+    state.page += 1;
+    state.artworks.push(...(await listOrFetchByCategory(state.category.id, state.pageSize, state.page)));
+  }
 };
 </script>
 

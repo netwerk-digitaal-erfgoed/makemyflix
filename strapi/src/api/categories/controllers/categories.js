@@ -1,13 +1,15 @@
 'use strict';
 
 module.exports = {
-  retrieveCategories: async (ctx) => {
+  retrieveCategories: async ctx => {
     try {
-      const { data: { endpointUrl, categoryQuery } } = ctx.state.flix;
+      const { data = {} } = ctx.state.flix;
+      const { endpointUrl, categoryQuery } = data;
+
       const { getCategories, transformCategories } = strapi.service('api::categories.categories');
 
       const categories = await getCategories(categoryQuery, endpointUrl);
-      ctx.body = transformCategories(categories);
+      ctx.body = await transformCategories(categories);
     } catch (err) {
       ctx.body = err;
     }

@@ -17,7 +17,7 @@ async function verifyDeletion(strapi, event) {
   const folders = await strapi.entityService.findMany('plugin::upload.folder', {
     filters: { name: folderName },
     populate: ['name'],
-    limit: 1
+    limit: 1,
   });
   const folderId = folders.length ? folders[0].path : false;
 
@@ -27,7 +27,7 @@ async function verifyDeletion(strapi, event) {
 
     if (containsCacheFolder) {
       throw new ApplicationError('This folder cannot be deleted.', {
-        message: 'This folder cannot be deleted.'
+        message: 'This folder cannot be deleted.',
       });
     }
   }
@@ -40,7 +40,7 @@ module.exports = {
    *
    * This gives you an opportunity to extend code.
    */
-  register(/*{ strapi }*/) { },
+  register(/*{ strapi }*/) {},
 
   /**
    * An asynchronous bootstrap function that runs before
@@ -52,10 +52,10 @@ module.exports = {
   async bootstrap({ strapi }) {
     await ensureCacheFolder(strapi);
     strapi.db.lifecycles.subscribe({
-      models: ["plugin::upload.folder"],
+      models: ['plugin::upload.folder'],
       async beforeDeleteMany(event) {
         await verifyDeletion(strapi, event);
-      }
+      },
     });
   },
 };

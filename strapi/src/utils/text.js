@@ -1,8 +1,8 @@
-const capitalize = (str) => {
+const capitalize = str => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-const slugify = (str) => {
+const slugify = str => {
   return str
     .toLowerCase()
     .trim()
@@ -12,7 +12,7 @@ const slugify = (str) => {
 };
 
 const periodName = (start, end) => {
-  return [start, end].filter((period) => period).join(' - ');
+  return [start, end].filter(period => period).join(' - ');
 };
 
 module.exports = {

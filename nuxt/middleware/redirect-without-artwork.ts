@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware(to => {
   const { category, artwork } = to.params as unknown as Params;
   const { currentFlix } = useFlixStore();
   const artworkStore = useArtworkStore();
-  const currentArtwork = artworkStore.findById(artwork, category);
+  const currentArtwork = artworkStore.findBySlug(artwork);
 
   if (currentArtwork) {
     return;

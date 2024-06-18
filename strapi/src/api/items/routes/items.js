@@ -2,7 +2,7 @@ module.exports = {
   routes: [
     {
      method: 'GET',
-     path: '/items',
+     path: '/category/:categoryId/items',
      handler: 'items.retrieveItemsByCategory',
      config: {
        policies: [],

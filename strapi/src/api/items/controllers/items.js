@@ -1,24 +1,29 @@
 'use strict';
 
 module.exports = {
-  retrieveItemsByCategory: async (ctx) => {
+  retrieveItemsByCategory: async ctx => {
     try {
       const {
         data: { endpointUrl, itemsQuery },
       } = ctx.state.flix;
-      const { categoryId, categorySlug, page, limit } = ctx.query;
+      const { page, limit } = ctx.query;
+      const { categoryId } = ctx.params;
 
-      const { getItemsByCategory, transformItems } =
-        strapi.service('api::items.items');
+      const { getItemsByCategory, transformItems, getCategoryMeta } = strapi.service('api::items.items');
+      const categoryMeta = await getCategoryMeta(categoryId);
+      if (!categoryMeta?.uri) {
+        ctx.body = { error: 'Category not found' };
+        return;
+      }
 
       const items = await getItemsByCategory(
         itemsQuery,
         endpointUrl,
-        categoryId,
+        categoryMeta.uri,
         parseInt(page) || 0,
         parseInt(limit) || 16,
       );
-      ctx.body = transformItems(categorySlug, items);
+      ctx.body = await transformItems(categoryId, items);
     } catch (err) {
       ctx.body = err;
     }

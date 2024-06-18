@@ -79,15 +79,15 @@ const store = useTransitionStore();
 const { transition } = storeToRefs(store);
 
 // Find the category and artwork
-const { findCategoryById } = useCategoryStore();
+const { findCategoryBySlug } = useCategoryStore();
 const artworkStore = useArtworkStore();
-const { findById, loadNext, findNext, findPrev } = artworkStore;
+const { findBySlug, loadNext, findNext, findPrev } = artworkStore;
 const { totalArtworks } = storeToRefs(artworkStore);
 
 // Find the current category
 const route = useRoute();
 const { category, artwork } = route.params as unknown as Params;
-const currentCategory = findCategoryById(category);
+const currentCategory = findCategoryBySlug(category);
 
 const title = computed(() => {
   return `${currentCategory?.title} ${currentCategory?.period}`;
@@ -114,16 +114,16 @@ const visualizeDescription = computed(() => {
 });
 
 // Find the current artwork
-const currentArtwork = findById(artwork, category);
+const currentArtwork = findBySlug(artwork);
 
 // Nav paths for the navigation buttons
 const navPath = (prev: boolean = false): To => {
   const propName = prev ? 'prev' : 'next';
   const params: Partial<Params> = {
-    category,
+    category: currentCategory?.slug,
   };
-  if (state[propName]?.id) {
-    params.artwork = state[propName]?.id;
+  if (state[propName]?.slug) {
+    params.artwork = state[propName]!.slug;
   }
 
   return {
@@ -163,14 +163,18 @@ onUnmounted(() => {
 watch(
   totalArtworks,
   () => {
-    state.next = findNext(artwork, category);
-    state.prev = findPrev(artwork, category);
+    if (currentArtwork) {
+      state.next = findNext(currentArtwork.id);
+      state.prev = findPrev(currentArtwork.id);
+    }
   },
   { immediate: true },
 );
 
 // Check if we need to load more artworks
-loadNext(artwork, category);
+if (currentArtwork && currentCategory) {
+  loadNext(currentArtwork.id, currentCategory.id);
+}
 </script>
 
 <style scoped lang="scss">
