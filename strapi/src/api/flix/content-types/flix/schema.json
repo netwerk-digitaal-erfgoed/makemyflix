@@ -12,11 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "title": {
-      "type": "string",
-      "required": true,
-      "unique": false
-    },
     "branding": {
       "displayName": "branding",
       "type": "component",
@@ -37,6 +32,12 @@
       "type": "component",
       "repeatable": false,
       "component": "theming.theming"
+    },
+    "labels": {
+      "type": "component",
+      "repeatable": false,
+      "component": "theming.labels",
+      "required": false
     }
   }
 }

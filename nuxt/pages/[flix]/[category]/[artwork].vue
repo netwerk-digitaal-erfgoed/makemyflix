@@ -186,6 +186,7 @@ if (currentArtwork && currentCategory) {
   display: grid;
   grid-template-rows: min-content 1fr;
   grid-template-areas: 'header' 'content';
+  background-color: var(--background-color);
 
   .header {
     grid-area: header;

@@ -2,15 +2,11 @@
 
 module.exports = {
   themeData: (flix) => {
-    if (!flix.theme) {
-      return;
-    }
-
     return {
-      primaryColor: flix.theme.primary ?? '#000000',
-      secondaryColor: flix.theme.secondary ?? '#ffffff',
-      tertiaryColor: flix.theme.tertiary ?? '#f2f5ff',
-      fontFamily: flix.theme.font ?? 'Poppins',
+      primaryColor: flix.theme?.primary ?? '#ffffff',
+      secondaryColor: flix.theme?.secondary ?? '#000000',
+      tertiaryColor: flix.theme?.tertiary ?? '#f2f5ff',
+      fontFamily: flix.theme?.font ?? 'Poppins',
     };
   },
   brandingData: (flix) => {
@@ -43,5 +39,15 @@ module.exports = {
     if (notes.length) {
       return notes[0].body;
     }
+  },
+  labelData: async (flix) => {
+    return {
+      dateCreated: flix.labels?.dateCreated ?? 'Jaar',
+      imageLicenseURI: flix.labels?.imageLicenseURI ?? 'Licentie',
+      creators: flix.labels?.creators ?? 'Makers',
+      contentLocationURIs: flix.labels?.contentLocationURIs ?? 'Plek',
+      provinceURI: flix.labels?.provinceURI ?? 'Provincie',
+      publisherURI: flix.labels?.publisherURI ?? 'Publisher'
+    };
   }
 };

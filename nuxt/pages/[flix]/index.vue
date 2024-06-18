@@ -21,9 +21,27 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Store deps
+ */
 const { categories } = storeToRefs(useCategoryStore());
 const { listOrFetchByCategory } = useArtworkStore();
 
+/**
+ * State & Props
+ * Note: Needed for transition to art page
+ */
+definePageMeta({
+  pageTransition: {
+    name: 'page',
+    mode: 'in-out',
+    duration: 1000,
+  },
+});
+
+/**
+ * Lifecycle methods
+ */
 onMounted(async () => {
   categories.value.forEach((category: Category) => listOrFetchByCategory(category.id));
 });

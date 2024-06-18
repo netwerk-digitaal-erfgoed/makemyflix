@@ -19,6 +19,11 @@ export const useFlixStore = defineStore('flix', () => {
   /**
    * Methods
    */
+  const generateLabel = (label: string) => {
+    const { labels } = currentFlix.value ?? {};
+    return labels?.[label] ?? '';
+  };
+
   const setupFlix = async (flix: string) => {
     // Construct the flexUri
     const flexUri = `${window.location.origin}/${flix}`;
@@ -48,5 +53,6 @@ export const useFlixStore = defineStore('flix', () => {
     branding,
     sidenote,
     setupFlix,
+    generateLabel,
   };
 });

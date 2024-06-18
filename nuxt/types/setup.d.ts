@@ -25,4 +25,5 @@ declare interface Flix {
   branding?: Branding;
   sidenote?: string;
   theme?: Theme;
+  labels?: Record<string, string>;
 }

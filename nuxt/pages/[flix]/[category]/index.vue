@@ -44,8 +44,8 @@ const { listOrFetchByCategory } = useArtworkStore();
 
 /**
  * State & Props
+ * Note: Needed for transition to art page
  */
-// Needed for transition to art page
 definePageMeta({
   pageTransition: {
     name: 'page',

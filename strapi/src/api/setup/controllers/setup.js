@@ -29,6 +29,13 @@ module.exports = {
       if (sidenoteData) {
         data.sidenote = sidenoteData;
       }
+
+      // Add Labels data
+      const labelData = await setupService.labelData(flix);
+      if (labelData) {
+        data.labels = labelData;
+      }
+
       ctx.body = data;
     } catch (err) {
       ctx.body = err;

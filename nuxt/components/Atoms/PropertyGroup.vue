@@ -1,6 +1,6 @@
 <template>
   <div class="property">
-    <label class="label">{{ t(label) }}</label>
+    <label class="label">{{ generateLabel(label) }}</label>
     <AtomsProperty
       v-for="property in properties"
       :key="property"
@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n({});
+const { generateLabel } = useFlixStore();
 const props = defineProps<{
   label: string;
   groupName: string;

@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_theming_labels",
+  "info": {
+    "displayName": "labels"
+  },
+  "options": {},
+  "attributes": {
+    "dateCreated": {
+      "type": "string"
+    },
+    "imageLicenseURI": {
+      "type": "string"
+    },
+    "creators": {
+      "type": "string"
+    },
+    "contentLocationURIs": {
+      "type": "string"
+    },
+    "provinceURI": {
+      "type": "string"
+    },
+    "publisherURI": {
+      "type": "string"
+    }
+  }
+}

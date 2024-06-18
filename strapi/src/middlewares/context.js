@@ -20,10 +20,11 @@ module.exports = (config, { strapi }) => {
             },
           },
           data: true,
+          labels: true,
         },
         filters: { uri: flixUri },
         limit: 1
-      })
+      });
 
       if (!entry) {
         context.status = 404;
