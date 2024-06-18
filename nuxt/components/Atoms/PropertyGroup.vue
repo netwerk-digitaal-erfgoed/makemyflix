@@ -19,8 +19,9 @@ const props = defineProps<{
 }>();
 
 const allowLink = computed(() => {
+  // TODO: Fix this! Use Strapi to relay this information
   // Fetch field names that aren't allowed to be links
-  const disableLinks = useQueriesStore().getDisableLinks();
+  const disableLinks = [] as string[];
   // If the groupName isn't in the list, return true
   return !disableLinks.includes(props.groupName);
 });

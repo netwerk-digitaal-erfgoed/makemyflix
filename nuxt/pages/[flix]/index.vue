@@ -43,6 +43,10 @@ definePageMeta({
  * Lifecycle methods
  */
 onMounted(async () => {
+  // First fetch the categories
+  await useCategoryStore().listOrFetchCategories();
+
+  // Then fetch the artworks for each category
   categories.value.forEach((category: Category) => listOrFetchByCategory(category.id));
 });
 </script>

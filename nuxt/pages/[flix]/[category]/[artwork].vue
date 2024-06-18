@@ -134,7 +134,6 @@ const navPath = (prev: boolean = false): To => {
 
 /**
  * Based on the direction of the component and the key pressed, trigger navigation
- * TODO: Why not trigger click on the corresponding element.
  */
 const eventHandler = (evt: KeyboardEvent) => {
   if (['ArrowLeft', 'ArrowRight'].includes(evt.key)) {
@@ -180,7 +179,7 @@ if (currentArtwork && currentCategory) {
 <style scoped lang="scss">
 .page {
   position: absolute;
-  z-index: 10;
+  z-index: 30;
   height: 100vh;
   width: 100vw;
   display: grid;

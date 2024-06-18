@@ -4,7 +4,7 @@ export const useArtworkStore = defineStore('artworks', () => {
   const {
     app: { backendUrl, token },
   } = useRuntimeConfig();
-  const { currentFlix } = useFlixStore();
+  const { currentFlix } = storeToRefs(useFlixStore());
   const artworks = ref<Artwork[]>([]);
   const totalArtworks = computed(() => artworks.value.length);
 
@@ -53,6 +53,10 @@ export const useArtworkStore = defineStore('artworks', () => {
     }
   }
 
+  function resetData(): void {
+    artworks.value = [];
+  }
+
   /**
    * Private Functions
    */
@@ -70,7 +74,7 @@ export const useArtworkStore = defineStore('artworks', () => {
     const category = findCategoryById(categoryId);
 
     // Only fetch if we have the category
-    if (category && currentFlix?.uri) {
+    if (category && currentFlix.value?.uri) {
       const response =
         ((await $fetch(`${backendUrl}/category/${categoryId}/items`, {
           params: {
@@ -79,7 +83,7 @@ export const useArtworkStore = defineStore('artworks', () => {
           },
           headers: {
             Authorization: `Bearer ${token}`,
-            'X-flix': currentFlix.uri,
+            'X-flix': currentFlix.value.uri,
           },
         }).catch(error => console.error(error))) as Artwork[]) || [];
       artworks.value.push(...response.map(artwork => ({ ...artwork, categoryId })));
@@ -100,5 +104,6 @@ export const useArtworkStore = defineStore('artworks', () => {
     loadNext,
     findNext,
     findPrev,
+    resetData,
   };
 });

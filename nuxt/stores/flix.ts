@@ -24,6 +24,37 @@ export const useFlixStore = defineStore('flix', () => {
     return labels?.[label] ?? '';
   };
 
+  const fetchFlixes = async (): Promise<Flix[]> => {
+    try {
+      const { data }: any = await $fetch(`${config.app.backendUrl}/flixes`, {
+        headers: {
+          Authorization: `Bearer ${config.app.token}`,
+        },
+      });
+      return data.map((entry: any) => {
+        const uri = entry.attributes.uri;
+        const path = uri.replace(window.location.origin, '');
+        const title = path.replace(/^\/(.)/, (_: any, char: string) => char.toUpperCase());
+
+        return {
+          id: entry.id,
+          path,
+          title,
+        };
+      });
+    } catch (error) {
+      console.error('Error fetching flixes:', error);
+      return [];
+    }
+  };
+
+  const resetData = () => {
+    currentFlix.value = undefined;
+    useArtworkStore().resetData();
+    useCategoryStore().resetData();
+    useThemeStore().resetData();
+  };
+
   const setupFlix = async (flix: string) => {
     // Construct the flexUri
     const flexUri = `${window.location.origin}/${flix}`;
@@ -32,6 +63,9 @@ export const useFlixStore = defineStore('flix', () => {
     if (currentFlix.value?.uri === flexUri) {
       return;
     }
+
+    // Reset the currentFlix
+    resetData();
 
     // Origin path is not retrievable from the backend so we need to pass it
     const setup: Flix = await $fetch(`${config.app.backendUrl}/setup`, {
@@ -46,6 +80,9 @@ export const useFlixStore = defineStore('flix', () => {
 
     // Update the current flix
     currentFlix.value = setup;
+
+    // Set the theming
+    useThemeStore().setThemeStyling();
   };
 
   return {
@@ -53,6 +90,7 @@ export const useFlixStore = defineStore('flix', () => {
     branding,
     sidenote,
     setupFlix,
+    fetchFlixes,
     generateLabel,
   };
 });

@@ -3,7 +3,7 @@ export const useCategoryStore = defineStore('categories', () => {
   const {
     app: { backendUrl, token },
   } = useRuntimeConfig();
-  const { currentFlix } = useFlixStore();
+  const { currentFlix } = storeToRefs(useFlixStore());
 
   function updateCategory(category: Category): void {
     const idx = categories.value.findIndex((cat: Category) => cat.id === category.id);
@@ -25,22 +25,33 @@ export const useCategoryStore = defineStore('categories', () => {
     return categories.value.slice();
   }
 
+  function resetData(): void {
+    categories.value = [];
+  }
+
   /**
    * Private functions
    */
   async function fetchCategories(): Promise<void> {
     console.warn('Categories.ts#fetchCategories');
-    if (!currentFlix?.uri) {
+    if (!currentFlix.value?.uri) {
       return;
     }
 
     categories.value = await $fetch(`${backendUrl}/categories`, {
       headers: {
         Authorization: `Bearer ${token}`,
-        'X-flix': currentFlix.uri,
+        'X-flix': currentFlix.value.uri,
       },
     });
   }
 
-  return { categories, updateCategory, findCategoryById, findCategoryBySlug, listOrFetchCategories };
+  return {
+    categories,
+    updateCategory,
+    findCategoryById,
+    findCategoryBySlug,
+    listOrFetchCategories,
+    resetData,
+  };
 });

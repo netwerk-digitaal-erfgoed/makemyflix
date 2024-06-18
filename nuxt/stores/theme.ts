@@ -54,7 +54,19 @@ export const useThemeStore = defineStore('theme', () => {
     createFontLink('theme-font', currentFlix.theme.fontFamily);
   };
 
+  const resetData = () => {
+    const style = document.getElementById('theme');
+    if (style) {
+      style.remove();
+    }
+    const link = document.getElementById('theme-font');
+    if (link) {
+      link.remove();
+    }
+  };
+
   return {
     setThemeStyling,
+    resetData,
   };
 });

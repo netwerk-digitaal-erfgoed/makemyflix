@@ -1,3 +1,5 @@
 export default defineNuxtRouteMiddleware(async to => {
-  await useFlixStore().setupFlix(to.params.flix as string);
+  if (to.params.flix) {
+    await useFlixStore().setupFlix(to.params.flix as string);
+  }
 });
