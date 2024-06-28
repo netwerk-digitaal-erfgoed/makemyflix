@@ -6,8 +6,6 @@ module.exports = {
       // Fetch the flix info from the context
       const flix = ctx.state.flix;
       const setupService = strapi.service('api::setup.setup');
-
-      // @TODO: Colors/fonts should be moved to the setupService once there are more
       const data = {
         title: flix.title,
       };

@@ -17,11 +17,11 @@ services:
       MINIO_ROOT_USER: ${S3_KEY}
       MINIO_ROOT_PASSWORD: ${S3_SECRET}
     ports:
-      - '9001:9001'
-      - '9091:9091'
+      - '1003:1003'
+      - '1004:1004'
     volumes:
       - ./minio-data:/data
-    command: server --address ":9001" --console-address ":9091" /data
+    command: server --address ":1003" --console-address ":1004" /data
 
   createbucket:
     image: minio/mc:latest

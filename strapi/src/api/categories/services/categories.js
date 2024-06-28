@@ -37,6 +37,7 @@ module.exports = () => ({
       const id =
         categoryMetas.find(meta => meta.uri === category.id && meta.slug === category.slug)?.id ||
         (await addCategoryMeta(category.id, category.slug));
+      // TODO: Improve this transformation. f.e. don't force optional properties like period
       transformedCategories.push({
         id,
         slug: category.slug,
