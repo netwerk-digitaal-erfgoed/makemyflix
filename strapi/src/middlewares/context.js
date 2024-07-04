@@ -21,9 +21,12 @@ module.exports = (config, { strapi }) => {
           },
           data: true,
           labels: true,
+          seo: {
+            populate: '*',
+          },
         },
         filters: { uri: flixUri },
-        limit: 1
+        limit: 1,
       });
 
       if (!entry) {

@@ -15,6 +15,8 @@
 <script lang="ts" setup>
 const flixStore = useFlixStore();
 const flixes = await flixStore.fetchFlixes();
+// Clear seo from any previous selected flixes
+useSetSeo();
 </script>
 
 <style lang="scss" scoped>

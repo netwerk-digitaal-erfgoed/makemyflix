@@ -83,6 +83,9 @@ export const useFlixStore = defineStore('flix', () => {
 
     // Set the theming
     useThemeStore().setThemeStyling();
+
+    // Set SEO
+    useSetSeo(currentFlix.value.seo);
   };
 
   return {

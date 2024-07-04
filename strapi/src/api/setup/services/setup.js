@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  themeData: (flix) => {
+  themeData: flix => {
     return {
       primaryColor: flix.theme?.primary ?? '#ffffff',
       secondaryColor: flix.theme?.secondary ?? '#000000',
@@ -9,13 +9,13 @@ module.exports = {
       fontFamily: flix.theme?.font ?? 'Poppins',
     };
   },
-  brandingData: (flix) => {
+  brandingData: flix => {
     if (!flix.branding) {
       return;
     }
 
     const branding = {
-      name: flix.branding?.name
+      name: flix.branding?.name,
     };
     if (flix?.branding?.intro) {
       branding.intro = flix.branding.intro;
@@ -29,25 +29,38 @@ module.exports = {
     }
     return branding;
   },
-  sidenoteData: async (flix) => {
+  sidenoteData: async flix => {
     const flixId = flix.id;
     const notes = await strapi.entityService.findMany('api::side-note.side-note', {
       filters: { flix: flixId },
       fields: ['body'],
-      limit: 1
+      limit: 1,
     });
     if (notes.length) {
       return notes[0].body;
     }
   },
-  labelData: async (flix) => {
+  labelData: flix => {
     return {
       dateCreated: flix.labels?.dateCreated ?? 'Jaar',
       imageLicenseURI: flix.labels?.imageLicenseURI ?? 'Licentie',
       creators: flix.labels?.creators ?? 'Makers',
       contentLocationURIs: flix.labels?.contentLocationURIs ?? 'Plek',
       provinceURI: flix.labels?.provinceURI ?? 'Provincie',
-      publisherURI: flix.labels?.publisherURI ?? 'Publisher'
+      publisherURI: flix.labels?.publisherURI ?? 'Publisher',
     };
-  }
+  },
+  seoData: flix => {
+    if (!flix.seo) {
+      return;
+    }
+    delete flix.seo.id;
+    if (flix.seo.ogImage) {
+      flix.seo.ogImage = flix.seo.ogImage.url;
+    }
+    if (flix.seo.twitterImage) {
+      flix.seo.twitterImage = flix.seo.twitterImage.url;
+    }
+    return flix.seo;
+  },
 };

@@ -18,6 +18,17 @@ declare interface Theme {
   fontFamily: string;
 }
 
+declare interface Seo {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+}
+
 declare interface Flix {
   id: string;
   title: string;
@@ -26,4 +37,5 @@ declare interface Flix {
   sidenote?: string;
   theme?: Theme;
   labels?: Record<string, string>;
+  seo?: Seo;
 }
