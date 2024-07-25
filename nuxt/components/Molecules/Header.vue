@@ -1,6 +1,6 @@
 <template>
   <div :class="{ base: true, 'dark-mode': darkMode }">
-    <MoleculesButtonsHome class="home" />
+    <MoleculesButtonsHome v-if="showHome" />
     <h3
       v-if="title"
       class="title">
@@ -18,11 +18,13 @@ withDefaults(
     darkMode?: boolean;
     title?: string;
     showCategory?: boolean;
+    showHome?: boolean;
   }>(),
   {
     darkMode: false,
     title: '',
     showCategory: false,
+    showHome: true,
   },
 );
 </script>
