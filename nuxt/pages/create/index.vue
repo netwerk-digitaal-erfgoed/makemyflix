@@ -5,7 +5,8 @@
     dark-mode />
   <div class="page">
     <span class="title">Genereer jouw eigen Flix in slechts 4 stappen</span>
-    <OrganismsEndpoints />
+    <component :is="currentStepComponent" />
+    <pre>{{ newFlix }}</pre>
     <div class="actions">
       <button
         v-if="showBack"
@@ -24,15 +25,52 @@
 </template>
 
 <script setup lang="ts">
+useHead({
+  link: [
+    {
+      rel: 'stylesheet',
+      href: `https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap`,
+    },
+  ],
+});
+
+const step = ref<number>(1);
+const { newFlix } = storeToRefs(useFlixStore());
+
+/**
+ * Computed Properties
+ */
+const currentStepComponent = computed(() => {
+  switch (step.value) {
+    case 1:
+      return resolveComponent('OrganismsCreateEndpoints');
+    case 2:
+      return resolveComponent('OrganismsCreateIdentity');
+    case 3:
+      return resolveComponent('OrganismsCreateStyling');
+    case 4:
+      return resolveComponent('OrganismsCreatePreview');
+    default:
+      return resolveComponent('OrganismsCreateEndpoints');
+  }
+});
+
+const showBack = computed(() => step.value > 1);
+const showNext = computed(() => step.value < 4);
+// const showPreview = computed(() => step.value === 4);
+/**
+ * Methods
+ */
 const next = () => {
-  console.log('Next');
+  if (step.value < 4) {
+    step.value++;
+  }
 };
 const back = () => {
-  console.log('Back');
+  if (step.value > 1) {
+    step.value--;
+  }
 };
-
-const showBack = ref(false);
-const showNext = ref(true);
 </script>
 
 <style lang="scss" scoped>
@@ -63,6 +101,13 @@ const showNext = ref(true);
     background-color: var(--blues-blue);
     color: var(--background-color);
     cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      color: var(--blues-blue);
+      background-color: var(--background-color);
+      border: var(--space-0) solid var(--blues-blue);
+    }
 
     &.primary {
       grid-area: right;
@@ -75,6 +120,12 @@ const showNext = ref(true);
       background-color: var(--background-color);
       color: var(--blues-blue);
       border: var(--space-0) solid var(--blues-blue);
+
+      &:hover {
+        background-color: var(--blues-blue);
+        color: var(--background-color);
+        border: none;
+      }
     }
   }
 }

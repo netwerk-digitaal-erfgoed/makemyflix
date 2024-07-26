@@ -39,3 +39,17 @@ declare interface Flix {
   labels?: Record<string, string>;
   seo?: Seo;
 }
+
+declare interface FlixData {
+  endpoint?: string;
+  categoryQuery?: string;
+  itemsQuery?: string;
+  title?: string;
+  description?: string;
+  logo?: string;
+  banner?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  tertiaryColor?: string;
+  fontFamily?: string;
+}

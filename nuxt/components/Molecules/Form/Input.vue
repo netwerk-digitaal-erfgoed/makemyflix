@@ -10,6 +10,13 @@
         :value="modelValue"
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" />
     </template>
+    <template v-if="type === 'color'">
+      <input
+        class="input color"
+        type="color"
+        :value="modelValue"
+        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" />
+    </template>
     <template v-else-if="type === 'textarea'">
       <textarea
         class="input"
@@ -25,7 +32,7 @@
  */
 withDefaults(
   defineProps<{
-    type?: 'input' | 'textarea';
+    type?: 'input' | 'textarea' | 'color';
     label?: string;
     inline?: boolean;
     modelValue?: string | number;
@@ -92,6 +99,14 @@ defineEmits(['update:modelValue']);
 
     &::placeholder {
       color: var(--neutrals-400);
+    }
+
+    &.color {
+      justify-self: self-end;
+      border: none;
+      padding: 0;
+      width: var(--space-8);
+      height: var(--space-8);
     }
   }
 }

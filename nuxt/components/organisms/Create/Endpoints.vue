@@ -11,33 +11,22 @@
       class="endpoint"
       label="Plaats hier je link van je endpoint"
       inline
-      v-model="endpoint" />
+      v-model="newFlix.endpoint" />
     <MoleculesFormInput
       type="textarea"
       class="categories"
       label="Plaats hier je Category queries"
-      v-model="categories" />
+      v-model="newFlix.categoryQuery" />
     <MoleculesFormInput
       type="textarea"
       class="items"
       label="Plaats hier je Item queries"
-      v-model="items" />
+      v-model="newFlix.itemsQuery" />
   </div>
 </template>
 
 <script setup lang="ts">
-useHead({
-  link: [
-    {
-      rel: 'stylesheet',
-      href: `https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap`,
-    },
-  ],
-});
-
-const endpoint = ref();
-const categories = ref();
-const items = ref();
+const { newFlix } = storeToRefs(useFlixStore());
 </script>
 
 <style lang="scss" scoped>

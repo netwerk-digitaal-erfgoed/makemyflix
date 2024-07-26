@@ -4,6 +4,7 @@ export const useFlixStore = defineStore('flix', () => {
    */
   const currentFlix = ref<Flix>();
   const config = useRuntimeConfig();
+  const newFlix = ref<FlixData>({});
 
   /**
    * Computed Properties
@@ -94,6 +95,7 @@ export const useFlixStore = defineStore('flix', () => {
 
   return {
     currentFlix,
+    newFlix,
     branding,
     sidenote,
     supportIIIF,
