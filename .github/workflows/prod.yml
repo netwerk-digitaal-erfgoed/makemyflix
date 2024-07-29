@@ -1,0 +1,14 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-deploy-app:
+    strategy:
+      matrix:
+        app: [nuxt, strapi]
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      app: ${{ matrix.app }}
