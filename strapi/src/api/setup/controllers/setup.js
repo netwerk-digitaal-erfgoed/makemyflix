@@ -7,7 +7,7 @@ module.exports = {
       const flix = ctx.state.flix;
       const setupService = strapi.service('api::setup.setup');
       const data = {
-        title: flix.title,
+        fallback: !!flix.fallbackIIIF,
       };
 
       // add theming data

@@ -7,6 +7,7 @@
 
 <script setup lang="ts">
 const config = useRuntimeConfig();
+const { supportIIIF } = storeToRefs(useFlixStore());
 const props = withDefaults(
   defineProps<{
     identifier: string;
@@ -28,6 +29,9 @@ const props = withDefaults(
 
 const imageUrl = computed<string>(() => {
   const { identifier, region, size, rotation, quality, format } = props;
+  if (!supportIIIF.value || useIsIIIF(identifier)) {
+    return identifier;
+  }
   return `${config.app.backendUrl}/images/${btoa(identifier)}/${region}/${size}/${rotation}/${quality}.${format}`;
 });
 </script>

@@ -16,6 +16,10 @@ export const useFlixStore = defineStore('flix', () => {
     return currentFlix.value?.sidenote;
   });
 
+  const supportIIIF = computed<boolean>(() => {
+    return currentFlix.value?.fallback ?? false;
+  });
+
   /**
    * Methods
    */
@@ -92,6 +96,7 @@ export const useFlixStore = defineStore('flix', () => {
     currentFlix,
     branding,
     sidenote,
+    supportIIIF,
     setupFlix,
     fetchFlixes,
     generateLabel,

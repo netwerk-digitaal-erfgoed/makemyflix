@@ -43,6 +43,11 @@
       "type": "component",
       "repeatable": false,
       "component": "seo.seo"
+    },
+    "fallbackIIIF": {
+      "type": "boolean",
+      "default": true,
+      "required": true
     }
   }
 }

@@ -31,11 +31,11 @@ declare interface Seo {
 
 declare interface Flix {
   id: string;
-  title: string;
   uri?: string;
+  fallback?: boolean;
+  theme?: Theme;
   branding?: Branding;
   sidenote?: string;
-  theme?: Theme;
   labels?: Record<string, string>;
   seo?: Seo;
 }
