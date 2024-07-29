@@ -14,7 +14,11 @@ export const useCategoryStore = defineStore('categories', () => {
     return categories.value.find((cat: Category) => cat.id === id);
   }
 
-  function findCategoryBySlug(slug: string): Category | undefined {
+  async function findCategoryBySlug(slug: string): Promise<Category | undefined> {
+    if (categories.value.length === 0) {
+      await fetchCategories();
+    }
+
     return categories.value.find((cat: Category) => cat.slug === slug);
   }
 

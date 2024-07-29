@@ -61,7 +61,7 @@ defineProps<{
     height: 100%;
     overflow: hidden;
 
-    &:after {
+    &::after {
       content: '';
       position: absolute;
       top: 0;

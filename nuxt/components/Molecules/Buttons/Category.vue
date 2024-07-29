@@ -3,7 +3,9 @@
     class="category-button"
     :to="categoryPath"
     direction="down">
-    <Icon icon="mdi:close" class="icon"/>
+    <Icon
+      icon="mdi:close"
+      class="icon" />
   </AtomsNavigation>
 </template>
 
@@ -17,11 +19,8 @@ const categoryPath = {
 
 <style lang="scss" scoped>
 .category-button {
-  grid-column: span 1 / span 1;
   display: flex;
   justify-content: center;
-  color: inherit;
-  text-decoration: inherit;
 
   .icon {
     width: var(--space-7);

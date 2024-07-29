@@ -1,0 +1,10 @@
+@mixin sm-screen-down {
+  @media screen and (max-width: 64rem) {
+    @content;
+  }
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}

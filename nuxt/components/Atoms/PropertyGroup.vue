@@ -36,8 +36,7 @@ const properties = computed(() => {
 
 <style scoped lang="scss">
 .property {
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-light);
 

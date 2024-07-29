@@ -87,7 +87,7 @@ const { totalArtworks } = storeToRefs(artworkStore);
 // Find the current category
 const route = useRoute();
 const { category, artwork } = route.params as unknown as Params;
-const currentCategory = findCategoryBySlug(category);
+const currentCategory = await findCategoryBySlug(category);
 
 const title = computed(() => {
   return `${currentCategory?.title} ${currentCategory?.period}`;
@@ -197,21 +197,11 @@ if (currentArtwork && currentCategory) {
     width: 100%;
     overflow: hidden;
     display: grid;
-    grid-template-rows: repeat(12, minmax(0, 1fr));
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: 60vh auto;
+    grid-template-columns: 1fr 6fr 4fr 1fr;
     grid-template-areas:
-      'b c c c c c c c c c c f'
-      'b c c c c c c c c c c f'
-      'b c c c c c c c c c c f'
-      'b c c c c c c c c c c f'
-      'b c c c c c c c c c c f'
-      'b c c c c c c c c c c f'
-      'b c c c c c c c c c c f'
-      'b c c c c c c c c c c f'
-      '. d d d d d d p p p p .'
-      '. d d d d d d p p p p .'
-      '. d d d d d d p p p p .'
-      '. d d d d d d p p p p .';
+      'b c c f'
+      '. d p .';
 
     .navigation-arrow-left {
       grid-area: b;
@@ -235,9 +225,8 @@ if (currentArtwork && currentCategory) {
     }
 
     .description {
+      @include flex-column;
       grid-area: d;
-      display: flex;
-      flex-direction: column;
       margin: var(--space-4);
       margin-right: 0;
 
@@ -262,6 +251,31 @@ if (currentArtwork && currentCategory) {
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+  }
+}
+
+@include sm-screen-down {
+  .page {
+    .content {
+      grid-template-rows: 33vh auto auto min-content;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        'c c'
+        'd d'
+        'p p'
+        'b f';
+      gap: var(--space-4);
+
+      .artwork-container {
+        justify-content: center;
+        align-items: flex-start;
+      }
+
+      .navigation-arrow-left,
+      .navigation-arrow-right {
+        margin-block: var(--space-4);
+      }
     }
   }
 }

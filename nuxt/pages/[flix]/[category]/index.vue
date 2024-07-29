@@ -65,7 +65,7 @@ const state = reactive<ArtworkState>({
 // Load the category
 const route = useRoute();
 const category = route.params.category as string;
-state.category = findCategoryBySlug(category);
+state.category = await findCategoryBySlug(category);
 if (state.category) {
   state.artworks = await listOrFetchByCategory(state.category.id, state.pageSize, state.page);
 }
@@ -108,8 +108,7 @@ const loadMore = async () => {
 
 <style scoped lang="scss">
 .page {
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
   min-height: 100vh;
 
   .header {
@@ -135,6 +134,8 @@ const loadMore = async () => {
       .row {
         display: grid;
         grid-template-columns: repeat(1, 1fr);
+        column-gap: var(--space-12);
+        row-gap: var(--space-14);
 
         @media (min-width: 992px) {
           grid-template-columns: repeat(2, 1fr);
@@ -147,9 +148,6 @@ const loadMore = async () => {
         @media (min-width: 1400px) {
           grid-template-columns: repeat(4, 1fr);
         }
-
-        column-gap: var(--space-12);
-        row-gap: var(--space-14);
       }
 
       .observer {
