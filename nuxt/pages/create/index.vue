@@ -8,18 +8,20 @@
     <component :is="currentStepComponent" />
     <pre>{{ newFlix }}</pre>
     <div class="actions">
-      <button
-        v-if="showBack"
-        @click="back"
-        class="btn secondary">
-        Vorige
-      </button>
-      <button
-        v-if="showNext"
-        @click="next"
-        class="btn primary">
-        Volgende
-      </button>
+      <template v-if="showBack">
+        <button
+          @click="back"
+          class="btn secondary">
+          Vorige
+        </button>
+      </template>
+      <template v-if="showNext">
+        <button
+          @click="next"
+          class="btn primary">
+          Volgende
+        </button>
+      </template>
     </div>
   </div>
 </template>
@@ -64,6 +66,10 @@ const showNext = computed(() => step.value < 4);
 const next = () => {
   if (step.value < 4) {
     step.value++;
+  }
+  if (step.value === 4) {
+    useFlixStore().saveFlix();
+    navigateTo('/create/preview');
   }
 };
 const back = () => {

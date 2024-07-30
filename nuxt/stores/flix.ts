@@ -29,6 +29,60 @@ export const useFlixStore = defineStore('flix', () => {
     return labels?.[label] ?? '';
   };
 
+  const saveFlix = async () => {
+    try {
+      const {
+        endpoint,
+        categoryQuery,
+        itemsQuery,
+        title,
+        description,
+        // logo,
+        // banner,
+        primaryColor,
+        secondaryColor,
+        tertiaryColor,
+        // fontFamily,
+      } = newFlix.value;
+
+      const { data }: any = await $fetch(`${config.app.backendUrl}/flixes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${config.app.token}`,
+        },
+        body: JSON.stringify({
+          data: {
+            data: {
+              endpointUrl: endpoint,
+              categoryQuery,
+              itemsQuery,
+            },
+            fallbackIIIF: true,
+            uri: 'http://localhost:3000/heritageflix', // Make this dynamic
+            branding: {
+              name: title,
+              intro: {
+                title,
+                description,
+              },
+            },
+            theme: {
+              font: 'Poppins',
+              primary: primaryColor,
+              secondary: secondaryColor,
+              tertiary: tertiaryColor,
+            },
+          },
+        }),
+      });
+      return data;
+    } catch (error) {
+      console.error('Error saving flix:', error);
+      return undefined;
+    }
+  };
+
   const fetchFlixes = async (): Promise<Flix[]> => {
     try {
       const { data }: any = await $fetch(`${config.app.backendUrl}/flixes`, {
@@ -99,6 +153,7 @@ export const useFlixStore = defineStore('flix', () => {
     branding,
     sidenote,
     supportIIIF,
+    saveFlix,
     setupFlix,
     fetchFlixes,
     generateLabel,
