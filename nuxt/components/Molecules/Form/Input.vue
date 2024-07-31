@@ -1,8 +1,8 @@
 <template>
-  <div :class="{ 'input-wrapper': true, inline: inline }">
-    <label v-if="label">
-      {{ label }}
-    </label>
+  <AtomsInputWrapper
+    :id="id"
+    :label="label"
+    :inline="inline">
     <template v-if="type === 'input'">
       <input
         class="input"
@@ -23,7 +23,7 @@
         :value="modelValue"
         @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)" />
     </template>
-  </div>
+  </AtomsInputWrapper>
 </template>
 
 <script lang="ts" setup>
@@ -32,6 +32,7 @@
  */
 withDefaults(
   defineProps<{
+    id?: string;
     type?: 'input' | 'textarea' | 'color';
     label?: string;
     inline?: boolean;

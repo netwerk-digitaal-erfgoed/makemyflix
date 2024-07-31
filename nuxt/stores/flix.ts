@@ -29,6 +29,36 @@ export const useFlixStore = defineStore('flix', () => {
     return labels?.[label] ?? '';
   };
 
+  const uploadImage = async (file: File | UploadedImage | null | undefined): Promise<UploadedImage | null> => {
+    if (!(file instanceof File)) {
+      return file ?? null;
+    }
+
+    const formData = new FormData();
+    formData.append('files', file);
+
+    const response = await $fetch<UploadedImage[]>(`${config.app.backendUrl}/upload`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${config.app.token}`,
+      },
+      body: formData,
+    });
+
+    console.log(response?.[0]);
+
+    return response?.[0] ?? null;
+  };
+
+  const deleteImage = async (image: UploadedImage) => {
+    await $fetch<UploadedImage[]>(`${config.app.backendUrl}/upload/files/${image.id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${config.app.token}`,
+      },
+    });
+  };
+
   const saveFlix = async () => {
     try {
       const {
@@ -37,46 +67,68 @@ export const useFlixStore = defineStore('flix', () => {
         itemsQuery,
         title,
         description,
-        // logo,
-        // banner,
+        logo,
+        banner,
         primaryColor,
         secondaryColor,
         tertiaryColor,
         // fontFamily,
       } = newFlix.value;
 
-      const { data }: any = await $fetch(`${config.app.backendUrl}/flixes`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${config.app.token}`,
-        },
-        body: JSON.stringify({
-          data: {
+      const [logoData, bannerData] = await Promise.all([uploadImage(logo), uploadImage(banner)]);
+
+      try {
+        const { data }: any = await $fetch(`${config.app.backendUrl}/flixes`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${config.app.token}`,
+          },
+          body: JSON.stringify({
             data: {
-              endpointUrl: endpoint,
-              categoryQuery,
-              itemsQuery,
-            },
-            fallbackIIIF: true,
-            uri: 'http://localhost:3000/heritageflix', // Make this dynamic
-            branding: {
-              name: title,
-              intro: {
-                title,
-                description,
+              data: {
+                endpointUrl: endpoint,
+                categoryQuery,
+                itemsQuery,
+              },
+              fallbackIIIF: true,
+              uri: `${window.location.origin}/test`, // TODO: make input based
+              branding: {
+                name: title,
+                logo: {
+                  set: logoData ? [logoData.id] : [],
+                },
+                banner: {
+                  set: bannerData ? [bannerData.id] : [],
+                },
+                intro: {
+                  title,
+                  description,
+                },
+              },
+              theme: {
+                font: 'Poppins', // TODO: make input based
+                primary: primaryColor,
+                secondary: secondaryColor,
+                tertiary: tertiaryColor,
               },
             },
-            theme: {
-              font: 'Poppins',
-              primary: primaryColor,
-              secondary: secondaryColor,
-              tertiary: tertiaryColor,
-            },
-          },
-        }),
-      });
-      return data;
+          }),
+        });
+
+        return data;
+      } catch (e) {
+        // cleanup newly uploaded images to prevent reuploads of the same images upon errors
+        if (logoData && logo !== logoData) {
+          deleteImage(logoData);
+        }
+
+        if (bannerData && banner !== bannerData) {
+          deleteImage(bannerData);
+        }
+
+        throw e;
+      }
     } catch (error) {
       console.error('Error saving flix:', error);
       return undefined;

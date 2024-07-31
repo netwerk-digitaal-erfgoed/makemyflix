@@ -16,11 +16,13 @@
       v-model="newFlix.description" />
     <MoleculesFormUpload
       id="logo"
-      label="Selecteer vanuit je browser of sleep in dit vlak om te uploaden"
+      label="Flix logo"
+      prompt="Selecteer vanuit je browser of sleep in dit vlak om te uploaden"
       v-model="newFlix.logo" />
     <MoleculesFormUpload
       id="banner"
-      label="Selecteer vanuit je browser of sleep in dit vlak om te uploaden"
+      label="Flix thumbnail"
+      prompt="Selecteer vanuit je browser of sleep in dit vlak om te uploaden"
       v-model="newFlix.banner" />
   </div>
 </template>

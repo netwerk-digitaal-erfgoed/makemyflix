@@ -6,7 +6,7 @@
   <div class="page">
     <span class="title">Genereer jouw eigen Flix in slechts 4 stappen</span>
     <component :is="currentStepComponent" />
-    <pre>{{ newFlix }}</pre>
+    <pre>{{ devData }}</pre>
     <div class="actions">
       <template v-if="showBack">
         <button
@@ -36,8 +36,16 @@ useHead({
   ],
 });
 
-const step = ref<number>(1);
-const { newFlix } = storeToRefs(useFlixStore());
+/**
+ * Deps
+ */
+const flixStore = useFlixStore();
+
+/**
+ * State
+ */
+const step = ref<number>(2);
+const { newFlix } = storeToRefs(flixStore);
 
 /**
  * Computed Properties
@@ -57,9 +65,24 @@ const currentStepComponent = computed(() => {
   }
 });
 
+const devData = computed(() => {
+  return Object.fromEntries(
+    Object.entries(newFlix.value).map(([k, v]) => {
+      if (v instanceof File) {
+        return [k, v.name];
+      }
+
+      return [k, v];
+    }),
+  );
+});
+
 const showBack = computed(() => step.value > 1);
+
 const showNext = computed(() => step.value < 4);
+
 // const showPreview = computed(() => step.value === 4);
+
 /**
  * Methods
  */
@@ -68,10 +91,11 @@ const next = () => {
     step.value++;
   }
   if (step.value === 4) {
-    useFlixStore().saveFlix();
+    flixStore.saveFlix();
     navigateTo('/create/preview');
   }
 };
+
 const back = () => {
   if (step.value > 1) {
     step.value--;

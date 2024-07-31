@@ -4,10 +4,24 @@ declare interface Intro {
   footer: string;
 }
 
+declare interface UploadedImageFormat {
+  name: string;
+  url: string;
+  width: number;
+  height: number;
+  ext: string;
+  mime: string;
+}
+
+declare interface UploadedImage extends UploadedImageFormat {
+  id: number;
+  formats: UploadedImageFormat[];
+}
+
 declare interface Branding {
   name: string;
-  logo: string;
-  banner: string;
+  logo: UploadedImage;
+  banner: UploadedImage;
   intro: Intro;
 }
 
@@ -46,8 +60,8 @@ declare interface FlixData {
   itemsQuery?: string;
   title?: string;
   description?: string;
-  logo?: string;
-  banner?: string;
+  logo?: UploadedImage | File | null;
+  banner?: UploadedImage | File | null;
   primaryColor?: string;
   secondaryColor?: string;
   tertiaryColor?: string;

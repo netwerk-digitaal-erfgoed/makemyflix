@@ -42,12 +42,14 @@ export const useCategoryStore = defineStore('categories', () => {
       return;
     }
 
-    categories.value = await $fetch(`${backendUrl}/categories`, {
+    const cats = await $fetch<Category[]>(`${backendUrl}/categories`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'X-flix': currentFlix.value.uri,
       },
     });
+
+    categories.value = Array.isArray(cats) ? cats : [];
   }
 
   return {
