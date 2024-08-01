@@ -55,6 +55,8 @@ declare interface Flix {
 }
 
 declare interface FlixData {
+  id?: string; // indicates if it has been saved already
+  uri?: string;
   endpoint?: string;
   categoryQuery?: string;
   itemsQuery?: string;

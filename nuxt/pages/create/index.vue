@@ -4,25 +4,28 @@
     :show-home="false"
     dark-mode />
   <div class="page">
-    <span class="title">Genereer jouw eigen Flix in slechts 4 stappen</span>
-    <component :is="currentStepComponent" />
-    <pre>{{ devData }}</pre>
-    <div class="actions">
-      <template v-if="showBack">
+    <template v-if="!showPreview">
+      <span class="title">Genereer jouw eigen Flix in slechts {{ stepComponents.length }} stappen</span>
+      <component :is="stepComponents[stepComponentIndex]" />
+      <pre>{{ devData }}</pre>
+      <div class="actions">
         <button
-          @click="back"
+          v-if="showBack"
+          @click="flixBuilderStore.back"
           class="btn secondary">
           Vorige
         </button>
-      </template>
-      <template v-if="showNext">
         <button
-          @click="next"
+          v-if="showNext"
+          @click="flixBuilderStore.next"
           class="btn primary">
           Volgende
         </button>
-      </template>
-    </div>
+      </div>
+    </template>
+    <template v-else>
+      <component :is="stepComponents[stepComponentIndex]" />
+    </template>
   </div>
 </template>
 
@@ -39,32 +42,17 @@ useHead({
 /**
  * Deps
  */
-const flixStore = useFlixStore();
+const flixBuilderStore = useFlixBuilderStore();
 
 /**
  * State
  */
-const step = ref<number>(2);
-const { newFlix } = storeToRefs(flixStore);
+const stepComponents = flixBuilderStore.stepComponents;
+const { step, newFlix } = storeToRefs(flixBuilderStore);
 
 /**
  * Computed Properties
  */
-const currentStepComponent = computed(() => {
-  switch (step.value) {
-    case 1:
-      return resolveComponent('OrganismsCreateEndpoints');
-    case 2:
-      return resolveComponent('OrganismsCreateIdentity');
-    case 3:
-      return resolveComponent('OrganismsCreateStyling');
-    case 4:
-      return resolveComponent('OrganismsCreatePreview');
-    default:
-      return resolveComponent('OrganismsCreateEndpoints');
-  }
-});
-
 const devData = computed(() => {
   return Object.fromEntries(
     Object.entries(newFlix.value).map(([k, v]) => {
@@ -77,30 +65,19 @@ const devData = computed(() => {
   );
 });
 
+const stepComponentIndex = computed(() => {
+  if (step.value >= 1 && step.value <= stepComponents.length) {
+    return step.value - 1;
+  }
+
+  return 0;
+});
+
 const showBack = computed(() => step.value > 1);
 
-const showNext = computed(() => step.value < 4);
+const showNext = computed(() => step.value < stepComponents.length);
 
-// const showPreview = computed(() => step.value === 4);
-
-/**
- * Methods
- */
-const next = () => {
-  if (step.value < 4) {
-    step.value++;
-  }
-  if (step.value === 4) {
-    flixStore.saveFlix();
-    navigateTo('/create/preview');
-  }
-};
-
-const back = () => {
-  if (step.value > 1) {
-    step.value--;
-  }
-};
+const showPreview = computed(() => step.value === 4);
 </script>
 
 <style lang="scss" scoped>

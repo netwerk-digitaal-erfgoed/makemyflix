@@ -4,7 +4,6 @@ export const useFlixStore = defineStore('flix', () => {
    */
   const currentFlix = ref<Flix>();
   const config = useRuntimeConfig();
-  const newFlix = ref<FlixData>({});
 
   /**
    * Computed Properties
@@ -29,123 +28,18 @@ export const useFlixStore = defineStore('flix', () => {
     return labels?.[label] ?? '';
   };
 
-  const uploadImage = async (file: File | UploadedImage | null | undefined): Promise<UploadedImage | null> => {
-    if (!(file instanceof File)) {
-      return file ?? null;
-    }
-
-    const formData = new FormData();
-    formData.append('files', file);
-
-    const response = await $fetch<UploadedImage[]>(`${config.app.backendUrl}/upload`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${config.app.token}`,
-      },
-      body: formData,
-    });
-
-    console.log(response?.[0]);
-
-    return response?.[0] ?? null;
-  };
-
-  const deleteImage = async (image: UploadedImage) => {
-    await $fetch<UploadedImage[]>(`${config.app.backendUrl}/upload/files/${image.id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${config.app.token}`,
-      },
-    });
-  };
-
-  const saveFlix = async () => {
+  const fetchFlixes = async () => {
     try {
-      const {
-        endpoint,
-        categoryQuery,
-        itemsQuery,
-        title,
-        description,
-        logo,
-        banner,
-        primaryColor,
-        secondaryColor,
-        tertiaryColor,
-        // fontFamily,
-      } = newFlix.value;
-
-      const [logoData, bannerData] = await Promise.all([uploadImage(logo), uploadImage(banner)]);
-
-      try {
-        const { data }: any = await $fetch(`${config.app.backendUrl}/flixes`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${config.app.token}`,
-          },
-          body: JSON.stringify({
-            data: {
-              data: {
-                endpointUrl: endpoint,
-                categoryQuery,
-                itemsQuery,
-              },
-              fallbackIIIF: true,
-              uri: `${window.location.origin}/test`, // TODO: make input based
-              branding: {
-                name: title,
-                logo: {
-                  set: logoData ? [logoData.id] : [],
-                },
-                banner: {
-                  set: bannerData ? [bannerData.id] : [],
-                },
-                intro: {
-                  title,
-                  description,
-                },
-              },
-              theme: {
-                font: 'Poppins', // TODO: make input based
-                primary: primaryColor,
-                secondary: secondaryColor,
-                tertiary: tertiaryColor,
-              },
-            },
-          }),
-        });
-
-        return data;
-      } catch (e) {
-        // cleanup newly uploaded images to prevent reuploads of the same images upon errors
-        if (logoData && logo !== logoData) {
-          deleteImage(logoData);
-        }
-
-        if (bannerData && banner !== bannerData) {
-          deleteImage(bannerData);
-        }
-
-        throw e;
-      }
-    } catch (error) {
-      console.error('Error saving flix:', error);
-      return undefined;
-    }
-  };
-
-  const fetchFlixes = async (): Promise<Flix[]> => {
-    try {
-      const { data }: any = await $fetch(`${config.app.backendUrl}/flixes`, {
+      const { data } = await $fetch<StrapiApiResponse<StrapiEntity<Flix>[]>>(`${config.app.backendUrl}/flixes`, {
         headers: {
           Authorization: `Bearer ${config.app.token}`,
         },
       });
-      return data.map((entry: any) => {
+
+      return data.map(entry => {
         const uri = entry.attributes.uri;
-        const path = uri.replace(window.location.origin, '');
-        const title = path.replace(/^\/(.)/, (_: any, char: string) => char.toUpperCase());
+        const path = uri?.replace(window.location.origin, '') ?? '';
+        const title = path?.replace(/^\/(.)/, (_: any, char: string) => char.toUpperCase()) ?? '';
 
         return {
           id: entry.id,
@@ -166,7 +60,7 @@ export const useFlixStore = defineStore('flix', () => {
     useThemeStore().resetData();
   };
 
-  const setupFlix = async (flix: string) => {
+  const setupFlix = async (flix: string, preview = false) => {
     // Construct the flexUri
     const flexUri = `${window.location.origin}/${flix}`;
 
@@ -193,7 +87,7 @@ export const useFlixStore = defineStore('flix', () => {
     currentFlix.value = setup;
 
     // Set the theming
-    useThemeStore().setThemeStyling();
+    useThemeStore().setThemeStyling(preview);
 
     // Set SEO
     useSetSeo(currentFlix.value.seo);
@@ -201,13 +95,12 @@ export const useFlixStore = defineStore('flix', () => {
 
   return {
     currentFlix,
-    newFlix,
     branding,
     sidenote,
     supportIIIF,
-    saveFlix,
     setupFlix,
     fetchFlixes,
     generateLabel,
+    resetData,
   };
 });

@@ -5,12 +5,7 @@
     <h1 class="artwork-title">{{ category.title }} {{ category.period }}</h1>
     <AtomsNavigation
       class="navigation-link"
-      :to="{
-        name: 'flix-category',
-        params: {
-          category: category.slug,
-        },
-      }">
+      :to="categoryPath">
       Toon alles
     </AtomsNavigation>
     <div
@@ -29,6 +24,7 @@
           :to="{
             name: 'flix-category-artwork',
             params: {
+              flix: flixStore.currentFlix?.id ?? '',
               category: category.slug,
               artwork: artwork.slug,
             },
@@ -62,6 +58,15 @@ const artworksSliderProps = {
     },
   },
 };
+
+const flixStore = useFlixStore();
+const categoryPath = {
+  name: 'flix-category',
+  params: {
+    flix: flixStore.currentFlix?.id,
+    category: props.category.slug,
+  },
+} as To;
 </script>
 
 <style scoped lang="scss">

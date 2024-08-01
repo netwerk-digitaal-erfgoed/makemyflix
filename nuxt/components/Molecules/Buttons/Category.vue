@@ -10,10 +10,14 @@
 </template>
 
 <script setup lang="ts">
+const flixStore = useFlixStore();
 const route = useRoute();
 const categoryPath = {
   name: 'flix-category',
-  params: { category: route.params.category },
+  params: {
+    flix: flixStore.currentFlix?.id,
+    category: route.params.category,
+  },
 } as To;
 </script>
 

@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-const { newFlix } = storeToRefs(useFlixStore());
+const { newFlix } = storeToRefs(useFlixBuilderStore());
 </script>
 
 <style lang="scss" scoped>

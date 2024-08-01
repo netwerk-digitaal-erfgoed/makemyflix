@@ -1,9 +1,5 @@
 <template>
-  <AtomsNavigation
-    :to="{
-      name: 'flix-category',
-      params: { category: category.slug },
-    }">
+  <AtomsNavigation :to="to">
     <div class="teaser">
       <div
         v-if="category.image"
@@ -32,9 +28,21 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   category: Category;
 }>();
+
+const flixStore = useFlixStore();
+
+const to = computed(() => {
+  return {
+    name: 'flix-category',
+    params: {
+      category: props.category.slug,
+      flix: flixStore.currentFlix?.id ?? '',
+    },
+  };
+});
 </script>
 
 <style lang="scss" scoped>

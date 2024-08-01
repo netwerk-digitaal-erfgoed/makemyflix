@@ -37,19 +37,23 @@ export const useCategoryStore = defineStore('categories', () => {
    * Private functions
    */
   async function fetchCategories(): Promise<void> {
-    console.warn('Categories.ts#fetchCategories');
+    console.warn('Categories.ts#fetchCategories', currentFlix.value);
     if (!currentFlix.value?.uri) {
       return;
     }
 
-    const cats = await $fetch<Category[]>(`${backendUrl}/categories`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'X-flix': currentFlix.value.uri,
-      },
-    });
+    try {
+      const cats = await $fetch<Category[]>(`${backendUrl}/categories`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-flix': currentFlix.value.uri,
+        },
+      });
 
-    categories.value = Array.isArray(cats) ? cats : [];
+      categories.value = Array.isArray(cats) ? cats : [];
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   return {
