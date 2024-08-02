@@ -21,7 +21,8 @@ module.exports = () => ({
         _LIMIT_: limit.toString(),
       });
 
-      return (await axios.post(queryUrl, { query })).data || [];
+      const response = await axios.post(queryUrl, { query });
+      return response.data ?? [];
     } catch (err) {
       return err;
     }

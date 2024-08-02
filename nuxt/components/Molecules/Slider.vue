@@ -73,9 +73,6 @@ const setNavBtnVisibility = (event: CustomEvent) => {
   position: relative;
 }
 .swiper-button-nav {
-  &::after {
-    content: '';
-  }
   width: var(--space-11);
   height: var(--space-11);
   background: var(--tertiary-color);
@@ -86,8 +83,18 @@ const setNavBtnVisibility = (event: CustomEvent) => {
     width: var(--space-7);
     height: var(--space-7);
   }
+
+  &::after {
+    content: '';
+  }
 }
 .is-hidden {
   display: none;
+}
+
+@include sm-screen-down {
+  .swiper-button-nav {
+    display: none;
+  }
 }
 </style>

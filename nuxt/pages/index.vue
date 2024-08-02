@@ -21,13 +21,12 @@ useSetSeo();
 
 <style lang="scss" scoped>
 .flix-list {
+  @include flex-column;
+  align-items: center;
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   background-color: black;
   color: white;
   padding: var(--space-10);
@@ -38,11 +37,10 @@ h1 {
 }
 
 ul {
+  @include flex-column;
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
   align-items: center;
 }
 

@@ -76,7 +76,7 @@ export const useArtworkStore = defineStore('artworks', () => {
     // Only fetch if we have the category
     if (category && currentFlix.value?.uri) {
       const response =
-        ((await $fetch(`${backendUrl}/category/${categoryId}/items`, {
+        ((await $fetch(`${backendUrl}/categories/${categoryId}/items`, {
           params: {
             limit,
             page,

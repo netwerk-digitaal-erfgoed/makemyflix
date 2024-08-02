@@ -9,3 +9,12 @@ interface ArtworkState {
   artworks: Artwork[];
   category?: Category;
 }
+
+interface StrapiEntity<T> {
+  id: string;
+  attributes: T;
+}
+
+interface StrapiApiResponse<T> {
+  data: T;
+}

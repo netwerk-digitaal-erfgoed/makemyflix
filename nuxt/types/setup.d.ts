@@ -4,10 +4,24 @@ declare interface Intro {
   footer: string;
 }
 
+declare interface UploadedImageFormat {
+  name: string;
+  url: string;
+  width: number;
+  height: number;
+  ext: string;
+  mime: string;
+}
+
+declare interface UploadedImage extends UploadedImageFormat {
+  id: number;
+  formats: UploadedImageFormat[];
+}
+
 declare interface Branding {
   name: string;
-  logo: string;
-  banner: string;
+  logo: UploadedImage;
+  banner: UploadedImage;
   intro: Intro;
 }
 
@@ -38,4 +52,21 @@ declare interface Flix {
   sidenote?: string;
   labels?: Record<string, string>;
   seo?: Seo;
+}
+
+declare interface FlixData {
+  id?: string; // indicates if it has been saved already
+  uri?: string;
+  slug?: string;
+  endpoint?: string;
+  categoryQuery?: string;
+  itemsQuery?: string;
+  title?: string;
+  description?: string;
+  logo?: UploadedImage | File | null;
+  banner?: UploadedImage | File | null;
+  primaryColor?: string;
+  secondaryColor?: string;
+  tertiaryColor?: string;
+  fontFamily?: string;
 }

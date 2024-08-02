@@ -6,10 +6,27 @@ export default defineNuxtConfig({
   devtools: {
     enabled: false,
   },
-  css: ['ress/ress.css', '@/assets/scss/main.scss', '@/assets/scss/transitions.scss'],
+  sourcemap: {
+    server: true,
+    client: true,
+  },
+  css: [
+    'ress/ress.css',
+    '@/assets/scss/defaults.scss',
+    '@/assets/scss/theme.scss',
+    '@/assets/scss/main.scss',
+    '@/assets/scss/transitions.scss',
+  ],
   modules: ['@pinia/nuxt'],
   vite: {
     plugins: [svgLoader()],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import "./assets/scss/mixins";`,
+        },
+      },
+    },
   },
   runtimeConfig: {
     app: {

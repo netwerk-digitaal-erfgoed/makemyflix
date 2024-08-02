@@ -28,17 +28,18 @@ export const useFlixStore = defineStore('flix', () => {
     return labels?.[label] ?? '';
   };
 
-  const fetchFlixes = async (): Promise<Flix[]> => {
+  const fetchFlixes = async () => {
     try {
-      const { data }: any = await $fetch(`${config.app.backendUrl}/flixes`, {
+      const { data } = await $fetch<StrapiApiResponse<StrapiEntity<Flix>[]>>(`${config.app.backendUrl}/flixes`, {
         headers: {
           Authorization: `Bearer ${config.app.token}`,
         },
       });
-      return data.map((entry: any) => {
+
+      return data.map(entry => {
         const uri = entry.attributes.uri;
-        const path = uri.replace(window.location.origin, '');
-        const title = path.replace(/^\/(.)/, (_: any, char: string) => char.toUpperCase());
+        const path = uri?.replace(window.location.origin, '') ?? '';
+        const title = path?.replace(/^\/(.)/, (_: any, char: string) => char.toUpperCase()) ?? '';
 
         return {
           id: entry.id,
@@ -59,7 +60,15 @@ export const useFlixStore = defineStore('flix', () => {
     useThemeStore().resetData();
   };
 
-  const setupFlix = async (flix: string) => {
+  const getSlugFromFlix = (flix: Flix | FlixData) => {
+    const uri = flix.uri;
+    if (!uri) {
+      return undefined;
+    }
+    return uri.replace(window.location.origin, '').split('/').filter(Boolean)[0];
+  };
+
+  const setupFlix = async (flix: string, preview = false) => {
     // Construct the flexUri
     const flexUri = `${window.location.origin}/${flix}`;
 
@@ -86,7 +95,7 @@ export const useFlixStore = defineStore('flix', () => {
     currentFlix.value = setup;
 
     // Set the theming
-    useThemeStore().setThemeStyling();
+    useThemeStore().setThemeStyling(preview);
 
     // Set SEO
     useSetSeo(currentFlix.value.seo);
@@ -100,5 +109,7 @@ export const useFlixStore = defineStore('flix', () => {
     setupFlix,
     fetchFlixes,
     generateLabel,
+    resetData,
+    getSlugFromFlix,
   };
 });

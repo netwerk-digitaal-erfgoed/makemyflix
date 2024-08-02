@@ -14,7 +14,11 @@ export const useCategoryStore = defineStore('categories', () => {
     return categories.value.find((cat: Category) => cat.id === id);
   }
 
-  function findCategoryBySlug(slug: string): Category | undefined {
+  async function findCategoryBySlug(slug: string): Promise<Category | undefined> {
+    if (categories.value.length === 0) {
+      await fetchCategories();
+    }
+
     return categories.value.find((cat: Category) => cat.slug === slug);
   }
 
@@ -34,16 +38,23 @@ export const useCategoryStore = defineStore('categories', () => {
    */
   async function fetchCategories(): Promise<void> {
     console.warn('Categories.ts#fetchCategories');
+
     if (!currentFlix.value?.uri) {
       return;
     }
 
-    categories.value = await $fetch(`${backendUrl}/categories`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'X-flix': currentFlix.value.uri,
-      },
-    });
+    try {
+      const cats = await $fetch<Category[]>(`${backendUrl}/categories`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-flix': currentFlix.value.uri,
+        },
+      });
+
+      categories.value = Array.isArray(cats) ? cats : [];
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   return {

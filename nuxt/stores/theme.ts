@@ -30,7 +30,7 @@ export const useThemeStore = defineStore('theme', () => {
     document.head.appendChild(link);
   };
 
-  const createCssVariables = (theme: Theme): void => {
+  const createCssVariables = (theme: Theme, preview = false): void => {
     const styleObject = fetchOrCreateElement('theme', 'style') as HTMLStyleElement;
 
     const vars = [] as string[];
@@ -38,10 +38,10 @@ export const useThemeStore = defineStore('theme', () => {
       const value = theme[key as keyof Theme];
       vars.push(`${useStringToCssVariable(key)}: ${value};`);
     }
-    styleObject.innerText = `:root{${vars.join('')}}`;
+    styleObject.innerText = `${preview ? '#preview' : ':root'}{${vars.join('')}}`;
   };
 
-  const setThemeStyling = () => {
+  const setThemeStyling = (preview = false) => {
     // Check if we have a currentFlix
     const { currentFlix } = useFlixStore();
     if (!currentFlix?.theme) {
@@ -49,7 +49,7 @@ export const useThemeStore = defineStore('theme', () => {
     }
 
     // Create the css variables
-    createCssVariables(currentFlix.theme);
+    createCssVariables(currentFlix.theme, preview);
     createPreloadLink('preload-font');
     createFontLink('theme-font', currentFlix.theme.fontFamily);
   };
