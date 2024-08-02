@@ -3,17 +3,19 @@
     <MoleculesBrandingHeader />
     <OrganismsCategorySlider
       :categories="categories"
-      class="elevated" />
+      class="elevated"
+      :preview="preview" />
     <MoleculesBrandingIntro class="elevated" />
     <section class="categories">
       <div class="container">
         <div
-          v-for="category in categories"
+          v-for="category in renderableCategories"
           :key="category.id"
           class="category">
           <OrganismsArtworkSlider
             class="slider"
-            :category="category" />
+            :category="category"
+            :preview="preview" />
         </div>
       </div>
     </section>
@@ -22,21 +24,38 @@
 
 <script setup lang="ts">
 /**
- * Store deps
+ * Deps
  */
 const categoriesStore = useCategoryStore();
+const artworkStore = useArtworkStore();
+
+/**
+ * State & Props
+ */
+const props = defineProps<{
+  preview?: boolean;
+}>();
+
 const { categories } = storeToRefs(categoriesStore);
-const { listOrFetchByCategory } = useArtworkStore();
+
+/**
+ * Computed properties
+ */
+const renderableCategories = computed(() => {
+  if (!props.preview) {
+    return categories.value;
+  }
+
+  return categories.value.slice(0, 2);
+});
 
 /**
  * Lifecycle methods
  */
 onMounted(async () => {
-  // First fetch the categories
   await categoriesStore.listOrFetchCategories();
 
-  // Then fetch the artworks for each category
-  categories.value.forEach((category: Category) => listOrFetchByCategory(category.id));
+  categories.value.forEach((category: Category) => artworkStore.listOrFetchByCategory(category.id));
 });
 </script>
 

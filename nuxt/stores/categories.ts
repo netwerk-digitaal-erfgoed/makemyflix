@@ -37,7 +37,8 @@ export const useCategoryStore = defineStore('categories', () => {
    * Private functions
    */
   async function fetchCategories(): Promise<void> {
-    console.warn('Categories.ts#fetchCategories', currentFlix.value);
+    console.warn('Categories.ts#fetchCategories');
+
     if (!currentFlix.value?.uri) {
       return;
     }

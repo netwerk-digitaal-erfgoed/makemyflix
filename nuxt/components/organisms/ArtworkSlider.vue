@@ -5,7 +5,8 @@
     <h1 class="artwork-title">{{ category.title }} {{ category.period }}</h1>
     <AtomsNavigation
       class="navigation-link"
-      :to="categoryPath">
+      :to="categoryPath"
+      :preview="preview">
       Toon alles
     </AtomsNavigation>
     <div
@@ -28,7 +29,8 @@
               category: category.slug,
               artwork: artwork.slug,
             },
-          }" />
+          }"
+          :preview="preview" />
       </swiper-slide>
     </MoleculesSlider>
   </div>
@@ -37,6 +39,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   category: Category;
+  preview?: boolean;
 }>();
 
 const { findByCategory } = useArtworkStore();

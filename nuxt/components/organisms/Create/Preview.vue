@@ -1,41 +1,79 @@
 <template>
-  <div class="header">
+  <div
+    class="header"
+    :class="{ published }">
     <h1>Flix bouwer</h1>
     <div class="actions">
-      <button
+      <AtomsButton
         @click="flixBuilderStore.back"
-        class="btn secondary">
+        variant="secondary">
         Aanpassingen
-      </button>
-      <button
-        @click="flixBuilderStore.next"
-        class="btn primary">
-        Delen
-      </button>
+      </AtomsButton>
+      <AtomsButton @click="publish"> Delen </AtomsButton>
     </div>
   </div>
   <div
     id="preview"
-    class="preview">
-    <OrganismsFlix v-if="ready" />
+    class="preview"
+    :class="{ published }">
+    <OrganismsFlix
+      v-if="ready"
+      preview />
     <AtomsLoader v-else />
   </div>
+  <OrganismsCreateShare
+    v-if="published"
+    @close="onCloseModal" />
 </template>
 
 <script setup lang="ts">
+/**
+ * Deps
+ */
 const flixStore = useFlixStore();
 const flixBuilderStore = useFlixBuilderStore();
 
+/**
+ * State
+ */
 const ready = ref(false);
+const published = ref(false);
 
+/**
+ * Methods
+ */
+const publish = async () => {
+  await flixBuilderStore.publishFlix();
+  published.value = true;
+};
+
+const onCloseModal = () => {
+  if (!flixBuilderStore.newFlixSlug) {
+    console.warn('Flix slug not found.');
+    return;
+  }
+
+  useNuxtApp().$navigate({
+    name: 'flix',
+    params: {
+      flix: flixBuilderStore.newFlixSlug,
+    },
+  });
+};
+
+/**
+ * Lifecyle methods
+ */
 onBeforeMount(async () => {
   await flixBuilderStore.saveDraftFlix();
-  await flixStore.setupFlix('test', true); // TODO: make dynamic
-  ready.value = true;
-});
-
-onUnmounted(() => {
   flixStore.resetData();
+
+  if (flixBuilderStore.newFlixSlug) {
+    await flixStore.setupFlix(flixBuilderStore.newFlixSlug, true);
+    ready.value = true;
+  } else {
+    console.warn('Flix slug not found.');
+  }
 });
 </script>
 
@@ -55,5 +93,12 @@ onUnmounted(() => {
 
 .preview {
   margin-top: 2rem;
+}
+
+.header,
+.preview {
+  &.published {
+    pointer-events: none;
+  }
 }
 </style>

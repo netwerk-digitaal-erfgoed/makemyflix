@@ -7,7 +7,9 @@
       :key="category.id"
       class="category-slide"
       :style="slideStyles">
-      <AtomsCategoryTeaser :category="category" />
+      <AtomsCategoryTeaser
+        :category="category"
+        :preview="preview" />
     </swiper-slide>
   </MoleculesSlider>
 </template>
@@ -15,6 +17,7 @@
 <script setup lang="ts">
 defineProps<{
   categories: Array<Category>;
+  preview?: boolean;
 }>();
 
 const categoriesSliderProps = {

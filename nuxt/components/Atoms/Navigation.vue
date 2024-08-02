@@ -1,12 +1,13 @@
 <template>
-  <NuxtLink
-    :to="to"
+  <a
+    :href="route.href"
     @click.prevent="animateNavigation">
     <slot />
-  </NuxtLink>
+  </a>
 </template>
 
 <script setup lang="ts">
+const router = useRouter();
 const { $navigate } = useNuxtApp();
 const { currentFlix } = useFlixStore();
 
@@ -14,13 +15,14 @@ const props = withDefaults(
   defineProps<{
     direction?: string;
     to: To;
+    preview?: boolean;
   }>(),
   {
     direction: '',
   },
 );
 
-const animateNavigation = function () {
+const destination = computed(() => {
   const to = {
     name: props.to.name,
     params: {
@@ -29,6 +31,22 @@ const animateNavigation = function () {
     },
   };
 
-  return $navigate(to, props.direction);
+  return to;
+});
+
+const route = computed(() => router.resolve(destination.value));
+
+const animateNavigation = () => {
+  if (props.preview) {
+    return;
+  }
+
+  return $navigate(destination.value, props.direction);
 };
 </script>
+
+<style>
+a {
+  cursor: pointer;
+}
+</style>

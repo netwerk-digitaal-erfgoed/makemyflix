@@ -5,22 +5,22 @@
     dark-mode />
   <div class="page">
     <template v-if="!showPreview">
-      <span class="title">Genereer jouw eigen Flix in slechts {{ stepComponents.length }} stappen</span>
+      <span class="title">Genereer jouw eigen Flix in slechts {{ stepsCount }} stappen</span>
       <component :is="stepComponents[stepComponentIndex]" />
-      <pre>{{ devData }}</pre>
       <div class="actions">
-        <button
+        <AtomsButton
           v-if="showBack"
           @click="flixBuilderStore.back"
-          class="btn secondary">
+          class="back-btn"
+          variant="secondary">
           Vorige
-        </button>
-        <button
+        </AtomsButton>
+        <AtomsButton
           v-if="showNext"
-          @click="flixBuilderStore.next"
-          class="btn primary">
+          class="next-btn"
+          @click="flixBuilderStore.next">
           Volgende
-        </button>
+        </AtomsButton>
       </div>
     </template>
     <template v-else>
@@ -47,24 +47,12 @@ const flixBuilderStore = useFlixBuilderStore();
 /**
  * State
  */
-const stepComponents = flixBuilderStore.stepComponents;
-const { step, newFlix } = storeToRefs(flixBuilderStore);
+const { stepComponents, stepsCount } = flixBuilderStore;
+const { step } = storeToRefs(flixBuilderStore);
 
 /**
  * Computed Properties
  */
-const devData = computed(() => {
-  return Object.fromEntries(
-    Object.entries(newFlix.value).map(([k, v]) => {
-      if (v instanceof File) {
-        return [k, v.name];
-      }
-
-      return [k, v];
-    }),
-  );
-});
-
 const stepComponentIndex = computed(() => {
   if (step.value >= 1 && step.value <= stepComponents.length) {
     return step.value - 1;
@@ -101,39 +89,14 @@ const showPreview = computed(() => step.value === 4);
   gap: var(--space-4);
   margin-inline: var(--space-15);
 
-  .btn {
-    padding: var(--space-4) var(--space-8);
-    border: none;
-    border-radius: var(--space-4);
-    background-color: var(--blues-blue);
-    color: var(--background-color);
-    cursor: pointer;
-    user-select: none;
+  .next-btn {
+    grid-area: right;
+    justify-self: flex-end;
+  }
 
-    &:hover {
-      color: var(--blues-blue);
-      background-color: var(--background-color);
-      border: var(--space-0) solid var(--blues-blue);
-    }
-
-    &.primary {
-      grid-area: right;
-      justify-self: flex-end;
-    }
-
-    &.secondary {
-      grid-area: left;
-      justify-self: flex-start;
-      background-color: var(--background-color);
-      color: var(--blues-blue);
-      border: var(--space-0) solid var(--blues-blue);
-
-      &:hover {
-        background-color: var(--blues-blue);
-        color: var(--background-color);
-        border: none;
-      }
-    }
+  .back-btn {
+    grid-area: left;
+    justify-self: flex-start;
   }
 }
 </style>

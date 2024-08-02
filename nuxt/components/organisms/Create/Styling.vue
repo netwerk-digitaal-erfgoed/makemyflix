@@ -26,14 +26,19 @@
         v-model="newFlix.tertiaryColor" />
     </div>
     <div class="fonts">
-      <span>Typographie</span>
-      <!-- Dropdown nodig -->
+      <MoleculesFormInput
+        type="select"
+        label="Typograhie"
+        :options="typographyOptions"
+        v-model="newFlix.fontFamily" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 const { newFlix } = storeToRefs(useFlixBuilderStore());
+
+const typographyOptions = ['Poppins', 'Times New Roman'];
 </script>
 
 <style lang="scss" scoped>

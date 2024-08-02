@@ -23,6 +23,19 @@
         :value="modelValue"
         @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)" />
     </template>
+    <template v-else-if="type === 'select'">
+      <select
+        class="input"
+        :value="modelValue"
+        @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)">
+        <option
+          v-for="option in options"
+          :value="option"
+          :key="option">
+          {{ option }}
+        </option>
+      </select>
+    </template>
   </AtomsInputWrapper>
 </template>
 
@@ -33,10 +46,11 @@
 withDefaults(
   defineProps<{
     id?: string;
-    type?: 'input' | 'textarea' | 'color';
+    type?: 'input' | 'textarea' | 'color' | 'select';
     label?: string;
     inline?: boolean;
     modelValue?: string | number;
+    options?: string[];
   }>(),
   {
     type: 'input',

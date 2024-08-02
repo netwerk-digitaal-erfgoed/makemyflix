@@ -33,6 +33,7 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
    */
   const newFlix = ref<FlixData>(createDefaultNewFlixDataForDevelopment());
   const stepComponents: any[] = markRaw([Endpoints, Identity, Styling, Preview]);
+  const stepsCount = stepComponents.length;
   const step = ref<number>(
     (() => {
       const intendedStep = +(useRoute().query.step?.toString() ?? '1');
@@ -42,6 +43,16 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
       return intendedStep;
     })(),
   );
+
+  /**
+   * Computed properties
+   */
+  const newFlixSlug = computed(() => {
+    if (!newFlix.value.title) {
+      return undefined;
+    }
+    return sluggify(newFlix.value.title);
+  });
 
   /**
    * Methods
@@ -112,6 +123,15 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
     }
   };
 
+  const sluggify = (text: string): string => {
+    return text
+      .toLowerCase() // Convert to lowercase
+      .trim() // Trim whitespace from both ends
+      .replace(/[\s\W-]+/g, '-') // Replace spaces and non-word characters with hyphens
+      .replace(/^-+|-+$/g, ''); // Remove any leading or trailing hyphens
+    // Thanks ChatGPT
+  };
+
   const saveDraftFlix = async () => {
     const {
       endpoint,
@@ -124,12 +144,16 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
       primaryColor,
       secondaryColor,
       tertiaryColor,
-      // fontFamily,
+      fontFamily,
     } = newFlix.value;
+
+    if (!newFlixSlug.value) {
+      return null;
+    }
 
     const [logoData, bannerData] = await Promise.all([uploadImage(logo), uploadImage(banner)]);
 
-    const uri = `${window.location.origin}/test`; // TODO: make input based
+    const uri = `${window.location.origin}/${newFlixSlug.value}`;
 
     const data = {
       data: {
@@ -155,7 +179,7 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
           },
         },
         theme: {
-          font: 'Poppins', // TODO: make input based
+          font: fontFamily,
           primary: primaryColor,
           secondary: secondaryColor,
           tertiary: tertiaryColor,
@@ -185,29 +209,27 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
     }
   };
 
+  const pad = (n: number) => String(n).padStart(2, '0');
+
   const publishFlix = async () => {
     const date = new Date();
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
     const publishedAt = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
-    await $fetch(`${config.app.backendUrl}/flixes`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.app.token}`,
-      },
-      body: JSON.stringify({
+    await saveFlix(
+      {
         data: {
           status: 'published',
           publishedAt,
         },
-      }),
-    });
+      },
+      newFlix.value.id,
+    );
   };
 
   const resetStore = () => {
@@ -217,7 +239,9 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
 
   return {
     newFlix,
+    newFlixSlug,
     stepComponents,
+    stepsCount,
     step,
     next,
     back,

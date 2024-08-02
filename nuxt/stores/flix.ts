@@ -60,6 +60,14 @@ export const useFlixStore = defineStore('flix', () => {
     useThemeStore().resetData();
   };
 
+  const getSlugFromFlix = (flix: Flix | FlixData) => {
+    const uri = flix.uri;
+    if (!uri) {
+      return undefined;
+    }
+    return uri.replace(window.location.origin, '').split('/').filter(Boolean)[0];
+  };
+
   const setupFlix = async (flix: string, preview = false) => {
     // Construct the flexUri
     const flexUri = `${window.location.origin}/${flix}`;
@@ -102,5 +110,6 @@ export const useFlixStore = defineStore('flix', () => {
     fetchFlixes,
     generateLabel,
     resetData,
+    getSlugFromFlix,
   };
 });
