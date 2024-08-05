@@ -64,7 +64,6 @@ withDefaults(
   grid-area: title;
   display: flex;
   justify-content: center;
-  text-transform: uppercase;
 }
 
 @include sm-screen-down {

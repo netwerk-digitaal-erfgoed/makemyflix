@@ -20,6 +20,7 @@ const classes = computed(() => {
   return {
     'input-wrapper': true,
     inline: props.inline,
+    label: !!props.label,
   };
 });
 </script>
@@ -29,23 +30,31 @@ const classes = computed(() => {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: min-content auto;
-  grid-template-areas: 'label' 'input';
+  grid-template-areas: 'input';
   gap: var(--space-4);
-  background-color: var(--background-color);
   color: var(--text-color);
   width: 100%;
+
+  &.label {
+    grid-template-areas: 'label' 'input';
+  }
 
   &.inline {
     grid-template-columns: min-content auto;
     grid-template-rows: min-content;
-    grid-template-areas: 'label input';
+    grid-template-areas: 'input';
+
+    &.label {
+      grid-template-areas: 'label input';
+    }
   }
 
   label {
     grid-area: label;
     display: flex;
     align-items: center;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-light);
     text-wrap: nowrap;
   }
 
