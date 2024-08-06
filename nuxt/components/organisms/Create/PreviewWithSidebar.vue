@@ -19,6 +19,7 @@
       :class="{ published }">
       <OrganismsFlix
         v-if="ready"
+        :class="[previewMediaQueryClassName]"
         preview />
       <AtomsLoader v-else />
     </div>
@@ -40,6 +41,7 @@ const flixBuilderStore = useFlixBuilderStore();
  */
 const ready = ref(false);
 const published = ref(false);
+const { previewMediaQueryClassName } = storeToRefs(flixBuilderStore);
 
 /**
  * Methods
@@ -62,6 +64,15 @@ const onCloseModal = () => {
     },
   });
 };
+
+/**
+ * Watchers
+ */
+watch(() => flixBuilderStore.previewMediaQueryClassName, v => {
+  const base = document.body.className.split(' ').filter(x => !!x && !x.startsWith('preview-'));
+  base.push(v);
+  document.body.className = base.join(' ');
+}, { immediate: true });
 
 /**
  * Lifecyle methods
@@ -95,12 +106,26 @@ onBeforeMount(async () => {
 }
 
 .preview {
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
+  overflow-x: scroll;
+
+  &-tablet {
+    max-width: 1180px;
+    max-height: 820px;
+    overflow-y: scroll;
+  }
+
+  &-cellphone {
+    max-width: 390px;
+    max-height: 844px;
+    overflow-y: scroll;
+  }
 }
 
 #preview {
   padding: var(--space-6);
+  width: 100%;
+  font-family: var(--font-family);
 }
 
 .header,

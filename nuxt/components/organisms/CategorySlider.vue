@@ -30,9 +30,11 @@ const categoriesSliderProps = {
   },
 };
 
+const availableWidth = useAvailableFlixWidth();
+
 const slideStyles = computed(() => {
   return {
-    '--max-width-slide': window.innerWidth / 3 + 'px',
+    '--max-width-slide': availableWidth.value / 3 + 'px',
   };
 });
 </script>

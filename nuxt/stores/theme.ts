@@ -42,16 +42,30 @@ export const useThemeStore = defineStore('theme', () => {
   };
 
   const setThemeStyling = (preview = false) => {
-    // Check if we have a currentFlix
-    const { currentFlix } = useFlixStore();
-    if (!currentFlix?.theme) {
-      return;
+    let theme: Theme;
+
+    if (!preview) {
+      // Check if we have a currentFlix
+      const { currentFlix } = useFlixStore();
+      if (!currentFlix?.theme) {
+        return;
+      }
+
+      theme = currentFlix.theme;
+    } else {
+      const { newFlix } = useFlixBuilderStore();
+      theme = {
+        primaryColor: newFlix.primaryColor ?? '',
+        secondaryColor: newFlix.secondaryColor ?? '',
+        tertiaryColor: newFlix.tertiaryColor ?? '',
+        fontFamily: newFlix.fontFamily ?? 'Poppins',
+      }
     }
 
     // Create the css variables
-    createCssVariables(currentFlix.theme, preview);
+    createCssVariables(theme, preview);
     createPreloadLink('preload-font');
-    createFontLink('theme-font', currentFlix.theme.fontFamily);
+    createFontLink('theme-font', theme.fontFamily);
   };
 
   const resetData = () => {

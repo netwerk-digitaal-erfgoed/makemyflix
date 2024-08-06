@@ -22,6 +22,22 @@ const createDefaultNewFlixDataForDevelopment = () => {
   return devDefaultNewFlixData;
 };
 
+type PreviewMediaQuery = 'laptop' | 'tablet' | 'cellphone';
+
+const determineInitialPreviewMediaQuery = (): PreviewMediaQuery => {
+  const availableWidth = window.innerWidth - 380 - 24; // screen width, minus sidebar width, minus preview padding
+
+  if (availableWidth <= 390) { // iPhone 12 Pro width
+    return 'cellphone'
+  }
+
+  if (availableWidth <= 1180) { // iPad Air width (landscape mode)
+    return 'tablet';
+  }
+
+  return 'laptop';
+}
+
 export const useFlixBuilderStore = defineStore('flix-builder', () => {
   /**
    * Deps
@@ -32,6 +48,7 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
    * State
    */
   const newFlix = ref<FlixData>(createDefaultNewFlixDataForDevelopment());
+  const previewView = ref<PreviewMediaQuery>(determineInitialPreviewMediaQuery());
   const stepComponents: any[] = markRaw([Endpoints, Identity, Styling, Preview]);
   const stepsCount = stepComponents.length;
   const step = ref<number>(
@@ -52,6 +69,17 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
       return undefined;
     }
     return sluggify(newFlix.value.title);
+  });
+
+  const previewMediaQueryClassName = computed(() => `preview-${previewView.value}`);
+
+  const newFlixTheme = computed<Theme>(() => {
+    return {
+      fontFamily: newFlix.value.fontFamily ?? 'Poppins',
+      primaryColor: newFlix.value.primaryColor ?? '',
+      secondaryColor: newFlix.value.secondaryColor ?? '',
+      tertiaryColor: newFlix.value.tertiaryColor ?? '',
+    };
   });
 
   /**
@@ -239,6 +267,9 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
 
   return {
     newFlix,
+    newFlixTheme,
+    previewView,
+    previewMediaQueryClassName,
     newFlixSlug,
     stepComponents,
     stepsCount,

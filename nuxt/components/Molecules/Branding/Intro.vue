@@ -24,15 +24,31 @@
 </template>
 
 <script setup lang="ts">
-const { branding } = storeToRefs(useFlixStore());
+/**
+ * Deps
+ */
+const flixStore = useFlixStore();
+
+/**
+ * State
+ */
+const { branding } = storeToRefs(flixStore);
+
+/**
+ * Computed properties
+ */
 const description = computed(() => branding.value?.intro.description?.substring(0, 300));
+
 const introStyle = computed(() => {
   const styles = {} as Record<string, string>;
+
   if (branding.value?.banner) {
-    styles['--url'] = `url(${branding.value?.banner})`;
+    styles['--url'] = `url(${branding.value?.banner.url})`;
   }
+
   return styles;
 });
+
 const introClass = computed(() => {
   return {
     intro: true,

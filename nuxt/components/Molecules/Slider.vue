@@ -30,6 +30,8 @@ interface SwiperElement extends HTMLElement {
   swiper: Swiper;
 }
 
+const flixBuilderStore = useFlixBuilderStore();
+
 const props = defineProps<{
   sliderProps: object;
 }>();
@@ -37,6 +39,10 @@ const props = defineProps<{
 const swiper = ref<SwiperElement>();
 const hideLeftNav = ref(true);
 const hideRightNav = ref(false);
+
+const { previewMediaQueryClassName } = storeToRefs(flixBuilderStore);
+
+const availableWidth = useAvailableFlixWidth();
 
 const swiperProps: any = Object.assign(
   {
@@ -66,6 +72,28 @@ const setNavBtnVisibility = (event: CustomEvent) => {
   hideLeftNav.value = swiper.isBeginning;
   hideRightNav.value = swiper.isEnd;
 };
+
+watch(previewMediaQueryClassName, v => {
+  if (!swiper.value) {
+    return;
+  }
+
+  const s = swiper.value.swiper;
+
+  const slidesPerView = v === 'laptop' ? 4.2 : 1.2;
+
+  if (!s.params.breakpoints) {
+    s.params.breakpoints = {};
+  }
+
+  if (!s.params.breakpoints![availableWidth.value]) {
+    s.params.breakpoints![availableWidth.value] = {};
+  }
+
+  s.params.breakpoints![availableWidth.value].slidesPerView = slidesPerView;
+
+  s.update();
+});
 </script>
 
 <style scoped lang="scss">
@@ -92,9 +120,20 @@ const setNavBtnVisibility = (event: CustomEvent) => {
   display: none;
 }
 
-@include sm-screen-down {
+@mixin slider-sm {
   .swiper-button-nav {
     display: none;
+  }
+}
+
+@include sm-screen-down {
+  @include slider-sm()
+}
+
+.preview {
+  &-tablet,
+  &-cellphone {
+    @include slider-sm()
   }
 }
 </style>
