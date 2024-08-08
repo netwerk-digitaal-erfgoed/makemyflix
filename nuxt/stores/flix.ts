@@ -68,12 +68,32 @@ export const useFlixStore = defineStore('flix', () => {
     return uri.replace(window.location.origin, '').split('/').filter(Boolean)[0];
   };
 
-  const setupFlix = async (flix: string, preview = false) => {
-    // Construct the flexUri
-    const flexUri = `${window.location.origin}/${flix}`;
+  const fetchFlix = async (flixUri: string) => {
+    try {
+      const flix = await $fetch<Flix | null>(`${config.app.backendUrl}/setup`, {
+        headers: {
+          Authorization: `Bearer ${config.app.token}`,
+          'X-flix': flixUri,
+        },
+      });
 
-    // Check if the flexUri is the currentFlex, if so do nothing
-    if (currentFlix.value?.uri === flexUri) {
+      if (!flix) {
+        return null;
+      }
+
+      return flix;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  };
+
+  const setupFlix = async (flix: string, preview = false) => {
+    // Construct the flixUri
+    const flixUri = `${window.location.origin}/${flix}`;
+
+    // Check if the flixUri is the currentFlix, if so do nothing
+    if (currentFlix.value?.uri === flixUri) {
       return;
     }
 
@@ -81,15 +101,14 @@ export const useFlixStore = defineStore('flix', () => {
     resetData();
 
     // Origin path is not retrievable from the backend so we need to pass it
-    const setup: Flix = await $fetch(`${config.app.backendUrl}/setup`, {
-      headers: {
-        Authorization: `Bearer ${config.app.token}`,
-        'X-flix': flexUri,
-      },
-    });
-    // Add the flexUri for the guard
-    setup.uri = flexUri;
+    const setup = await fetchFlix(flixUri);
+    if (!setup) {
+      return;
+    }
+
+    // Add the flixUri for the guard
     setup.id = flix;
+    setup.uri = flixUri;
 
     // Update the current flix
     currentFlix.value = setup;
@@ -106,6 +125,7 @@ export const useFlixStore = defineStore('flix', () => {
     branding,
     sidenote,
     supportIIIF,
+    fetchFlix,
     setupFlix,
     fetchFlixes,
     generateLabel,

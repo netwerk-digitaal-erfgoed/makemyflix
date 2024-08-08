@@ -31,21 +31,20 @@ interface SwiperElement extends HTMLElement {
 }
 
 const props = defineProps<{
-  sliderProps: object;
+  sliderProps: Swiper['params'];
 }>();
 
 const swiper = ref<SwiperElement>();
 const hideLeftNav = ref(true);
 const hideRightNav = ref(false);
 
-const swiperProps: any = Object.assign(
-  {
-    slidesPerView: 4.2,
-    spaceBetween: 72,
-    pagination: false,
-  },
-  props.sliderProps,
-);
+const swiperProps: Swiper['params'] = {
+  slidesPerView: 4.2,
+  spaceBetween: 72,
+  pagination: false,
+  breakpointsBase: 'container',
+  ...props.sliderProps,
+};
 
 const goToPrev = () => {
   if (swiper.value) {
@@ -92,9 +91,20 @@ const setNavBtnVisibility = (event: CustomEvent) => {
   display: none;
 }
 
-@include sm-screen-down {
+@mixin slider-sm {
   .swiper-button-nav {
     display: none;
+  }
+}
+
+@include sm-screen-down {
+  @include slider-sm();
+}
+
+.preview {
+  &-tablet,
+  &-cellphone {
+    @include slider-sm();
   }
 }
 </style>

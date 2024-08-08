@@ -18,3 +18,5 @@ interface StrapiEntity<T> {
 interface StrapiApiResponse<T> {
   data: T;
 }
+
+type PreviewMediaQuery = 'laptop' | 'tablet' | 'cellphone';

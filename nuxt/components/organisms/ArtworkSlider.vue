@@ -1,7 +1,8 @@
 <template>
   <div
+    v-if="artworks.length"
     class="artwork-slider"
-    v-if="artworks.length">
+    :class="[previewMediaQueryClassName]">
     <h1 class="artwork-title">{{ category.title }} {{ category.period }}</h1>
     <AtomsNavigation
       class="navigation-link"
@@ -37,13 +38,9 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  category: Category;
-  preview?: boolean;
-}>();
-
-const { findByCategory } = useArtworkStore();
-const artworks = computed(() => findByCategory(props.category.id, 10, 0));
+/**
+ * Constants
+ */
 const artworksSliderProps = {
   slidesPerView: 1.2,
   spaceBetween: 24,
@@ -62,14 +59,41 @@ const artworksSliderProps = {
   },
 };
 
+/**
+ * Deps
+ */
+const flixBuilderStore = useFlixBuilderStore();
 const flixStore = useFlixStore();
-const categoryPath = {
-  name: 'flix-category',
-  params: {
-    flix: flixStore.currentFlix?.id,
-    category: props.category.slug,
-  },
-} as To;
+const artworkStore = useArtworkStore();
+
+/**
+ * State & Props
+ */
+const props = defineProps<{
+  category: Category;
+  preview?: boolean;
+}>();
+
+const { previewMediaQueryClassName } = storeToRefs(flixBuilderStore);
+
+/**
+ * Computed properties
+ */
+const artworks = computed(() => findByCategory(props.category.id, 10, 0));
+const categoryPath = computed(() => {
+  return {
+    name: 'flix-category',
+    params: {
+      flix: flixStore.currentFlix?.id,
+      category: props.category.slug,
+    },
+  } as To;
+});
+
+/**
+ * Methods
+ */
+const { findByCategory } = artworkStore;
 </script>
 
 <style scoped lang="scss">
@@ -116,7 +140,7 @@ const categoryPath = {
   text-transform: uppercase;
 }
 
-@include sm-screen-down {
+@mixin artwork-slider-sm {
   .artwork-slider {
     grid-template-rows: var(--space-6) auto 1fr auto;
     grid-template-areas:
@@ -135,6 +159,17 @@ const categoryPath = {
     padding: var(--space-2);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-light);
+  }
+}
+
+@include sm-screen-down {
+  @include artwork-slider-sm();
+}
+
+.preview {
+  &-tablet,
+  &-cellphone {
+    @include artwork-slider-sm();
   }
 }
 </style>

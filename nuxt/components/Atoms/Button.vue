@@ -30,12 +30,16 @@ const classes = computed(() => {
   cursor: pointer;
   user-select: none;
 
+  &:disabled {
+    cursor: not-allowed;
+  }
+
   &.primary {
     color: var(--background-color);
     border: var(--space-0) solid transparent;
     background-color: var(--blues-blue);
 
-    &:hover {
+    &:hover:enabled {
       color: var(--blues-blue);
       background-color: var(--background-color);
       border: var(--space-0) solid var(--blues-blue);
@@ -47,7 +51,7 @@ const classes = computed(() => {
     color: var(--blues-blue);
     border: var(--space-0) solid var(--blues-blue);
 
-    &:hover {
+    &:hover:enabled {
       background-color: var(--blues-blue);
       color: var(--background-color);
       border: var(--space-0) solid transparent;

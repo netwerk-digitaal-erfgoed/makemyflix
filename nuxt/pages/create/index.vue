@@ -3,30 +3,20 @@
     title="MakeMyFlix"
     :show-home="false"
     dark-mode />
-  <div class="page">
-    <template v-if="!showPreview">
-      <span class="title">Genereer jouw eigen Flix in slechts {{ stepsCount }} stappen</span>
-      <component :is="stepComponents[stepComponentIndex]" />
+  <div
+    v-if="step === 1"
+    class="page">
+      <span class="title">Genereer jouw eigen Flix in slechts een paar stappen</span>
+      <OrganismsCreateEndpoints />
       <div class="actions">
         <AtomsButton
-          v-if="showBack"
-          @click="flixBuilderStore.back"
-          class="back-btn"
-          variant="secondary">
-          Vorige
-        </AtomsButton>
-        <AtomsButton
-          v-if="showNext"
           class="next-btn"
-          @click="flixBuilderStore.next">
+          @click="step++">
           Volgende
         </AtomsButton>
       </div>
-    </template>
-    <template v-else>
-      <component :is="stepComponents[stepComponentIndex]" />
-    </template>
   </div>
+  <OrganismsCreateEditor v-else-if="step === 2" />
 </template>
 
 <script setup lang="ts">
@@ -40,39 +30,16 @@ useHead({
 });
 
 /**
- * Deps
- */
-const flixBuilderStore = useFlixBuilderStore();
-
-/**
  * State
  */
-const { stepComponents, stepsCount } = flixBuilderStore;
-const { step } = storeToRefs(flixBuilderStore);
-
-/**
- * Computed Properties
- */
-const stepComponentIndex = computed(() => {
-  if (step.value >= 1 && step.value <= stepComponents.length) {
-    return step.value - 1;
-  }
-
-  return 0;
-});
-
-const showBack = computed(() => step.value > 1);
-
-const showNext = computed(() => step.value < stepComponents.length);
-
-const showPreview = computed(() => step.value === 4);
+const { step } = storeToRefs(useFlixBuilderStore());
 </script>
 
 <style lang="scss" scoped>
 .page {
   display: flex;
   flex-direction: column;
-  margin: var(--space-20);
+  margin: var(--space-20) 0;
 }
 
 .title {

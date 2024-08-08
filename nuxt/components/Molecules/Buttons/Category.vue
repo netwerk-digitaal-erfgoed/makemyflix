@@ -10,15 +10,24 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Deps
+ */
 const flixStore = useFlixStore();
 const route = useRoute();
-const categoryPath = {
-  name: 'flix-category',
-  params: {
-    flix: flixStore.currentFlix?.id,
-    category: route.params.category,
-  },
-} as To;
+
+/**
+ * Computed properties
+ */
+const categoryPath = computed(() => {
+  return {
+    name: 'flix-category',
+    params: {
+      flix: flixStore.currentFlix?.id,
+      category: route.params.category,
+    },
+  } as To;
+});
 </script>
 
 <style lang="scss" scoped>

@@ -14,7 +14,7 @@ h3 {
   font-weight: var(--font-weight-semibold);
 }
 
-@include sm-screen-down {
+@mixin responsive-typography {
   h1 {
     font-size: var(--font-size-l);
   }
@@ -28,8 +28,22 @@ h3 {
   }
 }
 
+@include sm-screen-down {
+  @include responsive-typography()
+}
+
+#preview {
+  &.preview-tablet,
+  &.preview-cellphone {
+    @include responsive-typography()
+  }
+}
+
 body {
   background-color: var(--background-color);
+}
+
+body, #preview {
   color: var(--text-color);
   font-family: var(--font-family);
   font-size: var(--font-size-base);
