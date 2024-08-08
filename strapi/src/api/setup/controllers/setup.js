@@ -7,6 +7,7 @@ module.exports = {
       const flix = ctx.state.flix;
       const setupService = strapi.service('api::setup.setup');
       const data = {
+        id: flix.id,
         fallback: !!flix.fallbackIIIF,
       };
 

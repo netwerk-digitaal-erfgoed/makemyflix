@@ -22,10 +22,18 @@ module.exports = {
       delete branding.intro.id;
     }
     if (flix?.branding?.banner) {
-      branding.banner = flix.branding.banner.url;
+      branding.banner = {
+        id: flix.branding.banner.id,
+        name: flix.branding.banner.name,
+        url: flix.branding.banner.url,
+      };
     }
     if (flix?.branding?.logo) {
-      branding.logo = flix.branding.logo.url;
+      branding.logo = {
+        id: flix.branding.logo.id,
+        name: flix.branding.logo.name,
+        url: flix.branding.logo.url,
+      };
     }
     return branding;
   },

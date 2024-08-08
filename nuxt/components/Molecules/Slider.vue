@@ -30,28 +30,21 @@ interface SwiperElement extends HTMLElement {
   swiper: Swiper;
 }
 
-const flixBuilderStore = useFlixBuilderStore();
-
 const props = defineProps<{
-  sliderProps: object;
+  sliderProps: Swiper['params'];
 }>();
 
 const swiper = ref<SwiperElement>();
 const hideLeftNav = ref(true);
 const hideRightNav = ref(false);
 
-const { previewMediaQueryClassName } = storeToRefs(flixBuilderStore);
-
-const availableWidth = useAvailableFlixWidth();
-
-const swiperProps: any = Object.assign(
-  {
-    slidesPerView: 4.2,
-    spaceBetween: 72,
-    pagination: false,
-  },
-  props.sliderProps,
-);
+const swiperProps: Swiper['params'] = {
+  slidesPerView: 4.2,
+  spaceBetween: 72,
+  pagination: false,
+  breakpointsBase: 'container',
+  ...props.sliderProps,
+};
 
 const goToPrev = () => {
   if (swiper.value) {
@@ -72,28 +65,6 @@ const setNavBtnVisibility = (event: CustomEvent) => {
   hideLeftNav.value = swiper.isBeginning;
   hideRightNav.value = swiper.isEnd;
 };
-
-watch(previewMediaQueryClassName, v => {
-  if (!swiper.value) {
-    return;
-  }
-
-  const s = swiper.value.swiper;
-
-  const slidesPerView = v === 'laptop' ? 4.2 : 1.2;
-
-  if (!s.params.breakpoints) {
-    s.params.breakpoints = {};
-  }
-
-  if (!s.params.breakpoints![availableWidth.value]) {
-    s.params.breakpoints![availableWidth.value] = {};
-  }
-
-  s.params.breakpoints![availableWidth.value].slidesPerView = slidesPerView;
-
-  s.update();
-});
 </script>
 
 <style scoped lang="scss">
@@ -127,13 +98,13 @@ watch(previewMediaQueryClassName, v => {
 }
 
 @include sm-screen-down {
-  @include slider-sm()
+  @include slider-sm();
 }
 
 .preview {
   &-tablet,
   &-cellphone {
-    @include slider-sm()
+    @include slider-sm();
   }
 }
 </style>

@@ -8,10 +8,10 @@
         <div class="icon">
           <Icon icon="mdi:tray-upload" />
         </div>
-        {{ prompt }}
+        <span class="prompt">{{ prompt }}</span>
       </template>
       <template v-else>
-        {{ filename }}
+        <span class="filename">{{ filename }}</span>
         <button
           type="button"
           class="icon"
@@ -110,6 +110,12 @@ const clearInput = () => {
 </script>
 
 <style lang="scss" scoped>
+.filename {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .inputfile {
   position: absolute;
   left: 0;
@@ -117,6 +123,7 @@ const clearInput = () => {
   height: 100%;
   cursor: pointer;
   opacity: 0;
+  width: 100%;
 
   &-area {
     position: relative;
@@ -137,6 +144,7 @@ const clearInput = () => {
       box-shadow: none;
       cursor: auto;
       width: auto;
+      overflow: hidden;
 
       &:focus,
       &:focus-visible,
@@ -165,7 +173,7 @@ const clearInput = () => {
       background-color: var(--blues-blue-5);
       border: var(--space-0) dashed var(--blues-blue);
       border-radius: var(--space-1);
-      padding: var(--space-6) var(--space-10);
+      padding: var(--space-6) var(--space-8);
       cursor: pointer;
       color: var(--blues-blue);
       font-size: var(--font-size-md);

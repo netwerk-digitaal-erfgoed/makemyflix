@@ -1,8 +1,8 @@
 <template>
   <div class="header">
     <img
-      v-if="branding?.logo"
-      :src="branding.logo.url"
+      v-if="logoUrl"
+      :src="logoUrl"
       class="header-image" />
     <h1
       v-else-if="branding?.name"
@@ -14,6 +14,15 @@
 
 <script setup lang="ts">
 const { branding } = storeToRefs(useFlixStore());
+
+const logoUrl = computed(() => {
+  const logo = branding.value?.logo;
+  if (typeof logo === 'string') {
+    return logo;
+  }
+
+  return logo?.url;
+});
 </script>
 
 <style lang="scss" scoped>

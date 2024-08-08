@@ -25,7 +25,7 @@
     </template>
     <template v-else-if="type === 'select'">
       <select
-        class="input"
+        class="input select"
         :value="modelValue"
         @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)">
         <option
@@ -68,9 +68,11 @@ textarea {
 
 .input {
   grid-area: input;
+  background-color: var(--background-color);
+  color: var(--text-color);
   border: var(--space-0) solid var(--text-color);
   border-radius: var(--space-1);
-  padding: var(--space-5);
+  padding: var(--space-5) var(--space-3);
   box-sizing: content-box;
   outline: none;
   box-shadow: none;
@@ -98,6 +100,11 @@ textarea {
     padding: 0;
     width: var(--space-8);
     height: var(--space-8);
+  }
+
+  &.color,
+  &.select {
+    cursor: pointer;
   }
 }
 </style>

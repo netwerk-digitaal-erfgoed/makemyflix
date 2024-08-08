@@ -39,11 +39,20 @@ const { branding } = storeToRefs(flixStore);
  */
 const description = computed(() => branding.value?.intro.description?.substring(0, 300));
 
+const bannerUrl = computed(() => {
+  const banner = branding.value?.banner;
+  if (typeof banner === 'string') {
+    return banner;
+  }
+
+  return banner?.url;
+});
+
 const introStyle = computed(() => {
   const styles = {} as Record<string, string>;
 
-  if (branding.value?.banner) {
-    styles['--url'] = `url(${branding.value?.banner.url})`;
+  if (bannerUrl.value) {
+    styles['--url'] = `url(${bannerUrl.value})`;
   }
 
   return styles;

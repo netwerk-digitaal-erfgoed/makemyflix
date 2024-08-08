@@ -1,5 +1,7 @@
 <template>
-  <div class="sidebar">
+  <fieldset
+    class="sidebar"
+    :disabled="!ready">
     <div class="title">
       <h2>Flix bouwer</h2>
     </div>
@@ -58,7 +60,9 @@
       </template>
       <template #default>
         <div class="divider"></div>
-        <AtomsAccordeon header="Naam">
+        <AtomsAccordeon
+          header="Naam"
+          :initial="true">
           <MoleculesFormInput v-model="newFlix.title" />
         </AtomsAccordeon>
         <div class="divider"></div>
@@ -70,14 +74,14 @@
           <MoleculesFormUpload
             id="input-logo"
             v-model="newFlix.logo"
-            prompt="Upload logo" />
+            prompt="Selecteer vanuit je browser of sleep in dit vlak om te uploaden" />
         </AtomsAccordeon>
         <div class="divider"></div>
         <AtomsAccordeon header="Flix banner (optioneel)">
           <MoleculesFormUpload
             id="input-banner"
             v-model="newFlix.banner"
-            prompt="Upload banner" />
+            prompt="Selecteer vanuit je browser of sleep in dit vlak om te uploaden" />
         </AtomsAccordeon>
       </template>
     </AtomsAccordeon>
@@ -105,10 +109,12 @@
         </div>
       </template>
     </AtomsAccordeon>
-    <div class="publish">
+    <div
+      class="publish"
+      v-if="ready">
       <AtomsButton @click="emit('publish')">PUBLICEER JOUW FLIX SITE</AtomsButton>
     </div>
-  </div>
+  </fieldset>
 </template>
 
 <script setup lang="ts">
@@ -117,7 +123,7 @@
  */
 const responsiveButtonIconSize = '1.8em';
 const typographyOptions = ['Poppins', 'Times New Roman'];
-const devices = ['laptop', 'tablet', 'cellphone'] as const;
+const devices: PreviewMediaQuery[] = ['laptop', 'tablet', 'cellphone'];
 
 /**
  * Deps
@@ -129,6 +135,9 @@ const themeStore = useThemeStore();
 /**
  * State
  */
+const props = defineProps<{
+  ready?: boolean;
+}>();
 const emit = defineEmits(['publish']);
 const { newFlix, previewView } = storeToRefs(flixBuilderStore);
 const { currentFlix } = storeToRefs(flixStore);
@@ -168,9 +177,24 @@ const syncUploadedImage = (type: 'logo' | 'banner', image: UploadedImage | File 
   }
 };
 
+const update = useDebounce(flixBuilderStore.saveDraftFlix, 1000);
+
 /**
  * Watchers
  */
+
+// debounced update upon input change
+watch(
+  newFlix,
+  () => {
+    if (props.ready) {
+      update();
+    }
+  },
+  { deep: true },
+);
+
+// syncs the theme so that theme input changes are immediately reflected in the preview
 watch(
   () => flixBuilderStore.newFlixTheme,
   () => {
@@ -179,6 +203,7 @@ watch(
   },
 );
 
+// syncs the theme so that intro input changes are immediately reflected in the preview
 watch(
   () => [newFlix.value.title, newFlix.value.description],
   ([t, d]) => {
@@ -205,6 +230,7 @@ watch(
   },
 );
 
+// syncs the theme so that image uploads are immediately reflected in the preview
 watch(
   () => [newFlix.value.logo, newFlix.value.banner],
   ([logo, banner]) => {
@@ -227,7 +253,9 @@ onUnmounted(() => {
 .sidebar {
   background-color: #f5f5f5;
   min-width: 380px;
+  width: 380px;
   padding: var(--space-6);
+  border: none;
 
   .divider {
     background-color: #8c8c8c;
@@ -271,8 +299,8 @@ onUnmounted(() => {
 .responsive-view-button {
   width: 88px;
   height: 65px;
-  border: 2px solid black;
-  transition: border 0.2s ease;
+  border: 2px solid gray;
+  transition: all 0.2s ease;
 
   svg {
     transition: color 0.2s ease;
@@ -280,10 +308,12 @@ onUnmounted(() => {
 
   &:hover,
   &.active {
-    border-color: var(--blues-blue);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--text-color);
 
     svg {
-      color: var(--blues-blue);
+      color: var(--text-color);
     }
   }
 }

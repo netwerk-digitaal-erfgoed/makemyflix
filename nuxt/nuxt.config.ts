@@ -4,11 +4,7 @@ import svgLoader from 'vite-svg-loader';
 export default defineNuxtConfig({
   ssr: false,
   devtools: {
-    enabled: true,
-  },
-  sourcemap: {
-    server: true,
-    client: true,
+    enabled: false,
   },
   css: [
     'ress/ress.css',

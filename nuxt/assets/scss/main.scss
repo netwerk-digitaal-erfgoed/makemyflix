@@ -32,15 +32,18 @@ h3 {
   @include responsive-typography()
 }
 
-.preview {
-  &-tablet,
-  &-cellphone {
+#preview {
+  &.preview-tablet,
+  &.preview-cellphone {
     @include responsive-typography()
   }
 }
 
 body {
   background-color: var(--background-color);
+}
+
+body, #preview {
   color: var(--text-color);
   font-family: var(--font-family);
   font-size: var(--font-size-base);

@@ -1,32 +1,29 @@
 <template>
-  <!-- <div
-    class="header"
-    :class="{ published }">
-    <h1>Flix bouwer</h1>
-    <div class="actions">
-      <AtomsButton
-        @click="flixBuilderStore.back"
-        variant="secondary">
-        Aanpassingen
-      </AtomsButton>
-      <AtomsButton @click="publish"> Delen </AtomsButton>
-    </div>
-  </div> -->
   <div class="preview">
-    <OrganismsCreatePreviewSidebar @publish="publish" />
+    <OrganismsCreatePreviewSidebar
+      :ready="ready"
+      @publish="publish" />
     <div
       id="preview"
-      :class="{ published }">
-      <OrganismsFlix
-        v-if="ready"
-        :class="[previewMediaQueryClassName]"
-        preview />
-      <AtomsLoader v-else />
+      :class="[previewMediaQueryClassName, { published }]">
+      <template v-if="ready">
+        <AtomsCellphone v-if="previewView === 'cellphone'">
+          <OrganismsFlix preview />
+        </AtomsCellphone>
+        <AtomsTablet v-else-if="previewView === 'tablet'">
+          <OrganismsFlix preview />
+        </AtomsTablet>
+        <OrganismsFlix
+          v-else
+          :class="[previewMediaQueryClassName]"
+          preview />
+      </template>
     </div>
   </div>
   <OrganismsCreateShare
     v-if="published"
     @close="onCloseModal" />
+  <AtomsLoader v-else />
 </template>
 
 <script setup lang="ts">
@@ -41,7 +38,7 @@ const flixBuilderStore = useFlixBuilderStore();
  */
 const ready = ref(false);
 const published = ref(false);
-const { previewMediaQueryClassName } = storeToRefs(flixBuilderStore);
+const { previewView, previewMediaQueryClassName } = storeToRefs(flixBuilderStore);
 
 /**
  * Methods
@@ -66,19 +63,20 @@ const onCloseModal = () => {
 };
 
 /**
- * Watchers
- */
-watch(() => flixBuilderStore.previewMediaQueryClassName, v => {
-  const base = document.body.className.split(' ').filter(x => !!x && !x.startsWith('preview-'));
-  base.push(v);
-  document.body.className = base.join(' ');
-}, { immediate: true });
-
-/**
  * Lifecyle methods
  */
 onBeforeMount(async () => {
-  await flixBuilderStore.saveDraftFlix();
+  if (flixBuilderStore.newFlixSlug) {
+    const uri = `${window.location.origin}/${flixBuilderStore.newFlixSlug}`;
+    const success = await flixBuilderStore.mergeExistingFlix(uri);
+
+    if (!success) {
+      await flixBuilderStore.saveDraftFlix();
+    }
+  } else {
+    await flixBuilderStore.saveDraftFlix();
+  }
+
   flixStore.resetData();
 
   if (flixBuilderStore.newFlixSlug) {
@@ -108,16 +106,10 @@ onBeforeMount(async () => {
 .preview {
   display: flex;
   overflow-x: scroll;
+  min-height: calc(100vh - 96px); // full height minus banner
 
-  &-tablet {
-    max-width: 1180px;
-    max-height: 820px;
-    overflow-y: scroll;
-  }
-
-  &-cellphone {
-    max-width: 390px;
-    max-height: 844px;
+  &-laptop {
+    max-height: 1080px;
     overflow-y: scroll;
   }
 }
@@ -126,6 +118,13 @@ onBeforeMount(async () => {
   padding: var(--space-6);
   width: 100%;
   font-family: var(--font-family);
+  display: flex;
+  justify-content: center;
+
+  &.preview-tablet,
+  &.preview-cellphone {
+    padding-top: var(--space-20);
+  }
 }
 
 .header,

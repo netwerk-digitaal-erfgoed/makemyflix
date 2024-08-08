@@ -1,65 +1,54 @@
-import Endpoints from '~/components/Organisms/Create/Endpoints.vue';
-import Identity from '~/components/Organisms/Create/Identity.vue';
-import Styling from '~/components/Organisms/Create/Styling.vue';
-import Preview from '~/components/Organisms/Create/Preview.vue';
-
-const createDefaultNewFlixDataForDevelopment = () => {
+const createDefaultNewFlixData = () => {
   const devDefaultNewFlixData: FlixData = {
-    endpoint:
-      'https://api.data.netwerkdigitaalerfgoed.nl/datasets/heritageflix/churches-v1/services/churches-v1/sparql',
-    categoryQuery:
-      'PREFIX gn: <http://www.geonames.org/ontology#> PREFIX schema: <https://schema.org/> SELECT ?id ?name (COUNT(?heritageObject) AS ?numberOfHeritageObjects) WHERE { ?heritageObject a schema:CreativeWork ; schema:contentLocation ?contentLocation . ?contentLocation gn:parentADM1 ?id . ?id gn:name ?name . } ORDER BY ?name',
-    itemsQuery:
-      "PREFIX gn: <http://www.geonames.org/ontology#> PREFIX schema: <https://schema.org/> SELECT * WHERE { { SELECT ?heritageObject ?identifier ?description ?dateCreated ?imageURI ?imageLicenseURI ?imageLicenseName ?provinceURI ?provinceName ?publisherURI ?publisherName ?publisherHomepage (GROUP_CONCAT(?creator; SEPARATOR='; ') AS ?creators) (GROUP_CONCAT(?creatorName; SEPARATOR='; ') AS ?creatorNames) (GROUP_CONCAT(?contentLocationURI; SEPARATOR='; ') AS ?contentLocationURIs) (GROUP_CONCAT(?contentLocationName; SEPARATOR='; ') AS ?contentLocationNames) WHERE { BIND(<_CATEGORYID_> AS ?provinceURI) ?heritageObject a schema:CreativeWork ; schema:identifier ?identifier ; schema:description ?description ; schema:dateCreated ?dateCreated ; schema:creator ?creator ; schema:contentLocation ?contentLocationURI ; schema:publisher ?publisher ; schema:image ?image . ?image schema:contentUrl ?imageURI ; schema:license ?imageLicenseURI . ?imageLicenseURI schema:name ?imageLicenseName . ?creator schema:name ?creatorName . ?contentLocationURI gn:name ?contentLocationName ; gn:parentADM1 ?provinceURI . ?provinceURI gn:name ?provinceName . ?publisher schema:name ?publisherName ; schema:mainEntityOfPage ?publisherHomepage . OPTIONAL { ?heritageObject schema:mainEntityOfPage ?publisherURI } } ORDER BY ?contentLocationName } } LIMIT _LIMIT_ OFFSET _OFFSET_",
+    endpoint: import.meta.dev
+      ? 'https://api.data.netwerkdigitaalerfgoed.nl/datasets/heritageflix/churches-v1/services/churches-v1/sparql'
+      : '',
+    categoryQuery: import.meta.dev
+      ? 'PREFIX gn: <http://www.geonames.org/ontology#> PREFIX schema: <https://schema.org/> SELECT ?id ?name (COUNT(?heritageObject) AS ?numberOfHeritageObjects) WHERE { ?heritageObject a schema:CreativeWork ; schema:contentLocation ?contentLocation . ?contentLocation gn:parentADM1 ?id . ?id gn:name ?name . } ORDER BY ?name'
+      : '',
+    itemsQuery: import.meta.dev
+      ? "PREFIX gn: <http://www.geonames.org/ontology#> PREFIX schema: <https://schema.org/> SELECT * WHERE { { SELECT ?heritageObject ?identifier ?description ?dateCreated ?imageURI ?imageLicenseURI ?imageLicenseName ?provinceURI ?provinceName ?publisherURI ?publisherName ?publisherHomepage (GROUP_CONCAT(?creator; SEPARATOR='; ') AS ?creators) (GROUP_CONCAT(?creatorName; SEPARATOR='; ') AS ?creatorNames) (GROUP_CONCAT(?contentLocationURI; SEPARATOR='; ') AS ?contentLocationURIs) (GROUP_CONCAT(?contentLocationName; SEPARATOR='; ') AS ?contentLocationNames) WHERE { BIND(<_CATEGORYID_> AS ?provinceURI) ?heritageObject a schema:CreativeWork ; schema:identifier ?identifier ; schema:description ?description ; schema:dateCreated ?dateCreated ; schema:creator ?creator ; schema:contentLocation ?contentLocationURI ; schema:publisher ?publisher ; schema:image ?image . ?image schema:contentUrl ?imageURI ; schema:license ?imageLicenseURI . ?imageLicenseURI schema:name ?imageLicenseName . ?creator schema:name ?creatorName . ?contentLocationURI gn:name ?contentLocationName ; gn:parentADM1 ?provinceURI . ?provinceURI gn:name ?provinceName . ?publisher schema:name ?publisherName ; schema:mainEntityOfPage ?publisherHomepage . OPTIONAL { ?heritageObject schema:mainEntityOfPage ?publisherURI } } ORDER BY ?contentLocationName } } LIMIT _LIMIT_ OFFSET _OFFSET_"
+      : '',
     primaryColor: '#000000',
-    secondaryColor: '#00ff00',
-    tertiaryColor: '#ff0000',
-    title: 'Test',
-    description: 'Test',
+    secondaryColor: '#FFFFFF',
+    tertiaryColor: '#FFFFFF',
+    title: 'Nieuwe Flix',
+    description: '',
     fontFamily: 'Poppins',
   };
 
   return devDefaultNewFlixData;
 };
 
-type PreviewMediaQuery = 'laptop' | 'tablet' | 'cellphone';
-
 const determineInitialPreviewMediaQuery = (): PreviewMediaQuery => {
   const availableWidth = window.innerWidth - 380 - 24; // screen width, minus sidebar width, minus preview padding
 
-  if (availableWidth <= 390) { // iPhone 12 Pro width
-    return 'cellphone'
+  if (availableWidth <= 390) {
+    // iPhone 12 Pro width
+    return 'cellphone';
   }
 
-  if (availableWidth <= 1180) { // iPad Air width (landscape mode)
+  if (availableWidth <= 1180) {
+    // iPad Air width (landscape mode)
     return 'tablet';
   }
 
   return 'laptop';
-}
+};
 
 export const useFlixBuilderStore = defineStore('flix-builder', () => {
   /**
    * Deps
    */
   const config = useRuntimeConfig();
+  const flixStore = useFlixStore();
 
   /**
    * State
    */
-  const newFlix = ref<FlixData>(createDefaultNewFlixDataForDevelopment());
+  const newFlix = ref<FlixData>(createDefaultNewFlixData());
   const previewView = ref<PreviewMediaQuery>(determineInitialPreviewMediaQuery());
-  const stepComponents: any[] = markRaw([Endpoints, Identity, Styling, Preview]);
-  const stepsCount = stepComponents.length;
-  const step = ref<number>(
-    (() => {
-      const intendedStep = +(useRoute().query.step?.toString() ?? '1');
-      if (!Number.isSafeInteger(intendedStep) || intendedStep < 1 || intendedStep > stepComponents.length) {
-        return 1;
-      }
-      return intendedStep;
-    })(),
-  );
+  const step = ref<number>(1);
 
   /**
    * Computed properties
@@ -85,19 +74,9 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
   /**
    * Methods
    */
-  const next = () => {
-    if (step.value < stepComponents.length) {
-      step.value++;
-    }
-  };
-
-  const back = () => {
-    if (step.value > 1) {
-      step.value--;
-    }
-  };
-
-  const uploadImage = async (file: File | UploadedImage | null | undefined): Promise<UploadedImage | null> => {
+  const uploadImage = async (
+    file: File | UploadedImage | null | undefined,
+  ): Promise<UploadedImage | null> => {
     if (!(file instanceof File)) {
       return file ?? null;
     }
@@ -160,6 +139,37 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
     // Thanks ChatGPT
   };
 
+  const mergeExistingFlix = async (uri: string) => {
+    try {
+      const current = await flixStore.fetchFlix(uri);
+
+      if (current) {
+        newFlix.value = {
+          banner: current.branding?.banner,
+          categoryQuery: newFlix.value.categoryQuery,
+          description: current.branding?.intro.description,
+          endpoint: newFlix.value.endpoint,
+          fontFamily: current.theme?.fontFamily ?? 'Poppins',
+          id: current.id,
+          itemsQuery: newFlix.value.itemsQuery,
+          logo: current.branding?.logo,
+          primaryColor: current.theme?.primaryColor,
+          secondaryColor: current.theme?.secondaryColor,
+          slug: newFlixSlug.value,
+          tertiaryColor: current.theme?.tertiaryColor,
+          title: current.branding?.intro.title,
+          uri: uri,
+        };
+
+        return true;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
+    return false;
+  };
+
   const saveDraftFlix = async () => {
     const {
       endpoint,
@@ -179,9 +189,9 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
       return null;
     }
 
-    const [logoData, bannerData] = await Promise.all([uploadImage(logo), uploadImage(banner)]);
-
     const uri = `${window.location.origin}/${newFlixSlug.value}`;
+
+    const [logoData, bannerData] = await Promise.all([uploadImage(logo), uploadImage(banner)]);
 
     const data = {
       data: {
@@ -217,18 +227,22 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
 
     try {
       const response = await saveFlix(data, newFlix.value.id);
-      newFlix.value.id = response.id;
+
+      if (response) {
+        newFlix.value.id = response.id;
+      }
+
       newFlix.value.uri = uri;
       newFlix.value.logo = logoData;
       newFlix.value.banner = bannerData;
       return response;
     } catch (e) {
       // cleanup newly uploaded images to prevent reuploads of the same images upon errors
-      if (logoData && logo !== logoData) {
+      if (logoData && logo !== logoData && typeof logoData !== 'string') {
         deleteImage(logoData);
       }
 
-      if (bannerData && banner !== bannerData) {
+      if (bannerData && banner !== bannerData && typeof bannerData !== 'string') {
         deleteImage(bannerData);
       }
 
@@ -261,7 +275,7 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
   };
 
   const resetStore = () => {
-    newFlix.value = {};
+    newFlix.value = createDefaultNewFlixData();
     step.value = 1;
   };
 
@@ -271,11 +285,8 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
     previewView,
     previewMediaQueryClassName,
     newFlixSlug,
-    stepComponents,
-    stepsCount,
     step,
-    next,
-    back,
+    mergeExistingFlix,
     saveDraftFlix,
     publishFlix,
     resetStore,
