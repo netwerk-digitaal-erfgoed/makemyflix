@@ -23,7 +23,6 @@
         <slot></slot>
       </div>
     </div>
-    <transition name="accordion"> </transition>
   </div>
 </template>
 
@@ -32,7 +31,6 @@ const props = defineProps<{
   header?: string;
   initial?: boolean;
 }>();
-
 const open = ref(props.initial ?? false);
 
 const openClasses = computed(() => {
