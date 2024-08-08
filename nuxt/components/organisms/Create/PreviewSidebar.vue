@@ -112,7 +112,11 @@
     <div
       class="publish"
       v-if="ready">
-      <AtomsButton @click="emit('publish')">PUBLICEER JOUW FLIX SITE</AtomsButton>
+      <AtomsButton
+        :disabled="!publishable"
+        @click="emit('publish')"
+        >PUBLICEER JOUW FLIX SITE</AtomsButton
+      >
     </div>
   </fieldset>
 </template>
@@ -141,6 +145,13 @@ const props = defineProps<{
 const emit = defineEmits(['publish']);
 const { newFlix, previewView } = storeToRefs(flixBuilderStore);
 const { currentFlix } = storeToRefs(flixStore);
+
+/**
+ * Computed properties
+ */
+const publishable = computed(() => {
+  return props.ready && flixBuilderStore.newFlix.title !== 'Nieuwe Flix';
+});
 
 /**
  * Methods
