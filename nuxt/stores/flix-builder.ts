@@ -55,7 +55,7 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
     if (!newFlix.value.title) {
       return undefined;
     }
-    return sluggify(newFlix.value.title);
+    return useSlugify(newFlix.value.title);
   });
 
   const previewMediaQueryClassName = computed(() => `preview-${previewView.value}`);
@@ -126,15 +126,6 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
       console.error('Error saving flix:', error);
       return undefined;
     }
-  };
-
-  const sluggify = (text: string): string => {
-    return text
-      .toLowerCase() // Convert to lowercase
-      .trim() // Trim whitespace from both ends
-      .replace(/[\s\W-]+/g, '-') // Replace spaces and non-word characters with hyphens
-      .replace(/^-+|-+$/g, ''); // Remove any leading or trailing hyphens
-    // Thanks ChatGPT
   };
 
   const mergeExistingFlix = async (uri: string) => {
