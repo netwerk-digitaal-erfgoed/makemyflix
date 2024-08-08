@@ -24,35 +24,15 @@
 </template>
 
 <script setup lang="ts">
-/**
- * Deps
- */
-const flixStore = useFlixStore();
+const { branding } = storeToRefs(useFlixStore());
 
-/**
- * State
- */
-const { branding } = storeToRefs(flixStore);
-
-/**
- * Computed properties
- */
 const description = computed(() => branding.value?.intro.description?.substring(0, 300));
-
-const bannerUrl = computed(() => {
-  const banner = branding.value?.banner;
-  if (typeof banner === 'string') {
-    return banner;
-  }
-
-  return banner?.url;
-});
 
 const introStyle = computed(() => {
   const styles = {} as Record<string, string>;
 
-  if (bannerUrl.value) {
-    styles['--url'] = `url(${bannerUrl.value})`;
+  if (branding.value?.banner) {
+    styles['--url'] = `url(${branding.value.banner.url})`;
   }
 
   return styles;

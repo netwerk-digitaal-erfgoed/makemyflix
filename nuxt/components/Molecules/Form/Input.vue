@@ -72,7 +72,7 @@ textarea {
   color: var(--text-color);
   border: var(--space-0) solid var(--text-color);
   border-radius: var(--space-1);
-  padding: var(--space-5) var(--space-3);
+  padding: var(--space-4);
   box-sizing: content-box;
   outline: none;
   box-shadow: none;

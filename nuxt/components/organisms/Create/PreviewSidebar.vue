@@ -30,7 +30,7 @@
               v-model="newFlix.tertiaryColor"
               type="color"
               inline
-              label="Tekst kleur" />
+              label="Tertiaire kleur" />
             <!-- <MoleculesFormInput
               type="color"
               inline

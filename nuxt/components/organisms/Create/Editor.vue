@@ -18,12 +18,12 @@
           :class="[previewMediaQueryClassName]"
           preview />
       </template>
+      <AtomsLoader v-else />
     </div>
   </div>
   <OrganismsCreateShare
     v-if="published"
     @close="onCloseModal" />
-  <AtomsLoader v-else />
 </template>
 
 <script setup lang="ts">
@@ -66,7 +66,7 @@ const onCloseModal = () => {
  * Lifecyle methods
  */
 onBeforeMount(async () => {
-  if (flixBuilderStore.newFlixSlug) {
+  if (flixBuilderStore.newFlixSlug && flixBuilderStore.newFlixSlug !== 'nieuwe-flix') {
     const uri = `${window.location.origin}/${flixBuilderStore.newFlixSlug}`;
     const success = await flixBuilderStore.mergeExistingFlix(uri);
 

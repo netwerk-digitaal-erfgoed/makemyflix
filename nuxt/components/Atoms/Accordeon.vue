@@ -33,12 +33,6 @@ const props = defineProps<{
   initial?: boolean;
 }>();
 
-const emit = defineEmits<{
-  (event: 'update:modelValue', value: boolean): void;
-  (event: 'open'): void;
-  (event: 'close'): void;
-}>();
-
 const open = ref(props.initial ?? false);
 
 const openClasses = computed(() => {
@@ -49,8 +43,6 @@ const openClasses = computed(() => {
 
 const toggle = () => {
   open.value = !open.value;
-  emit('update:modelValue', open.value);
-  emit(open.value ? 'open' : ('close' as any));
 };
 </script>
 

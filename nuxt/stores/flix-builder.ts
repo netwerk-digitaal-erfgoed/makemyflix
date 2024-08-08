@@ -9,8 +9,8 @@ const createDefaultNewFlixData = () => {
     itemsQuery: import.meta.dev
       ? "PREFIX gn: <http://www.geonames.org/ontology#> PREFIX schema: <https://schema.org/> SELECT * WHERE { { SELECT ?heritageObject ?identifier ?description ?dateCreated ?imageURI ?imageLicenseURI ?imageLicenseName ?provinceURI ?provinceName ?publisherURI ?publisherName ?publisherHomepage (GROUP_CONCAT(?creator; SEPARATOR='; ') AS ?creators) (GROUP_CONCAT(?creatorName; SEPARATOR='; ') AS ?creatorNames) (GROUP_CONCAT(?contentLocationURI; SEPARATOR='; ') AS ?contentLocationURIs) (GROUP_CONCAT(?contentLocationName; SEPARATOR='; ') AS ?contentLocationNames) WHERE { BIND(<_CATEGORYID_> AS ?provinceURI) ?heritageObject a schema:CreativeWork ; schema:identifier ?identifier ; schema:description ?description ; schema:dateCreated ?dateCreated ; schema:creator ?creator ; schema:contentLocation ?contentLocationURI ; schema:publisher ?publisher ; schema:image ?image . ?image schema:contentUrl ?imageURI ; schema:license ?imageLicenseURI . ?imageLicenseURI schema:name ?imageLicenseName . ?creator schema:name ?creatorName . ?contentLocationURI gn:name ?contentLocationName ; gn:parentADM1 ?provinceURI . ?provinceURI gn:name ?provinceName . ?publisher schema:name ?publisherName ; schema:mainEntityOfPage ?publisherHomepage . OPTIONAL { ?heritageObject schema:mainEntityOfPage ?publisherURI } } ORDER BY ?contentLocationName } } LIMIT _LIMIT_ OFFSET _OFFSET_"
       : '',
-    primaryColor: '#000000',
-    secondaryColor: '#FFFFFF',
+    primaryColor: '#FFFFFF',
+    secondaryColor: '#000000',
     tertiaryColor: '#FFFFFF',
     title: 'Nieuwe Flix',
     description: '',
@@ -21,15 +21,13 @@ const createDefaultNewFlixData = () => {
 };
 
 const determineInitialPreviewMediaQuery = (): PreviewMediaQuery => {
-  const availableWidth = window.innerWidth - 380 - 24; // screen width, minus sidebar width, minus preview padding
+  const availableWidth = window.innerWidth - 380 - 48; // screen width, minus sidebar width, minus preview padding
 
-  if (availableWidth <= 390) {
-    // iPhone 12 Pro width
+  if (availableWidth <= 500) {
     return 'cellphone';
   }
 
   if (availableWidth <= 1180) {
-    // iPad Air width (landscape mode)
     return 'tablet';
   }
 
