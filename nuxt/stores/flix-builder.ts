@@ -1,14 +1,8 @@
 const createDefaultNewFlixData = () => {
   const devDefaultNewFlixData: FlixData = {
-    endpoint: import.meta.dev
-      ? 'https://api.data.netwerkdigitaalerfgoed.nl/datasets/heritageflix/churches-v1/services/churches-v1/sparql'
-      : '',
-    categoryQuery: import.meta.dev
-      ? 'PREFIX gn: <http://www.geonames.org/ontology#> PREFIX schema: <https://schema.org/> SELECT ?id ?name (COUNT(?heritageObject) AS ?numberOfHeritageObjects) WHERE { ?heritageObject a schema:CreativeWork ; schema:contentLocation ?contentLocation . ?contentLocation gn:parentADM1 ?id . ?id gn:name ?name . } ORDER BY ?name'
-      : '',
-    itemsQuery: import.meta.dev
-      ? "PREFIX gn: <http://www.geonames.org/ontology#> PREFIX schema: <https://schema.org/> SELECT * WHERE { { SELECT ?heritageObject ?identifier ?description ?dateCreated ?imageURI ?imageLicenseURI ?imageLicenseName ?provinceURI ?provinceName ?publisherURI ?publisherName ?publisherHomepage (GROUP_CONCAT(?creator; SEPARATOR='; ') AS ?creators) (GROUP_CONCAT(?creatorName; SEPARATOR='; ') AS ?creatorNames) (GROUP_CONCAT(?contentLocationURI; SEPARATOR='; ') AS ?contentLocationURIs) (GROUP_CONCAT(?contentLocationName; SEPARATOR='; ') AS ?contentLocationNames) WHERE { BIND(<_CATEGORYID_> AS ?provinceURI) ?heritageObject a schema:CreativeWork ; schema:identifier ?identifier ; schema:description ?description ; schema:dateCreated ?dateCreated ; schema:creator ?creator ; schema:contentLocation ?contentLocationURI ; schema:publisher ?publisher ; schema:image ?image . ?image schema:contentUrl ?imageURI ; schema:license ?imageLicenseURI . ?imageLicenseURI schema:name ?imageLicenseName . ?creator schema:name ?creatorName . ?contentLocationURI gn:name ?contentLocationName ; gn:parentADM1 ?provinceURI . ?provinceURI gn:name ?provinceName . ?publisher schema:name ?publisherName ; schema:mainEntityOfPage ?publisherHomepage . OPTIONAL { ?heritageObject schema:mainEntityOfPage ?publisherURI } } ORDER BY ?contentLocationName } } LIMIT _LIMIT_ OFFSET _OFFSET_"
-      : '',
+    endpoint: '',
+    categoryQuery: '',
+    itemsQuery: '',
     primaryColor: '#FFFFFF',
     secondaryColor: '#000000',
     tertiaryColor: '#FFFFFF',
