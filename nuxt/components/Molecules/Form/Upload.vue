@@ -133,6 +133,7 @@ const clearInput = () => {
     flex-wrap: nowrap;
     align-items: center;
     gap: var(--space-8);
+    transition: var(--transition-state);
 
     &.file {
       justify-content: space-between;
@@ -161,6 +162,7 @@ const clearInput = () => {
       .icon {
         height: 1.25em;
         z-index: 2;
+        transition: var(--transition-state);
 
         &:hover {
           color: var(--blues-blue);

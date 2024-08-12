@@ -28,6 +28,7 @@ const classes = computed(() => {
   padding: var(--space-4) var(--space-8);
   border-radius: var(--space-2);
   cursor: pointer;
+  transition: var(--transition-state);
   user-select: none;
 
   &:disabled {
