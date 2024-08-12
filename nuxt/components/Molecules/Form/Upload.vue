@@ -190,7 +190,7 @@ const clearInput = () => {
         padding: var(--space-6);
         border-radius: 50%;
         background: var(--blues-blue);
-        color: white;
+        color: var(--primary-color);
       }
     }
   }

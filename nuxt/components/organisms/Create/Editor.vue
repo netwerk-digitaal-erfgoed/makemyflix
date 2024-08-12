@@ -93,20 +93,20 @@ onBeforeMount(async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-4);
   margin: 0 var(--space-20);
 
   .actions {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 }
 
 .preview {
   display: flex;
   overflow-x: scroll;
-  min-height: calc(100vh - 96px); // full height minus banner
+  min-height: calc(100vh - var(--space-24)); // full height minus banner
 
   &-laptop {
     max-height: 1080px;

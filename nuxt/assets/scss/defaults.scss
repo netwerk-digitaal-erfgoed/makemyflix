@@ -38,4 +38,11 @@
     $value: $i * $increment;
     --space-#{$i}: #{$value};
   }
+
+  // Transitions
+  --transition-page-vertical: top 1s;
+  --transition-page-horizontal: left 1s;
+  --transition-slider: 0.15s ease-in-out;
+  --transition-accordeon: 0.4s ease-in-out;
+  --transition-state: all 0.3s ease;
 }

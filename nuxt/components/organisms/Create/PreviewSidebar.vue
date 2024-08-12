@@ -270,7 +270,7 @@ onUnmounted(() => {
 
   .divider {
     background-color: #8c8c8c;
-    height: 1px;
+    height: var(--space-0);
     width: 100%;
     margin: var(--space-2) 0 var(--space-2);
   }
@@ -308,13 +308,13 @@ onUnmounted(() => {
 }
 
 .responsive-view-button {
-  width: 88px;
-  height: 65px;
+  width: var(--space-22);
+  height: var(--space-16);
   border: 2px solid gray;
-  transition: all 0.2s ease;
+  transition: var(--transition-state);
 
   svg {
-    transition: color 0.2s ease;
+    transition: var(--transition-state);
   }
 
   &:hover,

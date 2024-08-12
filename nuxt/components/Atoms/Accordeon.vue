@@ -55,7 +55,7 @@ const toggle = () => {
     cursor: pointer;
 
     .icon {
-      transition: transform 0.3s ease;
+      transition: transform var(--transition-accordeon);
 
       &.open {
         transform: rotate(90deg) translate(0, 6px);
@@ -65,9 +65,7 @@ const toggle = () => {
 
   &-body {
     overflow: hidden;
-    transition-property: max-height, opacity;
-    transition-duration: 0.4s;
-    transition-timing-function: ease-in-out;
+    transition: max-height var(--transition-accordeon), opacity var(--transition-accordeon);
 
     &.open {
       max-height: 100vh;
