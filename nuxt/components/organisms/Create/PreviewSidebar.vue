@@ -150,7 +150,7 @@ const { currentFlix } = storeToRefs(flixStore);
  * Computed properties
  */
 const publishable = computed(() => {
-  return props.ready && flixBuilderStore.newFlix.title !== 'Nieuwe Flix';
+  return props.ready && flixBuilderStore.newFlixSlug !== 'nieuwe-flix';
 });
 
 /**
