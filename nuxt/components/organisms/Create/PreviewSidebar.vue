@@ -205,7 +205,7 @@ watch(
   { deep: true },
 );
 
-// syncs the theme so that theme input changes are immediately reflected in the preview
+// syncs theme input changes so that colors and fonts are immediately reflected in the preview
 watch(
   () => flixBuilderStore.newFlixTheme,
   () => {
@@ -214,7 +214,7 @@ watch(
   },
 );
 
-// syncs the theme so that intro input changes are immediately reflected in the preview
+// syncs intro input changes so that they are immediately reflected in the preview
 watch(
   () => [newFlix.value.title, newFlix.value.description],
   ([t, d]) => {
@@ -241,7 +241,7 @@ watch(
   },
 );
 
-// syncs the theme so that image uploads are immediately reflected in the preview
+// syncs images so that image uploads are immediately reflected in the preview
 watch(
   () => [newFlix.value.logo, newFlix.value.banner],
   ([logo, banner]) => {
