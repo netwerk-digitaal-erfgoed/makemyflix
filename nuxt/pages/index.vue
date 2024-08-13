@@ -62,11 +62,12 @@
           Maak direct<br />
           je eigen flix
         </h2>
-        <NuxtLink
+        <AtomsButton
+          type="link"
           to="/create"
           class="create-btn"
-          >START NU</NuxtLink
-        >
+          >START NU
+        </AtomsButton>
       </div>
       <div class="footer">
         <div>
@@ -115,7 +116,17 @@
 
 <style lang="scss" scoped>
 .cta {
-  padding: 0 var(--space-20);
+  padding: 0 var(--space-6);
+  min-height: 100vh;
+
+  @media (min-width: 48em) {
+    padding: 0 var(--space-12);
+  }
+
+  @media (min-width: 80em) {
+    padding: 0 var(--space-20);
+  }
+
   background-color: var(--secondary-color);
   color: var(--primary-color);
 
@@ -125,10 +136,18 @@
   }
 
   .benefits {
-    padding: var(--space-40) 0 var(--space-20);
+    padding: var(--space-10) 0 var(--space-5);
     display: grid;
-    grid-template-columns: 1fr 2fr;
     gap: var(--space-8);
+
+    @media (min-width: 48em) {
+      padding: var(--space-20) 0 var(--space-10);
+      grid-template-columns: 1fr 2fr;
+    }
+
+    @media (min-width: 80em) {
+      padding: var(--space-40) 0 var(--space-20);
+    }
 
     .subheader {
       font-size: 1rem;
@@ -137,31 +156,49 @@
     }
 
     .header {
-      font-size: var(--space-8);
+      font-size: var(--font-size-xl);
+      text-wrap: balance;
     }
 
     .items {
       display: grid;
-      grid-template-columns: 1fr 1fr;
       gap: var(--space-8);
+      justify-content: center;
+
+      @media (min-width: 48em) {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     .item {
       display: flex;
       align-items: center;
-      gap: var(--space-6);
+      gap: var(--space-3);
+
+      @media (min-width: 48em) {
+        gap: var(--space-6);
+      }
 
       .icon {
-        color: #0a3dfa; // TODO: use css var
+        color: var(--blues-blue);
       }
 
       h3 {
-        font-size: 40px; // TODO: use css var
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-medium);
         margin-bottom: var(--space-4);
+
+        @media (min-width: 80em) {
+          font-size: 40px; // TODO: use css var
+        }
       }
 
       p {
-        font-size: var(--font-size-base);
+        font-size: var(--font-sm);
+
+        @media (min-width: 80em) {
+          font-size: var(--font-size-base);
+        }
       }
     }
   }
@@ -171,30 +208,41 @@
     padding: var(--space-20) 0;
 
     h2 {
-      font-size: 85px; // TODO: use css var?
+      font-size: var(--font-size-3xl);
       font-weight: var(--font-weight-bold);
+
+      @media (min-width: 48em) {
+        font-size: 85px; // TODO: use css var?
+      }
     }
 
     .create-btn {
-      display: inline-block;
-      background-color: #0a3dfa; // TODO: use css var
-      color: var(--primary-color);
-      border-radius: var(--space-4);
-      padding: var(--space-6) var(--space-8);
-      font-size: var(--space-5);
       margin-top: var(--space-16);
     }
   }
 
   .footer {
-    height: var(--space-29);
     display: grid;
     align-items: center;
-    grid-template-columns: var(--space-40) 1fr var(--space-40);
+    justify-content: center;
+    gap: var(--space-4);
+    padding: 0 0 var(--space-10);
+
+    @media (min-width: 48em) {
+      justify-content: initial;
+      height: var(--space-29);
+      grid-template-columns: var(--space-40) 1fr var(--space-40);
+      padding: initial;
+    }
 
     .name {
       text-align: center;
       font-size: var(--font-size-lg);
+      order: -1;
+
+      @media (min-width: 48em) {
+        order: initial;
+      }
     }
 
     .socials {
