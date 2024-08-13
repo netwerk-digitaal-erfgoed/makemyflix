@@ -1,10 +1,10 @@
 /**
  * Transition to and from the art pages
  */
- .up {
+.up {
   &.slide-leave-active,
   &.slide-enter-active {
-    transition: top 1s;
+    transition: var(--transition-page-vertical);
   }
 
   &.slide-enter-from {
@@ -17,14 +17,14 @@
 
 .down {
   &.slide-leave-active {
-    transition: top 1s;
+    transition: var(--transition-page-vertical);
   }
 
   &.slide-leave-from {
     top: 0;
   }
   &.slide-leave-to {
-    top: 100%
+    top: 100%;
   }
 }
 
@@ -34,14 +34,14 @@
 .left {
   &.slide-leave-active,
   &.slide-enter-active {
-    transition: left 1s;
+    transition: var(--transition-page-horizontal);
   }
 
   &.slide-enter-from {
     left: 100%;
   }
   &.slide-enter-to {
-    left: 0
+    left: 0;
   }
   &.slide-leave-to {
     left: -100%;
@@ -54,7 +54,7 @@
 .right {
   &.slide-leave-active,
   &.slide-enter-active {
-    transition: left 1s;
+    transition: var(--transition-page-horizontal);
   }
 
   &.slide-enter-from {
@@ -62,7 +62,7 @@
   }
 
   &.slide-enter-to {
-    left: 0%
+    left: 0%;
   }
   &.slide-leave-to {
     left: 100%;

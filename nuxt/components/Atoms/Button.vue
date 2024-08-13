@@ -28,14 +28,19 @@ const classes = computed(() => {
   padding: var(--space-4) var(--space-8);
   border-radius: var(--space-2);
   cursor: pointer;
+  transition: var(--transition-state);
   user-select: none;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 
   &.primary {
     color: var(--background-color);
     border: var(--space-0) solid transparent;
     background-color: var(--blues-blue);
 
-    &:hover {
+    &:hover:enabled {
       color: var(--blues-blue);
       background-color: var(--background-color);
       border: var(--space-0) solid var(--blues-blue);
@@ -47,7 +52,7 @@ const classes = computed(() => {
     color: var(--blues-blue);
     border: var(--space-0) solid var(--blues-blue);
 
-    &:hover {
+    &:hover:enabled {
       background-color: var(--blues-blue);
       color: var(--background-color);
       border: var(--space-0) solid transparent;

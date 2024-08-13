@@ -8,10 +8,10 @@
         <div class="icon">
           <Icon icon="mdi:tray-upload" />
         </div>
-        {{ prompt }}
+        <span class="prompt">{{ prompt }}</span>
       </template>
       <template v-else>
-        {{ filename }}
+        <span class="filename">{{ filename }}</span>
         <button
           type="button"
           class="icon"
@@ -110,29 +110,10 @@ const clearInput = () => {
 </script>
 
 <style lang="scss" scoped>
-.input-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: min-content auto;
-  grid-template-areas: 'label' 'input';
-  gap: var(--space-4);
-  background-color: var(--background-color);
-  color: var(--text-color);
-  width: 100%;
-
-  &.inline {
-    grid-template-columns: min-content auto;
-    grid-template-rows: min-content;
-    grid-template-areas: 'label input';
-  }
-
-  label {
-    grid-area: label;
-    display: flex;
-    align-items: center;
-    font-size: var(--font-size-lg);
-    text-wrap: nowrap;
-  }
+.filename {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .inputfile {
@@ -142,6 +123,7 @@ const clearInput = () => {
   height: 100%;
   cursor: pointer;
   opacity: 0;
+  width: 100%;
 
   &-area {
     position: relative;
@@ -151,6 +133,7 @@ const clearInput = () => {
     flex-wrap: nowrap;
     align-items: center;
     gap: var(--space-8);
+    transition: var(--transition-state);
 
     &.file {
       justify-content: space-between;
@@ -162,6 +145,7 @@ const clearInput = () => {
       box-shadow: none;
       cursor: auto;
       width: auto;
+      overflow: hidden;
 
       &:focus,
       &:focus-visible,
@@ -178,6 +162,7 @@ const clearInput = () => {
       .icon {
         height: 1.25em;
         z-index: 2;
+        transition: var(--transition-state);
 
         &:hover {
           color: var(--blues-blue);
@@ -190,7 +175,7 @@ const clearInput = () => {
       background-color: var(--blues-blue-5);
       border: var(--space-0) dashed var(--blues-blue);
       border-radius: var(--space-1);
-      padding: var(--space-6) var(--space-10);
+      padding: var(--space-6) var(--space-8);
       cursor: pointer;
       color: var(--blues-blue);
       font-size: var(--font-size-md);
@@ -207,7 +192,7 @@ const clearInput = () => {
         padding: var(--space-6);
         border-radius: 50%;
         background: var(--blues-blue);
-        color: white;
+        color: var(--primary-color);
       }
     }
   }

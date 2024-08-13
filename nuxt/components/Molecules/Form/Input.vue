@@ -25,7 +25,7 @@
     </template>
     <template v-else-if="type === 'select'">
       <select
-        class="input"
+        class="input select"
         :value="modelValue"
         @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)">
         <option
@@ -62,67 +62,49 @@ defineEmits(['update:modelValue']);
 </script>
 
 <style lang="scss" scoped>
-.input-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: min-content auto;
-  grid-template-areas: 'label' 'input';
-  gap: var(--space-4);
+textarea {
+  height: var(--space-32);
+}
+
+.input {
+  grid-area: input;
   background-color: var(--background-color);
   color: var(--text-color);
-  width: 100%;
+  border: var(--space-0) solid var(--text-color);
+  border-radius: var(--space-1);
+  padding: var(--space-4);
+  box-sizing: content-box;
+  outline: none;
+  box-shadow: none;
+  cursor: auto;
 
-  &.inline {
-    grid-template-columns: min-content auto;
-    grid-template-rows: min-content;
-    grid-template-areas: 'label input';
+  &:focus,
+  &:focus-visible,
+  &:hover {
+    border-color: var(--neutrals-900);
   }
 
-  label {
-    grid-area: label;
-    display: flex;
-    align-items: center;
-    font-size: var(--font-size-lg);
-    text-wrap: nowrap;
+  &:disabled {
+    border-color: var(--neutrals-300);
+    color: var(--neutrals-600);
+    cursor: not-allowed;
   }
 
-  textarea {
-    height: var(--space-32);
+  &::placeholder {
+    color: var(--neutrals-400);
   }
 
-  .input {
-    grid-area: input;
-    border: var(--space-0) solid var(--text-color);
-    border-radius: var(--space-1);
-    padding: var(--space-5);
-    box-sizing: content-box;
-    outline: none;
-    box-shadow: none;
-    cursor: auto;
+  &.color {
+    justify-self: self-end;
+    border: none;
+    padding: 0;
+    width: var(--space-8);
+    height: var(--space-8);
+  }
 
-    &:focus,
-    &:focus-visible,
-    &:hover {
-      border-color: var(--neutrals-900);
-    }
-
-    &:disabled {
-      border-color: var(--neutrals-300);
-      color: var(--neutrals-600);
-      cursor: not-allowed;
-    }
-
-    &::placeholder {
-      color: var(--neutrals-400);
-    }
-
-    &.color {
-      justify-self: self-end;
-      border: none;
-      padding: 0;
-      width: var(--space-8);
-      height: var(--space-8);
-    }
+  &.color,
+  &.select {
+    cursor: pointer;
   }
 }
 </style>

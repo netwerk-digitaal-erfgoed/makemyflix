@@ -42,7 +42,7 @@ const slideStyles = computed(() => {
   background-color: var(--primary-color);
 
   .category-slide {
-    transition: 0.15s ease-in-out;
+    transition: var(--transition-slider);
 
     &:hover {
       width: var(--max-width-slide) !important;

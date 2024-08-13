@@ -86,7 +86,7 @@ const to = computed(() => {
       width: var(--max-width-slide);
       height: 100%;
       object-fit: cover;
-      transition: 0.15s ease-in-out;
+      transition: var(--transition-slider);
       filter: blur(0.625rem);
       position: absolute;
       left: 50%;

@@ -20,7 +20,8 @@
     },
     "uri": {
       "type": "string",
-      "required": true
+      "required": true,
+      "unique": true
     },
     "data": {
       "type": "component",

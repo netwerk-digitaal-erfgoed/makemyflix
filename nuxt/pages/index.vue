@@ -52,7 +52,7 @@ a {
   text-decoration: none;
   color: white;
   padding: var(--space-2);
-  transition: color 0.3s ease;
+  transition: var(--transition-state);
 
   &:hover {
     color: blue;

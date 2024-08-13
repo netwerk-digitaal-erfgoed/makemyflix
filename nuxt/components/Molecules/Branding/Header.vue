@@ -2,7 +2,7 @@
   <div class="header">
     <img
       v-if="branding?.logo"
-      :src="branding.logo"
+      :src="branding.logo.url"
       class="header-image" />
     <h1
       v-else-if="branding?.name"
