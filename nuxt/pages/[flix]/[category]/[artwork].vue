@@ -231,7 +231,7 @@ if (currentArtwork && currentCategory) {
       margin-right: 0;
 
       .description-content {
-        font-size: var(--font-size-sm);
+        font-size: var(--font-size-xsm);
         font-weight: var(--font-weight-light);
         margin-top: var(--space-4);
       }

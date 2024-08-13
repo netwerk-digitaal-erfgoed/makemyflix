@@ -5,6 +5,17 @@
         <div class="content">
           <div class="subheader">Recent gelanceerd project</div>
           <div class="header">Door die verbindingen het publiek bereiken met de kernboodschap</div>
+          <DevOnly>
+            <ul class="flix-list">
+              <li
+                v-for="flix in flixes"
+                :key="flix.title">
+                <router-link :to="flix.path">
+                  {{ flix.title }}
+                </router-link>
+              </li>
+            </ul>
+          </DevOnly>
         </div>
         <div class="items">
           <div class="item">
@@ -111,10 +122,33 @@
 </template>
 
 <script lang="ts" setup>
-//
+const themeStore = useThemeStore();
+const flixStore = useFlixStore();
+
+const flixes = await flixStore.fetchFlixes();
+
+// Clear seo from any previous selected flixes
+useSetSeo();
+
+onMounted(() => {
+  themeStore.resetData();
+});
 </script>
 
 <style lang="scss" scoped>
+.flix-list {
+  margin-top: var(--space-4);
+  padding-left: var(--space-4);
+
+  a {
+    color: var(--primary-color);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
 .cta {
   padding: 0 var(--space-6);
   min-height: 100vh;
@@ -131,7 +165,7 @@
   color: var(--primary-color);
 
   .container {
-    max-width: 100rem; // TODO: use css var?
+    max-width: var(--container);
     margin: 0 auto;
   }
 
@@ -150,7 +184,7 @@
     }
 
     .subheader {
-      font-size: 1rem;
+      font-size: var(--font-size-sm);
       color: #dadada; // TODO: use css var
       margin-bottom: var(--space-8);
     }
@@ -189,7 +223,7 @@
         margin-bottom: var(--space-4);
 
         @media (min-width: 80em) {
-          font-size: 40px; // TODO: use css var
+          font-size: var(--font-size-2xl);
         }
       }
 
@@ -212,7 +246,7 @@
       font-weight: var(--font-weight-bold);
 
       @media (min-width: 48em) {
-        font-size: 85px; // TODO: use css var?
+        font-size: var(--font-size-8xl);
       }
     }
 

@@ -37,7 +37,7 @@ const properties = computed(() => {
 <style scoped lang="scss">
 .property {
   @include flex-column;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xsm);
   font-weight: var(--font-weight-light);
 
   .label {

@@ -13,13 +13,18 @@
   --black-50: rgba(0, 0, 0, 0.5);
 
   // Font Sizes
-  --font-size-sm: 0.875rem;
+  --font-size-xsm: 0.875rem;
+  --font-size-sm: 1rem;
   --font-size-base: 1.25rem;
   --font-size-md: 1.375rem;
   --font-size-lg: 1.5rem;
   --font-size-xl: 2rem;
-  --font-size-2xl: 2.25rem;
-  --font-size-3xl: 2.75rem;
+
+  @for $i from 2 through 10 {
+    $increment: 0.5rem;
+    $value: 2rem + (($i - 1) * $increment);
+    --font-size-#{$i}xl: #{$value};
+  }
 
   // Font weights
   --font-weight-light: 300;
@@ -38,6 +43,8 @@
     $value: $i * $increment;
     --space-#{$i}: #{$value};
   }
+
+  --container: 100rem;
 
   // Transitions
   --transition-page-vertical: top 1s;

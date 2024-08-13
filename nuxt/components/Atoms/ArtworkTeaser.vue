@@ -88,7 +88,7 @@ defineProps<{
     }
 
     .subtitle {
-      font-size: var(--font-size-sm);
+      font-size: var(--font-size-xsm);
       font-weight: var(--font-weight-light);
     }
   }
