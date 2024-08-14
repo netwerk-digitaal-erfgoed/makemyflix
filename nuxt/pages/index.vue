@@ -1,61 +1,147 @@
 <template>
-  <div class="flix-list">
-    <h1>Flix List</h1>
-    <ul>
-      <router-link
-        v-for="flix in flixes"
-        :key="flix.title"
-        :to="flix.path">
-        {{ flix.title }}
-      </router-link>
-    </ul>
+  <MoleculesHeader
+    title="MakeMyFlix"
+    :show-home="false"
+    dark-mode />
+  <div class="cta">
+    <div class="container">
+      <div class="items">
+        <div
+          v-for="benefit in Benefits"
+          :key="benefit.title"
+          class="item">
+          <div class="icon">
+            <Icon
+              :icon="benefit.icon"
+              width="2em"
+              height="2em" />
+          </div>
+          <div>
+            <h3>{{ benefit.title }}</h3>
+            <p>{{ benefit.text }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="prompt">
+      <h2>
+        Maak direct<br />
+        je eigen flix
+      </h2>
+      <AtomsButton
+        type="link"
+        to="/create"
+        class="create-btn">
+        START NU
+      </AtomsButton>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const flixStore = useFlixStore();
-const flixes = await flixStore.fetchFlixes();
-// Clear seo from any previous selected flixes
-useSetSeo();
+const themeStore = useThemeStore();
+
+const Benefits = [
+  {
+    title: 'Check de endpoints',
+    text: 'Lorem ipsum dolor sit amet, consect.',
+    icon: 'mdi:format-list-checks',
+  },
+  {
+    title: 'Personaliseren',
+    text: 'Lorem ipsum dolor sit amet, consect.',
+    icon: 'mdi:pencil-outline',
+  },
+  {
+    title: 'Genereer je Flix',
+    text: 'Lorem ipsum dolor sit amet, consect.',
+    icon: 'mdi:autorenew',
+  },
+  {
+    title: 'Bekijk en delen',
+    text: 'Lorem ipsum dolor sit amet, consect.',
+    icon: 'mdi:monitor-share',
+  },
+];
+
+onMounted(() => {
+  themeStore.resetData();
+});
 </script>
 
 <style lang="scss" scoped>
-.flix-list {
-  @include flex-column;
-  align-items: center;
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  color: white;
-  padding: var(--space-10);
-}
+.cta {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  min-height: calc(100vh - var(--header-height));
 
-h1 {
-  margin: var(--space-4);
-}
+  .container {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+  }
 
-ul {
-  @include flex-column;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  align-items: center;
-}
+  .items {
+    display: grid;
+    gap: var(--space-8);
+    justify-content: center;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: var(--space-8);
 
-ul li {
-  margin-block: var(--space-2);
-}
+    @media (min-width: 48em) {
+      padding: var(--space-20);
+      grid-template-columns: 1fr 1fr;
+    }
+  }
 
-a {
-  text-decoration: none;
-  color: white;
-  padding: var(--space-2);
-  transition: var(--transition-state);
+  .item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
 
-  &:hover {
-    color: blue;
+    @media (min-width: 48em) {
+      gap: var(--space-6);
+    }
+
+    .icon {
+      color: var(--blues-blue);
+    }
+
+    h3 {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-medium);
+      margin-bottom: var(--space-4);
+
+      @media (min-width: 80em) {
+        font-size: var(--font-size-2xl);
+      }
+    }
+
+    p {
+      font-size: var(--font-sm);
+
+      @media (min-width: 80em) {
+        font-size: var(--font-size-base);
+      }
+    }
+  }
+
+  .prompt {
+    text-align: center;
+    padding: var(--space-20) 0;
+
+    h2 {
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+
+      @media (min-width: 48em) {
+        font-size: var(--font-size-8xl);
+      }
+    }
+
+    .create-btn {
+      margin-top: var(--space-16);
+    }
   }
 }
 </style>

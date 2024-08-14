@@ -81,7 +81,7 @@ const introClass = computed(() => {
     }
 
     .footer {
-      font-size: var(--font-size-sm);
+      font-size: var(--font-size-xsm);
       text-transform: uppercase;
       grid-row-start: 3;
       grid-column: span 8 / span 8;

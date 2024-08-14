@@ -1,16 +1,26 @@
 <template>
   <button
+    v-if="type !== 'link'"
     :type="type"
     :class="classes">
     <slot></slot>
   </button>
+  <NuxtLink
+    v-else
+    :class="classes"
+    :to="to">
+    <slot></slot>
+  </NuxtLink>
 </template>
 
 <script setup lang="ts">
+import type { RouteLocationRaw } from '#vue-router';
+
 const props = withDefaults(
   defineProps<{
     variant?: 'primary' | 'secondary';
-    type?: HTMLButtonElement['type'];
+    type?: HTMLButtonElement['type'] | 'link';
+    to?: RouteLocationRaw;
   }>(),
   {
     variant: 'primary',
@@ -19,7 +29,13 @@ const props = withDefaults(
 );
 
 const classes = computed(() => {
-  return ['btn', props.variant];
+  const c = ['btn', props.variant];
+
+  if (props.type === 'link') {
+    c.push('link');
+  }
+
+  return c;
 });
 </script>
 
@@ -31,6 +47,10 @@ const classes = computed(() => {
   transition: var(--transition-state);
   user-select: none;
 
+  &.link {
+    display: inline-block;
+  }
+
   &:disabled {
     cursor: not-allowed;
   }
@@ -40,7 +60,8 @@ const classes = computed(() => {
     border: var(--space-0) solid transparent;
     background-color: var(--blues-blue);
 
-    &:hover:enabled {
+    &:hover:enabled,
+    &.link:hover {
       color: var(--blues-blue);
       background-color: var(--background-color);
       border: var(--space-0) solid var(--blues-blue);
@@ -52,7 +73,8 @@ const classes = computed(() => {
     color: var(--blues-blue);
     border: var(--space-0) solid var(--blues-blue);
 
-    &:hover:enabled {
+    &:hover:enabled,
+    &.link:hover {
       background-color: var(--blues-blue);
       color: var(--background-color);
       border: var(--space-0) solid transparent;

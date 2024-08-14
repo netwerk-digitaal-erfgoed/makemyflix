@@ -157,7 +157,7 @@ const { findByCategory } = artworkStore;
     border: 1px solid black;
     text-transform: unset;
     padding: var(--space-2);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xsm);
     font-weight: var(--font-weight-light);
   }
 }
