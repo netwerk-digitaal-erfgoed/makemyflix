@@ -60,7 +60,8 @@ const classes = computed(() => {
     border: var(--space-0) solid transparent;
     background-color: var(--blues-blue);
 
-    &:hover:enabled {
+    &:hover:enabled,
+    &.link:hover {
       color: var(--blues-blue);
       background-color: var(--background-color);
       border: var(--space-0) solid var(--blues-blue);
@@ -72,7 +73,8 @@ const classes = computed(() => {
     color: var(--blues-blue);
     border: var(--space-0) solid var(--blues-blue);
 
-    &:hover:enabled {
+    &:hover:enabled,
+    &.link:hover {
       background-color: var(--blues-blue);
       color: var(--background-color);
       border: var(--space-0) solid transparent;

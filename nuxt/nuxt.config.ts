@@ -2,10 +2,6 @@ import svgLoader from 'vite-svg-loader';
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  ssr: false,
-  devtools: {
-    enabled: false,
-  },
   css: [
     'ress/ress.css',
     '@/assets/scss/defaults.scss',
@@ -13,7 +9,24 @@ export default defineNuxtConfig({
     '@/assets/scss/main.scss',
     '@/assets/scss/transitions.scss',
   ],
-  modules: ['@pinia/nuxt'],
+  devtools: {
+    enabled: false,
+  },
+  googleFonts: {
+    families: {
+      Poppins: true,
+    },
+    download: false,
+    useStylesheet: true,
+  },
+  modules: ['@pinia/nuxt', '@nuxtjs/google-fonts'],
+  runtimeConfig: {
+    app: {
+      backendUrl: '',
+      token: '',
+    },
+  },
+  ssr: false,
   vite: {
     plugins: [svgLoader()],
     css: {
@@ -22,12 +35,6 @@ export default defineNuxtConfig({
           additionalData: `@import "./assets/scss/mixins";`,
         },
       },
-    },
-  },
-  runtimeConfig: {
-    app: {
-      backendUrl: '',
-      token: '',
     },
   },
   vue: {

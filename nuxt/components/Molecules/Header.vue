@@ -1,5 +1,7 @@
 <template>
-  <div :class="{ base: true, 'dark-mode': darkMode }">
+  <div
+    ref="header"
+    :class="{ base: true, 'dark-mode': darkMode }">
     <MoleculesButtonsHome v-if="showHome" />
     <h3
       v-if="title"
@@ -27,6 +29,26 @@ withDefaults(
     showHome: true,
   },
 );
+
+const header = ref<HTMLDivElement>();
+
+const cleanup = () => {
+  document.body.style.removeProperty('--header-height');
+};
+
+const setHeaderHeight = () => {
+  if (header.value) {
+    document.body.style.setProperty('--header-height', header.value.getBoundingClientRect().height + 'px');
+  }
+
+  return cleanup;
+};
+
+useResize(setHeaderHeight);
+
+onMounted(() => {
+  setHeaderHeight();
+});
 </script>
 
 <style scoped lang="scss">
