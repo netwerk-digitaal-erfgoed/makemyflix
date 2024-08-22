@@ -33,6 +33,7 @@ jobs:
         id: push
         with:
           context: ${{ inputs.app }}
+          file: ${{ inputs.app }}/Dockerfile.prod
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.output.labels }}
           push: true
