@@ -45,6 +45,7 @@ jobs:
           push-to-registry: true
 
   deploy:
+    environment: ${{ inputs.app }}
     needs: build
     runs-on: ubuntu-latest
     steps:
