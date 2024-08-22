@@ -8,7 +8,8 @@ on:
 jobs:
   build:
     outputs:
-      image: ${{ steps.meta.outputs.tags }}
+      # Manually specify the output image because steps.meta.outputs.tags is an array that includes ‘latest’.
+      image: ghcr.io/${{ github.repository }}-${{ inputs.app }}:sha-${{ github.sha }}
     runs-on: ubuntu-latest
     permissions:
       packages: write
