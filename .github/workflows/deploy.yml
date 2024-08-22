@@ -45,7 +45,9 @@ jobs:
           push-to-registry: true
 
   deploy:
-    environment: ${{ inputs.app }}
+    environment:
+      name: ${{ inputs.app }}
+      url: ${{ inputs.app  == 'nuxt' && 'https://makemyflix.netwerkdigitaalerfgoed.nl' || 'https://makemyflix.netwerkdigitaalerfgoed.nl/admin' }}
     needs: build
     runs-on: ubuntu-latest
     steps:
