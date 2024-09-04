@@ -16,6 +16,7 @@ COPY . .
 
 # Build
 WORKDIR /opt/app
+ENV URL "https://makemyflix.netwerkdigitaalerfgoed.nl/strapi"
 RUN npm run build
 
 # Creating final staging/production image
