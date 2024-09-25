@@ -16,14 +16,14 @@ module.exports = {
         return;
       }
 
-      const items = await getItemsByCategory(
+      const { results } = await getItemsByCategory(
         itemsQuery,
         endpointUrl,
         categoryMeta.uri,
         parseInt(page) || 0,
         parseInt(limit) || 16,
       );
-      ctx.body = await transformItems(categoryId, items);
+      ctx.body = await transformItems(categoryId, results.bindings);
     } catch (err) {
       ctx.body = err;
     }

@@ -99,7 +99,7 @@ const { findByCategory } = artworkStore;
 <style scoped lang="scss">
 .artwork-slider {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr min-content;
   grid-template-rows: var(--space-12) auto 1fr;
   grid-template-areas:
     'header action'
@@ -159,6 +159,7 @@ const { findByCategory } = artworkStore;
     padding: var(--space-2);
     font-size: var(--font-size-xsm);
     font-weight: var(--font-weight-light);
+    text-wrap: nowrap;
   }
 }
 
