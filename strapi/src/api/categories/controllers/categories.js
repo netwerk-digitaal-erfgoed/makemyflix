@@ -8,8 +8,8 @@ module.exports = {
 
       const { getCategories, transformCategories } = strapi.service('api::categories.categories');
 
-      const categories = await getCategories(categoryQuery, endpointUrl);
-      ctx.body = await transformCategories(categories);
+      const { results } = await getCategories(categoryQuery, endpointUrl);
+      ctx.body = await transformCategories(results.bindings);
     } catch (err) {
       ctx.body = err;
     }

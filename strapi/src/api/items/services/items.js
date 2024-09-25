@@ -81,21 +81,37 @@ module.exports = () => ({
   },
   getItemsByCategory: async (queryString, queryUrl, categoryUri, page, limit) => {
     try {
+      const headers = {
+        'Content-Type': 'application/sparql-query',
+        'Accept': 'application/sparql-results+json',
+      };
       const query = createQuery(queryString, {
         _LIMIT_: limit.toString(),
         _OFFSET_: (page * limit).toString(),
         _CATEGORYID_: categoryUri,
       });
-      return (await axios.post(queryUrl, { query })).data || [];
+      const response = await axios.post(queryUrl, query, { headers });
+      return response.data ?? [];
     } catch (err) {
       return err;
     }
   },
-  transformItems: async (categoryId, items) => {
+  transformItems: async (categoryId, bindings) => {
+    // Convert the bindings into compact objects with a slug
+    const items = bindings.map(b => {
+      const returnValue = {};
+      for (const bKey in b) {
+        returnValue[bKey] = b[bKey].value;
+      }
+      return returnValue;
+    });
+
+    // Find the meta data for the items
     const itemMetas = await strapi.entityService.findMany('api::item-meta.item-meta', {
       filters: { $or: items.map(item => ({ uri: item.heritageObject })), categoryId },
     });
 
+    // Transform the items to the new format
     const transformedItems = [];
     for (const item of items) {
       const properties = generateProperties(item);

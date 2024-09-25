@@ -17,22 +17,36 @@ const addCategoryMeta = async (uri, slug) => {
 module.exports = () => ({
   getCategories: async (queryString, queryUrl, limit = 1000) => {
     try {
+      const headers = {
+        'Content-Type': 'application/sparql-query',
+        'Accept': 'application/sparql-results+json',
+      };
       const query = createQuery(queryString, {
         _LIMIT_: limit.toString(),
       });
-
-      const response = await axios.post(queryUrl, { query });
+      const response = await axios.post(queryUrl, query, { headers });
       return response.data ?? [];
     } catch (err) {
       return err;
     }
   },
-  transformCategories: async categories => {
-    categories = categories.map(c => ({ ...c, slug: slugify(c.name) }));
+  transformCategories: async bindings => {
+    // Convert the bindings into compact objects with a slug
+    const categories = bindings.map(b => {
+      const returnValue = {};
+      for (const bKey in b) {
+        returnValue[bKey] = b[bKey].value;
+      }
+      returnValue.slug = slugify(returnValue.name);
+      return returnValue;
+    });
+
+    // Find the meta data for the categories
     const categoryMetas = await strapi.entityService.findMany('api::category-meta.category-meta', {
       filters: { $or: categories.map(c => ({ uri: c.id, slug: c.slug })) },
     });
 
+    // Transform the categories to the new format
     const transformedCategories = [];
     for (const category of categories) {
       const id =
