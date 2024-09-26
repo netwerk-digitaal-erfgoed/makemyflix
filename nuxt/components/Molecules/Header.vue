@@ -2,7 +2,7 @@
   <div
     ref="header"
     :class="{ base: true, 'dark-mode': darkMode }">
-    <MoleculesButtonsHome v-if="showHome" />
+    <MoleculesButtonsHome v-if="showHome" class="home"/>
     <h3
       v-if="title"
       class="title">
@@ -63,6 +63,20 @@ onMounted(() => {
   width: 100%;
   z-index: 10;
 
+  .home {
+    grid-area: home;
+  }
+
+  .close {
+    grid-area: action;
+  }
+
+  .title {
+    grid-area: title;
+    display: flex;
+    justify-content: center;
+  }
+
   &.dark-mode {
     background-color: var(--inverse-background-color);
     color: var(--inverse-text-color);
@@ -74,20 +88,6 @@ onMounted(() => {
   }
 }
 
-.home {
-  grid-area: home;
-}
-
-.close {
-  grid-area: action;
-}
-
-.title {
-  grid-area: title;
-  display: flex;
-  justify-content: center;
-}
-
 @include sm-screen-down {
   .base {
     grid-template-rows: repeat(2, 1fr);
@@ -95,16 +95,16 @@ onMounted(() => {
     grid-template-areas:
       'home action'
       'title title';
-  }
 
-  .home {
-    justify-self: flex-start;
-    margin-inline: var(--space-4);
-  }
+    .home {
+      justify-self: flex-start;
+      margin-inline: var(--space-4);
+    }
 
-  .close {
-    justify-self: flex-end;
-    margin-inline: var(--space-4);
+    .close {
+      justify-self: flex-end;
+      margin-inline: var(--space-4);
+    }
   }
 }
 </style>
