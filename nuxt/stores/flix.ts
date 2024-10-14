@@ -120,6 +120,50 @@ export const useFlixStore = defineStore('flix', () => {
     useSetSeo(currentFlix.value.seo);
   };
 
+  /**
+   * NEW CODE
+   */
+  const createDraft = async (token?: string) => {
+    try {
+      // Create the header
+      // TODO: Move this to seperate function
+      const headers: Record<string, string> = {
+        Authorization: `Bearer ${config.app.token}`,
+      };
+      if (token) {
+        headers['X-token'] = token;
+      }
+
+      // Fetch the draft and store as current flix
+      currentFlix.value = await $fetch<Flix>(`${config.app.backendUrl}/draft`, {
+        headers,
+      });
+    } catch (error) {
+      console.error('Error creating draft:', error);
+    }
+  };
+
+  const saveFlix = async () => {
+    if (!currentFlix.value) {
+      return;
+    }
+
+    // Save the flix, any error should be passed to the caller
+    const response = await useSaveFlix(currentFlix.value, currentFlix.value?.id);
+
+    // const uri = `${window.location.origin}/${newFlixSlug.value}`;
+    // const [logoData, bannerData] = await Promise.all([useUploadImage(logo), useUploadImage(banner)]);
+
+    // if (response) {
+    //   newFlix.value.id = response.id;
+    // }
+
+    // newFlix.value.uri = uri;
+    // newFlix.value.logo = logoData;
+    // newFlix.value.banner = bannerData;
+    return response;
+  };
+
   return {
     currentFlix,
     branding,
@@ -131,5 +175,9 @@ export const useFlixStore = defineStore('flix', () => {
     generateLabel,
     resetData,
     getSlugFromFlix,
+
+    // new code
+    createDraft,
+    saveFlix,
   };
 });

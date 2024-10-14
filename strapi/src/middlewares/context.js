@@ -1,33 +1,10 @@
+const { findFlix } = require("../utils/query");
+
 module.exports = (config, { strapi }) => {
   return async (context, next) => {
     const flixUri = context.request.header['x-flix'];
     try {
-      const [entry] = await strapi.entityService.findMany('api::flix.flix', {
-        populate: {
-          branding: {
-            populate: {
-              banner: true,
-              logo: true,
-              intro: true,
-            },
-          },
-          theme: {
-            populate: {
-              primary: true,
-              secondary: true,
-              tertiary: true,
-              font: true,
-            },
-          },
-          data: true,
-          labels: true,
-          seo: {
-            populate: '*',
-          },
-        },
-        filters: { uri: flixUri },
-        limit: 1,
-      });
+      const [entry] = await findFlix({ uri: flixUri });
 
       if (!entry) {
         context.status = 404;

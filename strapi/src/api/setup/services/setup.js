@@ -38,6 +38,10 @@ module.exports = {
     return branding;
   },
   sidenoteData: async flix => {
+    if (!flix.id) {
+      return;
+    }
+
     const flixId = flix.id;
     const notes = await strapi.entityService.findMany('api::side-note.side-note', {
       filters: { flix: flixId },
@@ -71,4 +75,11 @@ module.exports = {
     }
     return flix.seo;
   },
+  queryData: flix => {
+    return {
+      endpointUrl: flix?.data?.endpointUrl,
+      categoryQuery: flix?.data?.categoryQuery,
+      itemsQuery: flix?.data?.itemsQuery,
+    };
+  }
 };
