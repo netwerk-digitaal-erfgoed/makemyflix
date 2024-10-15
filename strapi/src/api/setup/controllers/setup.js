@@ -71,7 +71,6 @@ module.exports = {
       if (flixToken) {
         const [entry] = await findFlix({ hash: flixToken });
         if (entry) {
-          console.warn(entry);
           const data = await formatFlixData(entry, true);
           flix = {
             id: entry.id,
