@@ -39,8 +39,6 @@
 </template>
 
 <script lang="ts" setup>
-const themeStore = useThemeStore();
-
 const Benefits = [
   {
     title: 'Check de endpoints',
@@ -65,7 +63,7 @@ const Benefits = [
 ];
 
 onMounted(() => {
-  themeStore.resetData();
+  useResetStyling();
 });
 </script>
 

@@ -6,8 +6,7 @@
     <h1 class="artwork-title">{{ category.title }} {{ category.period }}</h1>
     <AtomsNavigation
       class="navigation-link"
-      :to="categoryPath"
-      :preview="preview">
+      :to="categoryPath">
       Toon alles
     </AtomsNavigation>
     <div
@@ -30,8 +29,7 @@
               category: category.slug,
               artwork: artwork.slug,
             },
-          }"
-          :preview="preview" />
+          }" />
       </swiper-slide>
     </MoleculesSlider>
   </div>
@@ -71,7 +69,6 @@ const artworkStore = useArtworkStore();
  */
 const props = defineProps<{
   category: Category;
-  preview?: boolean;
 }>();
 
 const { previewMediaQueryClassName } = storeToRefs(flixBuilderStore);

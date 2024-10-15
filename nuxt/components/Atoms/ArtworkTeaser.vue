@@ -1,8 +1,7 @@
 <template>
   <AtomsNavigation
     :to="to"
-    direction="up"
-    :preview="preview">
+    direction="up">
     <div class="teaser">
       <div
         v-if="artwork.image"
@@ -34,7 +33,6 @@
 defineProps<{
   artwork: Artwork;
   to: To;
-  preview?: boolean;
 }>();
 </script>
 

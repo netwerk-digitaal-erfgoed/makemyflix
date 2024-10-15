@@ -1,7 +1,5 @@
 <template>
-  <AtomsNavigation
-    :to="to"
-    :preview="preview">
+  <AtomsNavigation :to="to">
     <div class="teaser">
       <div
         v-if="category.image"
@@ -32,7 +30,6 @@
 <script setup lang="ts">
 const props = defineProps<{
   category: Category;
-  preview?: boolean;
 }>();
 
 const flixStore = useFlixStore();

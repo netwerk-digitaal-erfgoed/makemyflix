@@ -3,6 +3,7 @@ export const useFlixStore = defineStore('flix', () => {
    * State
    */
   const currentFlix = ref<Flix>();
+  const isPreview = ref(false);
 
   /**
    * Computed Properties
@@ -51,7 +52,7 @@ export const useFlixStore = defineStore('flix', () => {
     currentFlix.value = undefined;
     useArtworkStore().resetData();
     useCategoryStore().resetData();
-    useThemeStore().resetData();
+    useResetStyling();
   };
 
   const getSlugFromFlix = (flix: Flix | FlixData) => {
@@ -71,7 +72,7 @@ export const useFlixStore = defineStore('flix', () => {
     }
   };
 
-  const setupFlix = async (flix: string, preview = false) => {
+  const setupFlix = async (flix: string) => {
     // Construct the flixUri
     const flixUri = `${window.location.origin}/${flix}`;
 
@@ -97,7 +98,7 @@ export const useFlixStore = defineStore('flix', () => {
     currentFlix.value = setup;
 
     // Set the theming
-    useThemeStore().setThemeStyling(preview);
+    useSetStyling(currentFlix.value.theme);
 
     // Set SEO
     useSetSeo(currentFlix.value.seo);
@@ -153,6 +154,7 @@ export const useFlixStore = defineStore('flix', () => {
     getSlugFromFlix,
 
     // new code
+    isPreview,
     createDraft,
     saveFlix,
   };
