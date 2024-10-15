@@ -32,6 +32,6 @@ const imageUrl = computed<string>(() => {
   if (!supportIIIF.value || useIsIIIF(identifier)) {
     return identifier;
   }
-  return `${config.app.backendUrl}/images/${btoa(identifier)}/${region}/${size}/${rotation}/${quality}.${format}`;
+  return `${config.public.backendUrl}/images/${btoa(identifier)}/${region}/${size}/${rotation}/${quality}.${format}`;
 });
 </script>

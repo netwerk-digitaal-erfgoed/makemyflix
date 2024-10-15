@@ -45,28 +45,20 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
     const formData = new FormData();
     formData.append('files', file);
 
-    const response = await $fetch<UploadedImage[]>(`${config.app.backendUrl}/upload`, {
+    return $fetch<UploadedImage>(`/api/images`, {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${config.app.token}`,
-      },
       body: formData,
     });
-
-    return response?.[0] ?? null;
   };
 
   const deleteImage = async (image: UploadedImage) => {
-    await $fetch<UploadedImage[]>(`${config.app.backendUrl}/upload/files/${image.id}`, {
+    await $fetch(`api/images/${image.id}`, {
       method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${config.app.token}`,
-      },
     });
   };
 
   const saveFlix = async (body: Record<string, any>, id?: string) => {
-    let url = `${config.app.backendUrl}/flixes`;
+    let url = `/api/flixes`;
     let method: 'POST' | 'PUT' = 'POST';
 
     if (id) {
@@ -77,11 +69,7 @@ export const useFlixBuilderStore = defineStore('flix-builder', () => {
     try {
       const { data }: any = await $fetch(url, {
         method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${config.app.token}`,
-        },
-        body: JSON.stringify(body),
+        body,
       });
 
       return data;

@@ -1,18 +1,13 @@
 export default async (body: Record<string, any>, id?: string) => {
-  const config = useRuntimeConfig();
-  const url = `${config.app.backendUrl}/flixes${id ? `/${id}` : ''}`;
+  const url = `/api/flixes${id ? `/${id}` : ''}`;
   const method: 'POST' | 'PUT' = id ? 'PUT' : 'POST';
 
   try {
     const response: any = await $fetch(url, {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.app.token}`,
-      },
-      body: JSON.stringify({ data: body }),
+      body,
     });
-    return response.data;
+    return response;
   } catch (error: any) {
     if (error.status === 400) {
       let messages: string[] = [error.data.error.message];

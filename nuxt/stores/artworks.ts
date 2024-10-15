@@ -1,9 +1,6 @@
 const defaultPageSize = 16;
 
 export const useArtworkStore = defineStore('artworks', () => {
-  const {
-    app: { backendUrl, token },
-  } = useRuntimeConfig();
   const { currentFlix } = storeToRefs(useFlixStore());
   const artworks = ref<Artwork[]>([]);
   const totalArtworks = computed(() => artworks.value.length);
@@ -76,17 +73,10 @@ export const useArtworkStore = defineStore('artworks', () => {
     // Only fetch if we have the category
     if (category && currentFlix.value?.uri) {
       const response =
-        ((await $fetch(`${backendUrl}/categories/${categoryId}/items`, {
-          params: {
-            limit,
-            page,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'X-flix': currentFlix.value.uri,
-          },
-        }).catch(error => console.error(error))) as Artwork[]) || [];
-      artworks.value.push(...response.map(artwork => ({ ...artwork, categoryId })));
+        ((await $fetch(`/api/categories/${categoryId}/items?limit=${limit}&page=${page}`).catch(error =>
+          console.error(error),
+        )) as Artwork[]) || [];
+      artworks.value.push(...response);
 
       // Update the category if needed
       if (response.length && !category.image) {

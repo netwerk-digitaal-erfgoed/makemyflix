@@ -3,7 +3,6 @@ export const useFlixStore = defineStore('flix', () => {
    * State
    */
   const currentFlix = ref<Flix>();
-  const config = useRuntimeConfig();
 
   /**
    * Computed Properties
@@ -30,12 +29,7 @@ export const useFlixStore = defineStore('flix', () => {
 
   const fetchFlixes = async () => {
     try {
-      const { data } = await $fetch<StrapiApiResponse<StrapiEntity<Flix>[]>>(`${config.app.backendUrl}/flixes`, {
-        headers: {
-          Authorization: `Bearer ${config.app.token}`,
-        },
-      });
-
+      const { data } = await $fetch<StrapiApiResponse<StrapiEntity<Flix>[]>>(`/flixes`);
       return data.map(entry => {
         const uri = entry.attributes.uri;
         const path = uri?.replace(window.location.origin, '') ?? '';
@@ -68,20 +62,9 @@ export const useFlixStore = defineStore('flix', () => {
     return uri.replace(window.location.origin, '').split('/').filter(Boolean)[0];
   };
 
-  const fetchFlix = async (flixUri: string) => {
+  const fetchFlix = (flixUri: string) => {
     try {
-      const flix = await $fetch<Flix | null>(`${config.app.backendUrl}/setup`, {
-        headers: {
-          Authorization: `Bearer ${config.app.token}`,
-          'X-flix': flixUri,
-        },
-      });
-
-      if (!flix) {
-        return null;
-      }
-
-      return flix;
+      return $fetch<Flix | null>(`/api/setup?uri=${flixUri}`);
     } catch (e) {
       console.error(e);
       return null;
@@ -125,19 +108,8 @@ export const useFlixStore = defineStore('flix', () => {
    */
   const createDraft = async (token?: string) => {
     try {
-      // Create the header
-      // TODO: Move this to seperate function
-      const headers: Record<string, string> = {
-        Authorization: `Bearer ${config.app.token}`,
-      };
-      if (token) {
-        headers['X-token'] = token;
-      }
-
       // Fetch the draft and store as current flix
-      currentFlix.value = await $fetch<Flix>(`${config.app.backendUrl}/draft`, {
-        headers,
-      });
+      currentFlix.value = await $fetch<Flix>(`/api/flixes/draft${token ? `?token=${token}` : ''}`);
     } catch (error) {
       console.error('Error creating draft:', error);
     }
