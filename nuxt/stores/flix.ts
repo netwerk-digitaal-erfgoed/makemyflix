@@ -64,7 +64,7 @@ export const useFlixStore = defineStore('flix', () => {
 
   const fetchFlix = (flixUri: string) => {
     try {
-      return $fetch<Flix | null>(`/api/setup?uri=${flixUri}`);
+      return $fetch<Flix | null>('/api/setup', { headers: { uri: flixUri } });
     } catch (e) {
       console.error(e);
       return null;
@@ -109,7 +109,11 @@ export const useFlixStore = defineStore('flix', () => {
   const createDraft = async (token?: string) => {
     try {
       // Fetch the draft and store as current flix
-      currentFlix.value = await $fetch<Flix>(`/api/flixes/draft${token ? `?token=${token}` : ''}`);
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers.token = token;
+      }
+      currentFlix.value = await $fetch<Flix>('/api/flixes/draft', { headers });
     } catch (error) {
       console.error('Error creating draft:', error);
     }

@@ -3,8 +3,7 @@ export default defineEventHandler<Promise<Category[]>>(async event => {
     public: { backendUrl },
     token,
   } = useRuntimeConfig();
-  const { uri } = getQuery(event);
-
+  const { uri } = getHeaders(event);
   const categories = await $fetch<Category[]>(`${backendUrl}/categories`, {
     headers: {
       Authorization: `Bearer ${token}`,

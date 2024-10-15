@@ -3,7 +3,7 @@ export default defineEventHandler<Promise<Flix | null>>(async event => {
     public: { backendUrl },
     token,
   } = useRuntimeConfig();
-  const { uri } = getQuery(event);
+  const { uri } = getHeaders(event);
 
   const flix = await $fetch<Flix | null>(`${backendUrl}/setup`, {
     headers: {

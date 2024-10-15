@@ -73,9 +73,9 @@ export const useArtworkStore = defineStore('artworks', () => {
     // Only fetch if we have the category
     if (category && currentFlix.value?.uri) {
       const response =
-        ((await $fetch(`/api/categories/${categoryId}/items?limit=${limit}&page=${page}`).catch(error =>
-          console.error(error),
-        )) as Artwork[]) || [];
+        ((await $fetch(`/api/categories/${categoryId}/items?limit=${limit}&page=${page}`, {
+          headers: { uri: currentFlix.value?.uri },
+        }).catch(error => console.error(error))) as Artwork[]) || [];
       artworks.value.push(...response);
 
       // Update the category if needed

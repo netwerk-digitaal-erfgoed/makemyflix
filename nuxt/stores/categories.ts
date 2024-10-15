@@ -41,7 +41,7 @@ export const useCategoryStore = defineStore('categories', () => {
     }
 
     try {
-      categories.value = await $fetch('/api/categories?uri=' + currentFlix.value.uri);
+      categories.value = (await $fetch('/api/categories', { headers: { uri: currentFlix.value.uri } })) as Category[];
     } catch (e) {
       console.error(e);
     }

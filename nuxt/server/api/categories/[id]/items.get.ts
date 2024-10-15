@@ -5,7 +5,8 @@ export default defineEventHandler<Promise<Artwork[]>>(async event => {
   } = useRuntimeConfig();
 
   const categoryId = getRouterParam(event, 'id') as string;
-  const { limit, page, uri } = getQuery(event);
+  const { limit, page } = getQuery(event);
+  const { uri } = getHeaders(event);
 
   const artworks = await $fetch<Artwork[]>(`${backendUrl}/categories/${categoryId}/items`, {
     params: {

@@ -3,7 +3,7 @@ export default defineEventHandler<Promise<Flix | undefined>>(async event => {
     public: { backendUrl },
     token,
   } = useRuntimeConfig();
-  const { token: urlToken } = getQuery(event);
+  const { token: urlToken } = getHeaders(event);
 
   const headers: Record<string, string> = {
     Authorization: `Bearer ${token}`,
