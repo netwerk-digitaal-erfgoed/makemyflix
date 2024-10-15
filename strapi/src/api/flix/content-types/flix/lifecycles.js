@@ -8,7 +8,7 @@ module.exports = {
   },
   async beforeUpdate(event) {
     const { params } = event;
-    const originalEntry = await strapi.entityService.findOne('api::flix.flix', params.data.id, {
+    const originalEntry = await strapi.entityService.findOne('api::flix.flix', params.where.id, {
       fields: ['hash'],
     });
     params.data.hash = originalEntry.hash ?? uuidv4();
