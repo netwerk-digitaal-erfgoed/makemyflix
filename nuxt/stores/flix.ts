@@ -137,22 +137,6 @@ export const useFlixStore = defineStore('flix', () => {
    * Code from the flix-builder store, which should be solved differently
    * TODO: Work towards removing this
    */
-  const determineInitialPreviewMediaQuery = (): PreviewMediaQuery => {
-    const availableWidth = window.innerWidth - 380 - 48; // screen width, minus sidebar width, minus preview padding
-
-    if (availableWidth <= 500) {
-      return 'cellphone';
-    }
-
-    if (availableWidth <= 1180) {
-      return 'tablet';
-    }
-
-    return 'laptop';
-  };
-
-  const previewView = ref<PreviewMediaQuery>(determineInitialPreviewMediaQuery());
-
   const newFlixSlug = computed(() => {
     if (!currentFlix.value?.title) {
       return undefined;
@@ -161,7 +145,7 @@ export const useFlixStore = defineStore('flix', () => {
   });
 
   const previewMediaQueryClassName = computed(() => {
-    return `preview-${previewView.value}`;
+    return `preview-${currentViewport.value}`;
   });
 
   return {
@@ -185,7 +169,6 @@ export const useFlixStore = defineStore('flix', () => {
     publishDraft,
 
     // These should be removed
-    previewView,
     previewMediaQueryClassName,
     newFlixSlug,
   };
