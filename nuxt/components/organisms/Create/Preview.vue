@@ -2,16 +2,15 @@
   <div
     id="preview"
     :class="[previewMediaQueryClassName, { published }]">
-    <!-- <template>
-      <AtomsCellphone v-if="previewView === 'cellphone'">
-        <OrganismsFlix preview />
-      </AtomsCellphone>
-      <AtomsTablet v-else-if="previewView === 'tablet'">
-        <OrganismsFlix preview />
-      </AtomsTablet> -->
-    <OrganismsFlix preview />
-    <!-- v-else -->
-    <!-- </template> -->
+    <AtomsCellphone v-if="currentViewport === 'cellphone'">
+      <OrganismsFlix preview />
+    </AtomsCellphone>
+    <AtomsTablet v-else-if="currentViewport === 'tablet'">
+      <OrganismsFlix preview />
+    </AtomsTablet>
+    <OrganismsFlix
+      v-else
+      preview />
   </div>
   <OrganismsCreateShare
     v-if="published"
@@ -20,7 +19,7 @@
 
 <script setup lang="ts">
 const flixStore = useFlixStore();
-const { previewView, previewMediaQueryClassName } = storeToRefs(flixStore);
+const { previewMediaQueryClassName, currentViewport } = storeToRefs(flixStore);
 
 const published = ref(false);
 
@@ -46,7 +45,7 @@ const onCloseModal = () => {
 <style lang="scss" scoped>
 #preview {
   padding: var(--space-6);
-  width: 100%;
+  width: calc(100% - 380px); // TODO: 380px should be a variable
   font-family: var(--font-family);
   display: flex;
   justify-content: center;

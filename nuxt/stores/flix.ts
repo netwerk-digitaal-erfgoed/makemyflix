@@ -17,7 +17,7 @@ export const useFlixStore = defineStore('flix', () => {
   });
 
   const supportIIIF = computed<boolean>(() => {
-    return currentFlix.value?.fallback ?? false;
+    return currentFlix.value?.fallbackIIIF ?? false;
   });
 
   /**
@@ -82,6 +82,7 @@ export const useFlixStore = defineStore('flix', () => {
 
       // Update the currentFlix with the draft
       currentFlix.value = await $fetch<Flix>('/api/flixes/draft', { headers });
+      isPreview.value = true;
     } catch (error) {
       console.error('Error creating draft:', error);
     }
