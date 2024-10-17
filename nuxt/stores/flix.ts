@@ -28,26 +28,6 @@ export const useFlixStore = defineStore('flix', () => {
     return labels?.[label] ?? '';
   };
 
-  const fetchFlixes = async () => {
-    try {
-      const { data } = await $fetch<StrapiApiResponse<StrapiEntity<Flix>[]>>(`/flixes`);
-      return data.map(entry => {
-        const uri = entry.attributes.uri;
-        const path = uri?.replace(window.location.origin, '') ?? '';
-        const title = path?.replace(/^\/(.)/, (_: any, char: string) => char.toUpperCase()) ?? '';
-
-        return {
-          id: entry.id,
-          path,
-          title,
-        };
-      });
-    } catch (error) {
-      console.error('Error fetching flixes:', error);
-      return [];
-    }
-  };
-
   const resetData = () => {
     currentFlix.value = undefined;
     useArtworkStore().resetData();
@@ -55,107 +35,157 @@ export const useFlixStore = defineStore('flix', () => {
     useResetStyling();
   };
 
-  const getSlugFromFlix = (flix: Flix | FlixData) => {
-    const uri = flix.uri;
-    if (!uri) {
-      return undefined;
-    }
-    return uri.replace(window.location.origin, '').split('/').filter(Boolean)[0];
-  };
-
-  const fetchFlix = (flixUri: string) => {
+  const setupFlix = async (flix: string) => {
     try {
-      return $fetch<Flix | null>('/api/setup', { headers: { uri: flixUri } });
+      // Construct the flixUri
+      const flixUri = `${window.location.origin}/${flix}`;
+
+      // Check if the flixUri is the currentFlix, if so do nothing
+      if (currentFlix.value?.uri === flixUri) {
+        return;
+      }
+
+      // Reset the currentFlix
+      resetData();
+
+      // Origin path is not retrievable from the backend so we need to pass it
+      const setup = await $fetch<Flix>('/api/setup', { headers: { uri: flixUri } });
+
+      // Add the flixUri for the guard
+      // TODO: Double check this, seems off
+      // setup.id = flix;
+      // setup.uri = flixUri;
+
+      // Update the current flix
+      currentFlix.value = setup;
+
+      // Set the theming
+      useSetStyling(currentFlix.value.theme!);
+
+      // Set SEO
+      useSetSeo(currentFlix.value.seo);
     } catch (e) {
       console.error(e);
-      return null;
     }
-  };
-
-  const setupFlix = async (flix: string) => {
-    // Construct the flixUri
-    const flixUri = `${window.location.origin}/${flix}`;
-
-    // Check if the flixUri is the currentFlix, if so do nothing
-    if (currentFlix.value?.uri === flixUri) {
-      return;
-    }
-
-    // Reset the currentFlix
-    resetData();
-
-    // Origin path is not retrievable from the backend so we need to pass it
-    const setup = await fetchFlix(flixUri);
-    if (!setup) {
-      return;
-    }
-
-    // Add the flixUri for the guard
-    setup.id = flix;
-    setup.uri = flixUri;
-
-    // Update the current flix
-    currentFlix.value = setup;
-
-    // Set the theming
-    useSetStyling(currentFlix.value.theme);
-
-    // Set SEO
-    useSetSeo(currentFlix.value.seo);
   };
 
   /**
    * NEW CODE
    */
-  const createDraft = async (token?: string) => {
+  const createDraft = async (): Promise<void> => {
     try {
-      // Fetch the draft and store as current flix
-      const headers: Record<string, string> = {};
-      if (token) {
-        headers.token = token;
-      }
+      // Reset the currenFlix
+      resetData();
+
+      // Generate headers
+      const headers = useGenerateHeaders();
+
+      // Update the currentFlix with the draft
       currentFlix.value = await $fetch<Flix>('/api/flixes/draft', { headers });
     } catch (error) {
       console.error('Error creating draft:', error);
     }
   };
 
-  const saveFlix = async () => {
-    if (!currentFlix.value) {
-      return;
+  const saveDraft = async (): Promise<string | void> => {
+    try {
+      // No currentFlix to save, just return
+      if (!currentFlix.value) {
+        return;
+      }
+
+      // Save the flix
+      const response = await useSaveFlix(currentFlix.value);
+
+      // if no error occurred, update the currentFlix with the response
+      // TODO: What to do when we do have an error
+      if (!response?.error) {
+        currentFlix.value.id = response.id;
+        return response.attributes.hash;
+      }
+    } catch (error) {
+      console.error('Error saving draft:', error);
+    }
+  };
+
+  const publishDraft = async (): Promise<void> => {
+    console.warn('not yet implemented');
+    // await useSaveFlix(
+    //   {
+    //     data: {
+    //       status: 'published',
+    //       publishedAt: useStrapiDate(),
+    //     },
+    //   },
+    //   newFlix.value.id,
+    // );
+  };
+
+  // Preview related states
+  const currentViewport = ref<PreviewMediaQuery>('laptop');
+
+  const supportedViewports = computed<PreviewMediaQuery[]>(() => {
+    return ['laptop', 'tablet', 'cellphone'];
+  });
+
+  const supportedFonts = computed<string[]>(() => {
+    return ['Poppins', 'Times New Roman'];
+  });
+
+  /**
+   * Code from the flix-builder store, which should be solved differently
+   * TODO: Work towards removing this
+   */
+  const determineInitialPreviewMediaQuery = (): PreviewMediaQuery => {
+    const availableWidth = window.innerWidth - 380 - 48; // screen width, minus sidebar width, minus preview padding
+
+    if (availableWidth <= 500) {
+      return 'cellphone';
     }
 
-    // Save the flix, any error should be passed to the caller
-    const response = await useSaveFlix(currentFlix.value, currentFlix.value?.id);
+    if (availableWidth <= 1180) {
+      return 'tablet';
+    }
 
-    // const uri = `${window.location.origin}/${newFlixSlug.value}`;
-    // const [logoData, bannerData] = await Promise.all([useUploadImage(logo), useUploadImage(banner)]);
-
-    // if (response) {
-    //   newFlix.value.id = response.id;
-    // }
-
-    // newFlix.value.uri = uri;
-    // newFlix.value.logo = logoData;
-    // newFlix.value.banner = bannerData;
-    return response;
+    return 'laptop';
   };
+
+  const previewView = ref<PreviewMediaQuery>(determineInitialPreviewMediaQuery());
+
+  const newFlixSlug = computed(() => {
+    if (!currentFlix.value?.title) {
+      return undefined;
+    }
+    return useSlugify(currentFlix.value.title);
+  });
+
+  const previewMediaQueryClassName = computed(() => {
+    return `preview-${previewView.value}`;
+  });
 
   return {
     currentFlix,
     branding,
     sidenote,
     supportIIIF,
-    fetchFlix,
     setupFlix,
-    fetchFlixes,
     generateLabel,
     resetData,
-    getSlugFromFlix,
 
     // new code
     isPreview,
+
+    currentViewport,
+    supportedViewports,
+    supportedFonts,
+
     createDraft,
-    saveFlix,
+    saveDraft,
+    publishDraft,
+
+    // These should be removed
+    previewView,
+    previewMediaQueryClassName,
+    newFlixSlug,
   };
 });

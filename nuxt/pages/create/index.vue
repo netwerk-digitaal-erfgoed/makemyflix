@@ -60,8 +60,8 @@ useHead({
 /**
  * State & Props
  */
-const flixStore = useFlixStore();
 const { query } = useRoute();
+const flixStore = useFlixStore();
 const { currentFlix } = storeToRefs(flixStore);
 const showErrors = ref<boolean>(false);
 const errorMessages = ref<string>('');
@@ -81,11 +81,11 @@ const nextStep = async () => {
     return;
   }
   // Save the current flix
-  const response = await flixStore.saveFlix();
+  const response = await flixStore.saveDraft(query.token);
 
   // If there was an error, show a generic message.
   // Note: Don't show the actual error to the user, since it's most likely an issue for us, unlike validation errors
-  if (response.error) {
+  if (response?.error) {
     showErrors.value = true;
     errorMessages.value = 'Er is iets fout gegaan bij het opslaan, controlleer alle velden en probeer het opnieuw.';
   } else {
@@ -93,7 +93,7 @@ const nextStep = async () => {
     navigateTo({
       path: `/create/preview`,
       query: {
-        token: response.attributes.hash,
+        token: response,
       },
     });
   }

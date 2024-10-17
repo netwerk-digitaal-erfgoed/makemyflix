@@ -60,9 +60,8 @@ const artworksSliderProps = {
 /**
  * Deps
  */
-const flixBuilderStore = useFlixBuilderStore();
 const flixStore = useFlixStore();
-const artworkStore = useArtworkStore();
+const { findByCategory } = useArtworkStore();
 
 /**
  * State & Props
@@ -71,7 +70,7 @@ const props = defineProps<{
   category: Category;
 }>();
 
-const { previewMediaQueryClassName } = storeToRefs(flixBuilderStore);
+const { previewMediaQueryClassName } = storeToRefs(flixStore);
 
 /**
  * Computed properties
@@ -86,11 +85,6 @@ const categoryPath = computed(() => {
     },
   } as To;
 });
-
-/**
- * Methods
- */
-const { findByCategory } = artworkStore;
 </script>
 
 <style scoped lang="scss">

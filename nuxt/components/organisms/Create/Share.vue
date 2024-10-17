@@ -16,7 +16,7 @@
       </button>
     </div>
     <div class="info">
-      <h2>{{ newFlix.title }} FLIX staat live!</h2>
+      <h2>{{ currentFlix.title }} FLIX staat live!</h2>
       <div>Bekijk en deel de link</div>
     </div>
     <div class="copy">
@@ -37,19 +37,19 @@
 /**
  * Deps
  */
-const flixBuilderStore = useFlixBuilderStore();
+const flixStore = useFlixStore();
 const router = useRouter();
 
 /**
  * State
  */
 const emit = defineEmits(['close']);
-const { newFlix } = storeToRefs(flixBuilderStore);
+const { currentFlix } = storeToRefs(flixStore);
 
 /**
  * Computed properties
  */
-const flixUri = computed(() => window.location.origin + '/' + flixBuilderStore.newFlixSlug);
+const flixUri = computed(() => window.location.origin + '/' + flixStore.currentFlixSlug);
 
 /**
  * Methods
@@ -66,7 +66,7 @@ const navigateToFlix = () => {
   router.push({
     name: 'flix',
     params: {
-      flix: flixBuilderStore.newFlixSlug,
+      flix: flixStore.currentFlixSlug,
     },
   });
 };

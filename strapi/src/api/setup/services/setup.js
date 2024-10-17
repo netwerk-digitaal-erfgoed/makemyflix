@@ -1,4 +1,5 @@
 'use strict';
+// TODO: Still needed?
 
 module.exports = {
   themeData: flix => {
