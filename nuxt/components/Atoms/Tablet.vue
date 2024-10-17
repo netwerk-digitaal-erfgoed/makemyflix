@@ -1,7 +1,7 @@
 <template>
-  <div class="device device-ipad-pro">
+  <div class="device">
     <div class="device-frame">
-      <div class="device-screen">
+      <div class="device-screen scroller">
         <slot></slot>
       </div>
     </div>
@@ -17,15 +17,12 @@ $device-panel: #0d0d0d;
 
 .device {
   position: relative;
-  z-index: 1;
-  margin-top: var(--space-20);
-}
-
-.device-ipad-pro {
-  height: 35rem;
-  width: 50.25rem;
+  height: var(--tablet-height);
+  width: var(--tablet-width);
   container-type: inline-size;
   container-name: preview;
+  z-index: 1;
+  margin-top: var(--space-20);
 
   .device-frame {
     background: $device-panel;
@@ -41,10 +38,10 @@ $device-panel: #0d0d0d;
   }
 
   .device-screen {
-    border: 0.125rem solid lighten($device-panel, 2%);
+    border: var(--space-a) solid lighten($device-panel, 2%);
     border-radius: var(--space-3);
     height: 100%;
-    max-width: 42.5rem;
+    max-width: var(--tablet-screen-width);
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -72,9 +69,6 @@ $device-panel: #0d0d0d;
       transform: rotate(-90deg) scale(-1);
     }
     &::before {
-      background: radial-gradient(farthest-corner at 20% 20%, #6074bf 0, transparent 40%),
-        radial-gradient(farthest-corner at 80% 80%, #513785 0, #24555e 20%, transparent 50%);
-      box-shadow: 0 0 var(--space-0) var(--space-0) rgba(255, 255, 255, 0.05);
       border-radius: 50%;
       height: var(--space-2);
       left: var(--space-8);
@@ -85,7 +79,7 @@ $device-panel: #0d0d0d;
   }
 
   .device-home {
-    border: 0.125rem solid #454545;
+    border: var(--space-a) solid var(--dark-gray);
     border-radius: 50%;
     right: var(--space-4);
     height: var(--space-9);
@@ -99,7 +93,7 @@ $device-panel: #0d0d0d;
   @include responsive-typography;
   .category-slide .teaser {
     @include preview-container-down {
-      height: calc(32rem - (var(--header-height)));
+      height: calc(var(--tablet-screen-height) - (var(--header-height)));
     }
   }
 }

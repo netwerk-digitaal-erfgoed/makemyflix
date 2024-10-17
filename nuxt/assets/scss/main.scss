@@ -72,7 +72,7 @@ a {
 }
 
 .scroller {
-  scrollbar-color: gray rgba(0, 0, 0, 0);
+  scrollbar-color: lightgray rgba(0, 0, 0, 0);
   scrollbar-width: thin;
 }
 
@@ -81,7 +81,7 @@ a {
 }
 
 .scroller::-webkit-scrollbar-thumb {
-  background: gray;
+  background: lightgray;
   border-radius: var(--space-1);
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="device device-iphone-x">
+  <div class="device">
     <div class="device-frame">
       <div class="device-screen scroller">
         <slot></slot>
@@ -19,28 +19,24 @@
 </script>
 
 <style lang="scss" scoped>
-// iPhone X
 $device-silver: #e2e3e4;
 $device-silver-dark: darken($device-silver, 10%);
 $device-silver-panel: #222;
 
 .device {
   position: relative;
-  z-index: 1;
-  margin-top: var(--space-20);
-}
-
-.device-iphone-x {
-  height: 54.25rem;
-  width: 26.75rem;
+  height: var(--phone-height);
+  width: var(--phone-width);
   container-type: inline-size;
   container-name: preview;
+  z-index: 1;
+  margin-top: var(--space-20);
 
   .device-frame {
     background: $device-silver-panel;
     border-radius: var(--space-16);
     box-shadow:
-      inset 0 0 0.125rem 0.125rem $device-silver-dark,
+      inset 0 0 var(--space-a) var(--space-a) $device-silver-dark,
       inset 0 0 0 var(--space-2) $device-silver;
     height: 100%;
     padding: var(--space-7);
@@ -49,8 +45,8 @@ $device-silver-panel: #222;
 
   .device-screen {
     border-radius: var(--space-10);
-    height: 50.75rem;
-    max-width: 23.5rem;
+    height: var(--phone-screen-height);
+    max-width: var(--phone-screen-width);
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -61,7 +57,7 @@ $device-silver-panel: #222;
   .device-stripe {
     &::after,
     &::before {
-      border: solid rgba(1, 1, 1, 0.25);
+      border: solid var(--black-20);
       border-width: 0 var(--space-2);
       content: '';
       height: var(--space-2);
@@ -87,7 +83,7 @@ $device-silver-panel: #222;
     margin-left: calc(var(--space-26) * -1);
     position: absolute;
     top: var(--space-7);
-    width: 12.75rem;
+    width: var(--phone-header-width);
     z-index: 20;
 
     &::after,
@@ -128,24 +124,13 @@ $device-silver-panel: #222;
       z-index: 20;
     }
     &::after {
-      background: #333;
+      background: var(--dark-gray);
       border-radius: var(--space-1);
       height: var(--space-2);
       left: 50%;
       margin-left: calc(var(--space-7) * -1);
       top: var(--space-8);
       width: var(--space-13);
-    }
-    &::before {
-      background: radial-gradient(farthest-corner at 20% 20%, #6074bf 0, transparent 40%),
-        radial-gradient(farthest-corner at 80% 80%, #513785 0, #24555e 20%, transparent 50%);
-      box-shadow: 0 0 var(--space-0) var(--space-0) rgba(255, 255, 255, 0.05);
-      border-radius: 50%;
-      height: var(--space-3);
-      left: 50%;
-      margin-left: var(--space-10);
-      top: var(--space-8);
-      width: var(--space-3);
     }
   }
 
@@ -180,7 +165,7 @@ $device-silver-panel: #222;
     height: var(--space-25);
     right: calc(var(--space-1) * -1);
     position: absolute;
-    top: 12.5rem;
+    top: var(--phone-power-btn-top);
     width: var(--space-1);
   }
 }
@@ -189,7 +174,7 @@ $device-silver-panel: #222;
   @include responsive-typography;
   .category-slide .teaser {
     @include preview-container-down {
-      height: calc(50.75rem - (var(--header-height)));
+      height: calc(var(--phone-screen-height) - (var(--header-height)));
     }
   }
 }
