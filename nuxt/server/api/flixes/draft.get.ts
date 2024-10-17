@@ -3,6 +3,7 @@ import { generateHeaders } from '~/server/utils/generateHeaders';
 const generateDraft = (): Flix => {
   return {
     uri: undefined,
+    publishedAt: null,
     fallbackIIIF: true,
     branding: {
       name: '',

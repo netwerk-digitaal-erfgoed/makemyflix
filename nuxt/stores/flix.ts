@@ -3,6 +3,7 @@ export const useFlixStore = defineStore('flix', () => {
    * State
    */
   const currentFlix = ref<Flix>();
+  const currentToken = ref<string>();
   const isPreview = ref(false);
 
   /**
@@ -72,9 +73,16 @@ export const useFlixStore = defineStore('flix', () => {
   /**
    * NEW CODE
    */
-  const createDraft = async (): Promise<void> => {
+  const createDraft = async (token?: string): Promise<void> => {
     try {
-      // Reset the currenFlix
+      // If the current token is the same as being requested
+      // set the preview on true but don't fetch the draft
+      if (currentToken.value === token) {
+        isPreview.value = true;
+        return;
+      }
+
+      // Reset the current data
       resetData();
 
       // Generate headers
@@ -89,37 +97,29 @@ export const useFlixStore = defineStore('flix', () => {
   };
 
   const saveDraft = async (): Promise<string | void> => {
-    try {
-      // No currentFlix to save, just return
-      if (!currentFlix.value) {
-        return;
-      }
-
-      // Save the flix
-      const response = await useSaveFlix(currentFlix.value);
-
-      // if no error occurred, update the currentFlix with the response
-      // TODO: What to do when we do have an error
-      if (!response?.error) {
-        currentFlix.value.id = response.id;
-        return response.attributes.hash;
-      }
-    } catch (error) {
-      console.error('Error saving draft:', error);
+    // No currentFlix to save, just return
+    if (!currentFlix.value) {
+      return;
     }
+
+    // Save the flix
+    const response = await useSaveFlix(currentFlix.value);
+    if (response?.flix) {
+      currentFlix.value = response.flix;
+      return response.hash;
+    }
+    return;
   };
 
   const publishDraft = async (): Promise<void> => {
-    console.warn('not yet implemented');
-    // await useSaveFlix(
-    //   {
-    //     data: {
-    //       status: 'published',
-    //       publishedAt: useStrapiDate(),
-    //     },
-    //   },
-    //   newFlix.value.id,
-    // );
+    const response = await useSaveFlix({
+      data: {
+        status: 'published',
+        publishedAt: useStrapiDate(),
+      },
+    });
+    console.warn(response);
+    isPreview.value = false;
   };
 
   // Preview related states

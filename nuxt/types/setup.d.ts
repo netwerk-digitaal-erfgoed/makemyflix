@@ -59,6 +59,7 @@ declare interface Flix {
   sidenote?: string;
   labels?: Record<string, string>;
   seo?: Seo;
+  publishedAt: string | null;
 }
 
 declare interface FlixData {

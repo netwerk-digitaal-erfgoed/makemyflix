@@ -4,6 +4,7 @@ export const generateHeaders = (event: H3Event) => {
   const { token } = useRuntimeConfig();
   const requestHeaders = getHeaders(event);
   const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
   };
   if (requestHeaders['x-token']) {

@@ -42,12 +42,87 @@ export interface DataConnectionDataConnection extends Schema.Component {
   };
 }
 
+export interface SeoSeo extends Schema.Component {
+  collectionName: 'components_seo_seos';
+  info: {
+    displayName: 'seo';
+    icon: 'search';
+    description: '';
+  };
+  attributes: {
+    title: Attribute.String;
+    description: Attribute.Text;
+    ogTitle: Attribute.String;
+    ogDescription: Attribute.Text;
+    ogImage: Attribute.Media;
+    twitterTitle: Attribute.String;
+    twitterDescription: Attribute.Text;
+    twitterImage: Attribute.Media;
+  };
+}
+
+export interface ThemingLabels extends Schema.Component {
+  collectionName: 'components_theming_labels';
+  info: {
+    displayName: 'labels';
+  };
+  attributes: {
+    dateCreated: Attribute.String;
+    imageLicenseURI: Attribute.String;
+    creators: Attribute.String;
+    contentLocationURIs: Attribute.String;
+    provinceURI: Attribute.String;
+    publisherURI: Attribute.String;
+  };
+}
+
+export interface ThemingTheming extends Schema.Component {
+  collectionName: 'components_theming_themings';
+  info: {
+    displayName: 'theming';
+    description: '';
+  };
+  attributes: {
+    font: Attribute.Enumeration<
+      [
+        'Roboto',
+        'Open Sans',
+        'Lato',
+        'Montserrat',
+        'Roboto Condensed',
+        'Oswald',
+        'Poppins',
+        'Raleway',
+        'Slabo 27px',
+        'PT Sans',
+        'Noto Sans',
+        'Roboto Mono',
+        'Roboto Slab',
+        'Ubuntu',
+        'Merriweather',
+        'Lora',
+        'Playfair Display',
+        'Inter',
+        'Nunito',
+        'PT Serif',
+        'Times New Roman',
+      ]
+    >;
+    primary: Attribute.String & Attribute.CustomField<'plugin::color-picker.color'>;
+    secondary: Attribute.String & Attribute.CustomField<'plugin::color-picker.color'>;
+    tertiary: Attribute.String & Attribute.CustomField<'plugin::color-picker.color'>;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
       'branding.branding': BrandingBranding;
       'branding.intro': BrandingIntro;
       'data-connection.data-connection': DataConnectionDataConnection;
+      'seo.seo': SeoSeo;
+      'theming.labels': ThemingLabels;
+      'theming.theming': ThemingTheming;
     }
   }
 }
