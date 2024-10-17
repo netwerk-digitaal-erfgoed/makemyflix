@@ -1,18 +1,51 @@
-export default defineEventHandler<Promise<Flix | undefined>>(async event => {
+import { generateHeaders } from '~/server/utils/generateHeaders';
+
+const generateDraft = (): Flix => {
+  return {
+    uri: undefined,
+    fallbackIIIF: true,
+    branding: {
+      name: '',
+      intro: {
+        title: '',
+        description: '',
+        footer: '',
+      },
+      logo: undefined,
+      banner: undefined,
+    },
+    data: {
+      endpointUrl: '',
+      categoryQuery: '',
+      itemsQuery: '',
+    },
+    theme: {
+      font: 'Poppins',
+      primary: '#ffffff',
+      secondary: '#000000',
+      tertiary: '#f2f5ff',
+    },
+    labels: {
+      dateCreated: 'Jaar',
+      imageLicenseURI: 'Licentie',
+      creators: 'Makers',
+      contentLocationURIs: 'Plek',
+      provinceURI: 'Provincie',
+      publisherURI: 'Publisher',
+    },
+  };
+};
+
+export default defineEventHandler<Promise<Flix | null>>(async event => {
   const {
     public: { backendUrl },
-    token,
   } = useRuntimeConfig();
-  const { token: urlToken } = getHeaders(event);
+  const headers = generateHeaders(event);
 
-  const headers: Record<string, string> = {
-    Authorization: `Bearer ${token}`,
-  };
-  if (urlToken) {
-    headers['X-token'] = urlToken as string;
+  if (headers['x-token']) {
+    return $fetch<Flix>(`${backendUrl}/setup`, {
+      headers,
+    });
   }
-
-  return $fetch<Flix>(`${backendUrl}/draft`, {
-    headers,
-  });
+  return Promise.resolve(generateDraft());
 });

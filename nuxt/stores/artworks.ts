@@ -71,12 +71,11 @@ export const useArtworkStore = defineStore('artworks', () => {
     const category = findCategoryById(categoryId);
 
     // Only fetch if we have the category
-    if (category && currentFlix.value?.uri) {
-      const response =
-        ((await $fetch(`/api/categories/${categoryId}/items?limit=${limit}&page=${page}`, {
-          headers: { uri: currentFlix.value?.uri },
-        }).catch(error => console.error(error))) as Artwork[]) || [];
-      artworks.value.push(...response);
+    if (category) {
+      const url = `/api/categories/${categoryId}/items?limit=${limit}&page=${page}`;
+      const headers = useGenerateHeaders();
+      const response = ((await $fetch(url, { headers }).catch(error => console.error(error))) as Artwork[]) || [];
+      artworks.value.push(...response.map(artwork => ({ ...artwork, categoryId })));
 
       // Update the category if needed
       if (response.length && !category.image) {

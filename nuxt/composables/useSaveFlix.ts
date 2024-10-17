@@ -1,12 +1,12 @@
-export default async (body: Record<string, any>, token?: string) => {
-  const isUpdate = !!body.id && !!token;
-  const url = `/api/flixes${id ? `/${body.id}` : ''}`;
+export default async (body: Record<string, any>) => {
+  const headers = useGenerateHeaders();
+  const isUpdate = !!body.id && !!headers['x-token'];
+  const url = `/api/flixes${isUpdate ? `/${body.id}` : ''}`;
   const method = isUpdate ? 'PUT' : 'POST';
 
-  // If it's an update, we should remove the id from the body and force the use of X-token
+  // If it's an update, we should remove the id from the body and force the use of x-token
   // If the token is undefined the call will fail
   if (isUpdate) {
-    headers['X-token'] = token!;
     delete body.id;
     delete body.hash;
   }
@@ -14,6 +14,7 @@ export default async (body: Record<string, any>, token?: string) => {
   try {
     const response: any = await $fetch(url, {
       method,
+      headers,
       body,
     });
     return response;

@@ -1,10 +1,45 @@
-const { findFlix } = require("../utils/query");
+const generateFilter = (headers) => {
+  const filters = {};
+
+  if (headers['x-token']) {
+    filters.hash = headers['x-token'];
+  } else if (headers['x-flix']) {
+    filters.uri = headers['x-flix'];
+  }
+
+  return filters;
+}
 
 module.exports = (config, { strapi }) => {
   return async (context, next) => {
-    const flixUri = context.request.header['x-flix'];
     try {
-      const [entry] = await findFlix({ uri: flixUri });
+      const filters = generateFilter(context.request.header);
+      const [entry] = await strapi.entityService.findMany('api::flix.flix', {
+        populate: {
+          branding: {
+            populate: {
+              banner: true,
+              logo: true,
+              intro: true,
+            },
+          },
+          theme: {
+            populate: {
+              primary: true,
+              secondary: true,
+              tertiary: true,
+              font: true,
+            },
+          },
+          data: true,
+          labels: true,
+          seo: {
+            populate: '*',
+          },
+        },
+        filters,
+        limit: 1,
+      });
 
       if (!entry) {
         context.status = 404;
