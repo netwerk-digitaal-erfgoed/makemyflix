@@ -1,15 +1,15 @@
-export default defineEventHandler<Promise<Flix | null>>(async event => {
+import { generateHeaders } from '~/server/utils/generateHeaders';
+
+export default defineEventHandler<Promise<Flix | void>>(async event => {
   const {
     public: { backendUrl },
-    token,
   } = useRuntimeConfig();
-  const { uri } = getHeaders(event);
+  const headers = generateHeaders(event);
 
-  const flix = await $fetch<Flix | null>(`${backendUrl}/setup`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'X-flix': uri as string,
-    },
-  });
-  return flix ? flix : null;
+  if (headers['x-flix']) {
+    return $fetch<Flix>(`${backendUrl}/setup`, {
+      headers,
+    });
+  }
+  return;
 });
