@@ -32,14 +32,11 @@ const props = defineProps<{
   category: Category;
 }>();
 
-const flixStore = useFlixStore();
-
 const to = computed(() => {
   return {
     name: 'flix-category',
     params: {
       category: props.category.slug,
-      flix: flixStore.currentFlix?.id ?? '',
     },
   };
 });

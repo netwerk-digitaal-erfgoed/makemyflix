@@ -39,7 +39,6 @@
 /**
  * Store deps
  */
-const flixStore = useFlixStore();
 const { findCategoryBySlug } = useCategoryStore();
 const { listOrFetchByCategory } = useArtworkStore();
 
@@ -93,7 +92,6 @@ const artworkPath = (artworkSlug: string) => {
   return {
     name: 'flix-category-artwork',
     params: {
-      flix: flixStore.currentFlix?.id ?? '',
       category,
       artwork: artworkSlug,
     },

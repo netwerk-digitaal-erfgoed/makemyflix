@@ -25,7 +25,6 @@
           :to="{
             name: 'flix-category-artwork',
             params: {
-              flix: flixStore.currentFlix?.id ?? '',
               category: category.slug,
               artwork: artwork.slug,
             },
@@ -80,7 +79,6 @@ const categoryPath = computed(() => {
   return {
     name: 'flix-category',
     params: {
-      flix: flixStore.currentFlix?.id,
       category: props.category.slug,
     },
   } as To;
