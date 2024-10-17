@@ -101,6 +101,10 @@ const setNavBtnVisibility = (event: CustomEvent) => {
   @include slider-sm();
 }
 
+@include preview-container-down {
+  @include slider-sm();
+}
+
 .preview {
   &-tablet,
   &-cellphone {

@@ -82,6 +82,14 @@ const to = computed(() => {
       object-fit: cover;
       transition: var(--transition-slider);
       filter: blur(0.625rem);
+      @include sm-screen-down {
+        width: 100%;
+        filter: blur(0);
+      }
+      @include preview-container-down {
+        width: 100%;
+        filter: blur(0);
+      }
       position: absolute;
       left: 50%;
       transform: translateX(-50%);

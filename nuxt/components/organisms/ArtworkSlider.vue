@@ -156,6 +156,10 @@ const categoryPath = computed(() => {
   @include artwork-slider-sm();
 }
 
+@include preview-container-down {
+  @include artwork-slider-sm();
+}
+
 .preview {
   &-tablet,
   &-cellphone {

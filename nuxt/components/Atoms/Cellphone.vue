@@ -1,16 +1,16 @@
 <template>
   <div class="device device-iphone-x">
     <div class="device-frame">
-      <div class="device-screen">
+      <div class="device-screen scroller">
         <slot></slot>
       </div>
     </div>
-    <div class="device-stripe"></div>
-    <div class="device-header"></div>
-    <div class="device-sensors"></div>
-    <div class="device-btns"></div>
-    <div class="device-power"></div>
-    <div class="device-home"></div>
+    <div class="device-stripe" />
+    <div class="device-header" />
+    <div class="device-sensors" />
+    <div class="device-btns" />
+    <div class="device-power" />
+    <div class="device-home" />
   </div>
 </template>
 
@@ -25,31 +25,33 @@ $device-silver-dark: darken($device-silver, 10%);
 $device-silver-panel: #222;
 
 .device {
-    position: relative;
-    transform: scale(1);
-    z-index: 1;
+  position: relative;
+  z-index: 1;
+  margin-top: var(--space-20);
 }
 
 .device-iphone-x {
-  height: 868px;
-  width: 428px;
+  height: 54.25rem;
+  width: 26.75rem;
+  container-type: inline-size;
+  container-name: preview;
 
   .device-frame {
     background: $device-silver-panel;
-    border-radius: 68px;
+    border-radius: var(--space-16);
     box-shadow:
-      inset 0 0 2px 2px $device-silver-dark,
-      inset 0 0 0 7px $device-silver;
-    height: 868px;
-    padding: 28px;
-    width: 428px;
+      inset 0 0 0.125rem 0.125rem $device-silver-dark,
+      inset 0 0 0 var(--space-2) $device-silver;
+    height: 100%;
+    padding: var(--space-7);
+    width: 100%;
   }
 
-  // 2436-by-1125-pixel resolution
   .device-screen {
-    border-radius: 40px;
-    height: 812px;
-    width: 375px;
+    border-radius: var(--space-10);
+    height: 50.75rem;
+    max-width: 23.5rem;
+    width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
     background-color: var(--background-color);
@@ -60,41 +62,41 @@ $device-silver-panel: #222;
     &::after,
     &::before {
       border: solid rgba(1, 1, 1, 0.25);
-      border-width: 0 7px;
+      border-width: 0 var(--space-2);
       content: '';
-      height: 7px;
+      height: var(--space-2);
       left: 0;
       position: absolute;
       width: 100%;
       z-index: 9;
     }
     &::after {
-      top: 85px;
+      top: var(--space-21);
     }
     &::before {
-      bottom: 85px;
+      bottom: var(--space-21);
     }
   }
 
   .device-header {
     background: $device-silver-panel;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    height: 30px;
+    border-bottom-left-radius: var(--space-5);
+    border-bottom-right-radius: var(--space-5);
+    height: var(--space-8);
     left: 50%;
-    margin-left: -102px;
+    margin-left: calc(var(--space-26) * -1);
     position: absolute;
-    top: 28px;
-    width: 204px;
+    top: var(--space-7);
+    width: 12.75rem;
     z-index: 20;
 
     &::after,
     &::before {
       content: '';
-      height: 10px;
+      height: var(--space-3);
       position: absolute;
       top: 0;
-      width: 10px;
+      width: var(--space-3);
     }
     &::after {
       background: radial-gradient(
@@ -104,7 +106,7 @@ $device-silver-panel: #222;
         $device-silver-panel 75%,
         $device-silver-panel 100%
       );
-      left: -10px;
+      left: calc(var(--space-3) * -1);
     }
     &::before {
       background: radial-gradient(
@@ -114,7 +116,7 @@ $device-silver-panel: #222;
         $device-silver-panel 75%,
         $device-silver-panel 100%
       );
-      right: -10px;
+      right: calc(var(--space-3) * -1);
     }
   }
 
@@ -127,59 +129,68 @@ $device-silver-panel: #222;
     }
     &::after {
       background: #333;
-      border-radius: 3px;
-      height: 6px;
+      border-radius: var(--space-1);
+      height: var(--space-2);
       left: 50%;
-      margin-left: -25px;
-      top: 32px;
-      width: 50px;
+      margin-left: calc(var(--space-7) * -1);
+      top: var(--space-8);
+      width: var(--space-13);
     }
     &::before {
       background: radial-gradient(farthest-corner at 20% 20%, #6074bf 0, transparent 40%),
         radial-gradient(farthest-corner at 80% 80%, #513785 0, #24555e 20%, transparent 50%);
-      box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 var(--space-0) var(--space-0) rgba(255, 255, 255, 0.05);
       border-radius: 50%;
-      height: 10px;
+      height: var(--space-3);
       left: 50%;
-      margin-left: 42px;
-      top: 30px;
-      width: 10px;
+      margin-left: var(--space-10);
+      top: var(--space-8);
+      width: var(--space-3);
     }
   }
 
   .device-btns {
     background: $device-silver-dark;
-    height: 32px;
-    left: -3px;
+    height: var(--space-8);
+    left: calc(var(--space-1) * -1);
     position: absolute;
-    top: 115px;
-    width: 3px;
+    top: var(--space-29);
+    width: var(--space-1);
 
     &::after,
     &::before {
       background: $device-silver-dark;
       content: '';
-      height: 62px;
+      height: var(--space-16);
       left: 0;
       position: absolute;
-      width: 3px;
+      width: var(--space-1);
     }
 
     &::after {
-      top: 60px;
+      top: var(--space-15);
     }
     &::before {
-      top: 140px;
+      top: var(--space-35);
     }
   }
 
   .device-power {
     background: $device-silver-dark;
-    height: 100px;
-    right: -3px;
+    height: var(--space-25);
+    right: calc(var(--space-1) * -1);
     position: absolute;
-    top: 200px;
-    width: 3px;
+    top: 12.5rem;
+    width: var(--space-1);
+  }
+}
+
+:deep() {
+  @include responsive-typography;
+  .category-slide .teaser {
+    @include preview-container-down {
+      height: calc(50.75rem - (var(--header-height)));
+    }
   }
 }
 </style>

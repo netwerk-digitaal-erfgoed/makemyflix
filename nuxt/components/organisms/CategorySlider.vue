@@ -44,6 +44,18 @@ const slideStyles = computed(() => {
     &:hover {
       width: var(--max-width-slide) !important;
     }
+
+    @include preview-container-down {
+      &:hover {
+        width: 100% !important;
+      }
+    }
+
+    @include sm-screen-down {
+      &:hover {
+        width: 100% !important;
+      }
+    }
   }
 
   :deep(.swiper-button-prev) {
