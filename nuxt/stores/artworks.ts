@@ -1,7 +1,6 @@
 const defaultPageSize = 16;
 
 export const useArtworkStore = defineStore('artworks', () => {
-  const { currentFlix } = storeToRefs(useFlixStore());
   const artworks = ref<Artwork[]>([]);
   const totalArtworks = computed(() => artworks.value.length);
 

@@ -61,6 +61,7 @@ declare interface Flix {
   seo?: Seo;
   publishedAt: string | null;
   status?: 'draft' | 'published';
+  hash?: string;
 }
 
 declare interface FlixData {

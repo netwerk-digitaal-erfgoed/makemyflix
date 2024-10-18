@@ -54,7 +54,6 @@ definePageMeta({
   },
 });
 
-// TODO: Just replace this with refs.
 const state = reactive<ArtworkState>({
   pageSize: 16,
   page: 0,

@@ -1,8 +1,7 @@
 <template>
   <div
     v-if="artworks.length"
-    class="artwork-slider"
-    :class="[previewMediaQueryClassName]">
+    class="artwork-slider">
     <h1 class="artwork-title">{{ category.title }} {{ category.period }}</h1>
     <AtomsNavigation
       class="navigation-link"
@@ -59,7 +58,6 @@ const artworksSliderProps = {
 /**
  * Deps
  */
-const flixStore = useFlixStore();
 const { findByCategory } = useArtworkStore();
 
 /**
@@ -68,8 +66,6 @@ const { findByCategory } = useArtworkStore();
 const props = defineProps<{
   category: Category;
 }>();
-
-const { previewMediaQueryClassName } = storeToRefs(flixStore);
 
 /**
  * Computed properties
@@ -158,12 +154,5 @@ const categoryPath = computed(() => {
 
 @include preview-container-down {
   @include artwork-slider-sm();
-}
-
-.preview {
-  &-tablet,
-  &-cellphone {
-    @include artwork-slider-sm();
-  }
 }
 </style>

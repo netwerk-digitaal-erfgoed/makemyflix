@@ -19,6 +19,6 @@ export default defineEventHandler(async event => {
       ...body,
       id: data.id,
     },
-    hash: data.attributes.hash, // TODO: We should change this
+    hash: data.attributes.hash,
   };
 });

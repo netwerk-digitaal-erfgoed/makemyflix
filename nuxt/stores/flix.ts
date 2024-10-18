@@ -133,21 +133,6 @@ export const useFlixStore = defineStore('flix', () => {
     return ['Poppins', 'Times New Roman'];
   });
 
-  /**
-   * Code from the flix-builder store, which should be solved differently
-   * TODO: Work towards removing this
-   */
-  const newFlixSlug = computed(() => {
-    if (!currentFlix.value?.title) {
-      return undefined;
-    }
-    return useSlugify(currentFlix.value.title);
-  });
-
-  const previewMediaQueryClassName = computed(() => {
-    return `preview-${currentViewport.value}`;
-  });
-
   return {
     currentFlix,
     branding,
@@ -167,10 +152,6 @@ export const useFlixStore = defineStore('flix', () => {
     createDraft,
     saveDraft,
     publishDraft,
-
-    // These should be removed
-    previewMediaQueryClassName,
-    newFlixSlug,
 
     isPublishable,
   };

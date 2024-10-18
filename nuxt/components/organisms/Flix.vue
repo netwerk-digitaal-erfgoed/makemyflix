@@ -39,7 +39,6 @@ const renderableCategories = computed(() => {
  * Lifecycle methods
  */
 onMounted(async () => {
-  // TODO: Maybe limit the call if the current flix is a preview flix
   await categoriesStore.listOrFetchCategories();
 
   categories.value.forEach((category: Category) => artworkStore.listOrFetchByCategory(category.id));
