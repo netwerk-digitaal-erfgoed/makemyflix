@@ -115,7 +115,7 @@
  * State & props
  */
 const flixStore = useFlixStore();
-const { currentFlix, currentViewport, supportedViewports, supportedFonts, isPublishable } = storeToRefs(flixStore);
+const { currentFlix, currentViewport, isPublishable } = storeToRefs(flixStore);
 
 // Local values
 const title = ref<string>(currentFlix.value.branding?.name ?? '');
@@ -138,6 +138,13 @@ useSetStyling({
 /**
  * Computed properties
  */
+const supportedViewports = computed<PreviewMediaQuery[]>(() => {
+  return ['laptop', 'tablet', 'cellphone'];
+});
+
+const supportedFonts = computed<string[]>(() => {
+  return ['Poppins', 'Times New Roman'];
+});
 
 /**
  * Sync the image to the server,
