@@ -50,15 +50,7 @@ export const useFlixStore = defineStore('flix', () => {
       resetData();
 
       // Origin path is not retrievable from the backend so we need to pass it
-      const setup = await $fetch<Flix>('/api/setup', { headers: { uri: flixUri } });
-
-      // Add the flixUri for the guard
-      // TODO: Double check this, seems off
-      // setup.id = flix;
-      // setup.uri = flixUri;
-
-      // Update the current flix
-      currentFlix.value = setup;
+      currentFlix.value = await $fetch<Flix>('/api/flixes/setup', { headers: { 'x-flix': flixUri } });
 
       // Set the theming
       useSetStyling(currentFlix.value.theme!);
@@ -70,14 +62,11 @@ export const useFlixStore = defineStore('flix', () => {
     }
   };
 
-  /**
-   * NEW CODE
-   */
   const createDraft = async (token?: string): Promise<void> => {
     try {
       // If the current token is the same as being requested
       // set the preview on true but don't fetch the draft
-      if (currentToken.value === token) {
+      if (token && currentToken.value === token) {
         isPreview.value = true;
         return;
       }

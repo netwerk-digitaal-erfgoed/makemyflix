@@ -10,7 +10,7 @@ export const generateHeaders = (event: H3Event) => {
   if (requestHeaders['x-token']) {
     headers['x-token'] = requestHeaders['x-token'];
   } else if (requestHeaders['x-flix']) {
-    headers['X-flix'] = requestHeaders['x-flix'];
+    headers['x-flix'] = requestHeaders['x-flix'];
   }
   return headers;
 };

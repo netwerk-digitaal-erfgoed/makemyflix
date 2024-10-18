@@ -127,6 +127,14 @@ const primaryColor = ref<string>(currentFlix.value.theme?.primary ?? '#ffffff');
 const secondaryColor = ref<string>(currentFlix.value.theme?.secondary ?? '#000000');
 const tertiaryColor = ref<string>(currentFlix.value.theme?.tertiary ?? '#f2f5ff');
 const font = ref<string>(currentFlix.value.theme?.font ?? 'Poppins');
+const debouncedSave = useDebounce(flixStore.saveDraft, 500);
+
+useSetStyling({
+  primary: primaryColor.value,
+  secondary: secondaryColor.value,
+  tertiary: tertiaryColor.value,
+  font: font.value,
+});
 
 /**
  * Computed properties
@@ -209,8 +217,15 @@ watch(
     currentFlix.value.branding = branding;
     currentFlix.value.theme = theme;
 
+    useSetStyling({
+      primary: p,
+      secondary: s,
+      tertiary: ter,
+      font: f,
+    });
+
     // Update the flix
-    await flixStore.saveDraft();
+    debouncedSave();
   },
 );
 </script>

@@ -16,20 +16,27 @@ const fetchOrCreateElement = (id: string, tag: string) => {
 };
 
 const createPreloadLink = (id: string): void => {
+  const href = 'https://fonts.gstatic.com';
   const link = fetchOrCreateElement(id, 'link') as HTMLLinkElement;
+  if (link.href === href) {
+    return;
+  }
   link.rel = 'preconnect';
-  link.href = 'https://fonts.gstatic.com';
+  link.href = href;
   document.head.appendChild(link);
 };
 
 const createFontLink = (id: string, font: string): void => {
+  const href = `https://fonts.googleapis.com/css2?family=${font}:wght@300;500;600;700&display=swap`;
   const link = fetchOrCreateElement(id, 'link') as HTMLLinkElement;
+  if (link.href === href) {
+    return;
+  }
   link.rel = 'stylesheet';
-  link.href = `https://fonts.googleapis.com/css2?family=${font}:wght@300;500;600;700&display=swap`;
   document.head.appendChild(link);
 };
 
-const createCssVariables = (theme: Theme, preview = false): void => {
+const createCssVariables = (id: string, theme: Record<string, string>): void => {
   const styleObject = fetchOrCreateElement('theme', 'style') as HTMLStyleElement;
 
   const vars = [] as string[];
@@ -37,7 +44,7 @@ const createCssVariables = (theme: Theme, preview = false): void => {
     const value = theme[key as keyof Theme];
     vars.push(`${useStringToCssVariable(key)}: ${value};`);
   }
-  styleObject.innerText = `${preview ? '#preview' : ':root'}{${vars.join('')}}`;
+  styleObject.innerText = `${id}{${vars.join('')}}`;
 };
 
 export default (theme: Theme) => {
@@ -45,8 +52,15 @@ export default (theme: Theme) => {
     return;
   }
 
-  // Create the css variables
-  createCssVariables(theme);
+  const { isPreview } = useFlixStore();
+  const cssId = isPreview ? '.preview' : ':root';
+  const fontId = isPreview ? 'preview-font' : 'theme-font';
   createPreloadLink('preload-font');
-  createFontLink('theme-font', theme.fontFamily);
+  createFontLink(fontId, theme.font);
+  createCssVariables(cssId, {
+    primaryColor: theme.primary,
+    secondaryColor: theme.secondary,
+    tertiaryColor: theme.tertiary,
+    fontFamily: theme.font,
+  });
 };
