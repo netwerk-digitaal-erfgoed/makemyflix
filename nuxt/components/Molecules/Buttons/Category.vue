@@ -13,7 +13,6 @@
 /**
  * Deps
  */
-const flixStore = useFlixStore();
 const route = useRoute();
 
 /**
@@ -23,7 +22,6 @@ const categoryPath = computed(() => {
   return {
     name: 'flix-category',
     params: {
-      flix: flixStore.currentFlix?.id,
       category: route.params.category,
     },
   } as To;

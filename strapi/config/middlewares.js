@@ -18,7 +18,7 @@ module.exports = [
   {
     name: 'strapi::cors',
     config: {
-      headers: ['Content-Type', 'Authorization', 'X-Flix'],
+      headers: ['Content-Type', 'Authorization', 'x-flix', 'x-token'],
     }
   },
   'strapi::poweredBy',

@@ -12,6 +12,12 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "hash": {
+      "displayName": "Hash",
+      "type": "string",
+      "editable": false,
+      "unique": true
+    },
     "branding": {
       "displayName": "branding",
       "type": "component",

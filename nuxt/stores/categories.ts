@@ -1,9 +1,5 @@
 export const useCategoryStore = defineStore('categories', () => {
   const categories = ref<Category[]>([]);
-  const {
-    app: { backendUrl, token },
-  } = useRuntimeConfig();
-  const { currentFlix } = storeToRefs(useFlixStore());
 
   function updateCategory(category: Category): void {
     const idx = categories.value.findIndex((cat: Category) => cat.id === category.id);
@@ -39,19 +35,9 @@ export const useCategoryStore = defineStore('categories', () => {
   async function fetchCategories(): Promise<void> {
     console.warn('Categories.ts#fetchCategories');
 
-    if (!currentFlix.value?.uri) {
-      return;
-    }
-
     try {
-      const cats = await $fetch<Category[]>(`${backendUrl}/categories`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'X-flix': currentFlix.value.uri,
-        },
-      });
-
-      categories.value = Array.isArray(cats) ? cats : [];
+      const headers = useGenerateHeaders();
+      categories.value = (await $fetch('/api/categories', { headers })) as Category[];
     } catch (e) {
       console.error(e);
     }

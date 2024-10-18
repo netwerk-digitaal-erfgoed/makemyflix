@@ -39,7 +39,6 @@
 /**
  * Store deps
  */
-const flixStore = useFlixStore();
 const { findCategoryBySlug } = useCategoryStore();
 const { listOrFetchByCategory } = useArtworkStore();
 
@@ -55,7 +54,6 @@ definePageMeta({
   },
 });
 
-// TODO: Just replace this with refs.
 const state = reactive<ArtworkState>({
   pageSize: 16,
   page: 0,
@@ -93,7 +91,6 @@ const artworkPath = (artworkSlug: string) => {
   return {
     name: 'flix-category-artwork',
     params: {
-      flix: flixStore.currentFlix?.id ?? '',
       category,
       artwork: artworkSlug,
     },

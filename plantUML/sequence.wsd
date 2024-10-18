@@ -1,0 +1,29 @@
+@startuml "sequence"
+
+' actor
+' boundary
+' control
+' entity
+' database
+' collections
+' queue
+
+actor "Edwin\n<<User UI>>" as Edwin
+control "Nuxt" as nuxt
+control "Strapi" as strapi
+database "Postgres Database" as db
+collections "Datasource" as datasource
+
+== Create Flix ==
+Edwin -> nuxt : Fill in forms
+nuxt -> strapi : Post form data
+strapi -> db : Store data
+== Open Flix ==
+Edwin -> nuxt : Open flix
+nuxt <-> strapi : Fetch setup data (theming, etc)
+nuxt -> strapi : Fetch flix data
+strapi <-> datasource : Fetch data
+strapi -> nuxt : Process and return data
+nuxt -> Edwin : Show flix
+
+@enduml
