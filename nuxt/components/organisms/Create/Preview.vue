@@ -1,5 +1,5 @@
 <template>
-  <div :class="['preview', { published }]">
+  <div :class="['preview']">
     <AtomsCellphone v-if="currentViewport === 'cellphone'">
       <OrganismsFlix />
     </AtomsCellphone>
@@ -8,34 +8,13 @@
     </AtomsTablet>
     <OrganismsFlix v-else />
   </div>
-  <OrganismsCreateShare
-    v-if="published"
-    @close="onCloseModal" />
+  <template v-if="!isPreview">
+    <OrganismsCreateShare />
+  </template>
 </template>
 
 <script setup lang="ts">
-const flixStore = useFlixStore();
-const { currentViewport } = storeToRefs(flixStore);
-
-const published = ref(false);
-
-/**
- * Methods
- */
-
-const onCloseModal = () => {
-  if (!flixStore.newFlixSlug) {
-    console.warn('Flix slug not found.');
-    return;
-  }
-
-  useNuxtApp().$navigate({
-    name: 'flix',
-    params: {
-      flix: flixStore.newFlixSlug,
-    },
-  });
-};
+const { currentViewport, isPreview } = storeToRefs(useFlixStore());
 </script>
 
 <style lang="scss" scoped>

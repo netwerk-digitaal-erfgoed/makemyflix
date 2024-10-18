@@ -1,14 +1,14 @@
 <template>
   <div
     class="backdrop"
-    @click="emit('close')"></div>
+    @click="close"></div>
   <div class="modal">
     <div class="header">
       <div></div>
       <h3>MakeMyFlix</h3>
       <button
         type="button"
-        @click="onClose">
+        @click="close">
         <Icon
           icon="mdi:close"
           height="1.25em"
@@ -16,14 +16,14 @@
       </button>
     </div>
     <div class="info">
-      <h2>{{ currentFlix.title }} FLIX staat live!</h2>
+      <h2>{{ currentFlix.branding.name }} FLIX staat live!</h2>
       <div>Bekijk en deel de link</div>
     </div>
     <div class="copy">
       <div>Kopieer deze link</div>
       <div class="link">
-        <div class="link-text">{{ flixUri }}</div>
-        <AtomsButton @click="copyToPasteBoard(flixUri)">Kopieren</AtomsButton>
+        <div class="link-text">{{ currentFlix.uri }}</div>
+        <AtomsButton @click="copyToPasteBoard">Kopieren</AtomsButton>
       </div>
     </div>
     <div class="visit">
@@ -35,39 +35,24 @@
 
 <script setup lang="ts">
 /**
- * Deps
- */
-const flixStore = useFlixStore();
-const router = useRouter();
-
-/**
  * State
  */
-const emit = defineEmits(['close']);
-const { currentFlix } = storeToRefs(flixStore);
-
-/**
- * Computed properties
- */
-const flixUri = computed(() => window.location.origin + '/' + flixStore.currentFlixSlug);
+const { currentFlix, isPreview } = storeToRefs(useFlixStore());
 
 /**
  * Methods
  */
-const copyToPasteBoard = (s: string) => {
-  window.navigator.clipboard.writeText(s);
+const copyToPasteBoard = () => {
+  window.navigator.clipboard.writeText(currentFlix.value.uri);
 };
 
-const onClose = () => {
-  emit('close');
+const close = () => {
+  isPreview.value = true;
 };
 
 const navigateToFlix = () => {
-  router.push({
-    name: 'flix',
-    params: {
-      flix: flixStore.currentFlixSlug,
-    },
+  navigateTo(currentFlix.value.uri, {
+    external: true,
   });
 };
 </script>

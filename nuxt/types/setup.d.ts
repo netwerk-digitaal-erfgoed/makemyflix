@@ -60,6 +60,7 @@ declare interface Flix {
   labels?: Record<string, string>;
   seo?: Seo;
   publishedAt: string | null;
+  status?: 'draft' | 'published';
 }
 
 declare interface FlixData {

@@ -100,14 +100,13 @@
         </div>
       </template>
     </AtomsAccordeon>
-    <!-- TODO: Publish action, when is button active and when you click it -->
-    <!-- <div class="publish">
+    <div class="publish">
       <AtomsButton
-        :disabled="!publishable"
-        @click="emit('publish')">
+        :disabled="!isPublishable"
+        @click="flixStore.publishDraft">
         PUBLICEER JOUW FLIX SITE
       </AtomsButton>
-    </div> -->
+    </div>
   </fieldset>
 </template>
 
@@ -116,7 +115,7 @@
  * State & props
  */
 const flixStore = useFlixStore();
-const { currentFlix, currentViewport, supportedViewports, supportedFonts } = storeToRefs(flixStore);
+const { currentFlix, currentViewport, supportedViewports, supportedFonts, isPublishable } = storeToRefs(flixStore);
 
 // Local values
 const title = ref<string>(currentFlix.value.branding?.name ?? '');
@@ -139,18 +138,6 @@ useSetStyling({
 /**
  * Computed properties
  */
-const publishable = computed(() => {
-  return false;
-  // return props.ready && flixBuilderStore.newFlixSlug !== 'nieuwe-flix';
-});
-
-/**
- * Methods
- */
-const publish = async () => {
-  await flixStore.publishDraft();
-  published.value = true;
-};
 
 /**
  * Sync the image to the server,
@@ -212,6 +199,12 @@ watch(
     theme.secondary = s;
     theme.tertiary = ter;
     theme.font = f;
+
+    // update the flix uri based on the title
+    // TODO: Add validation to the uri, should be unique
+    if (t) {
+      currentFlix.value.uri = `${window.location.origin}/${useSlugify(t)}`;
+    }
 
     // Update the currentFlix
     currentFlix.value.branding = branding;

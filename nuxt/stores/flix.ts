@@ -21,6 +21,11 @@ export const useFlixStore = defineStore('flix', () => {
     return currentFlix.value?.fallbackIIIF ?? false;
   });
 
+  // TODO: Add extra checks
+  const isPublishable = computed<boolean>(() => {
+    return !!(currentFlix.value && currentFlix.value.uri);
+  });
+
   /**
    * Methods
    */
@@ -101,14 +106,20 @@ export const useFlixStore = defineStore('flix', () => {
   };
 
   const publishDraft = async (): Promise<void> => {
-    const response = await useSaveFlix({
-      data: {
-        status: 'published',
-        publishedAt: useStrapiDate(),
-      },
-    });
-    console.warn(response);
-    isPreview.value = false;
+    if (!currentFlix.value) {
+      return;
+    }
+
+    // Update publish state
+    currentFlix.value.publishedAt = useStrapiDate();
+    currentFlix.value.status = 'published';
+
+    const response = await useSaveFlix(currentFlix.value);
+    if (response?.flix) {
+      isPreview.value = false;
+      currentFlix.value = response.flix;
+      return response.hash;
+    }
   };
 
   // Preview related states
@@ -160,5 +171,7 @@ export const useFlixStore = defineStore('flix', () => {
     // These should be removed
     previewMediaQueryClassName,
     newFlixSlug,
+
+    isPublishable,
   };
 });
