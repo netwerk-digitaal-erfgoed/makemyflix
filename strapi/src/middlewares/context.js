@@ -1,21 +1,9 @@
-const { findFlix } = require("../utils/query");
-
-const generateFilter = (headers) => {
-  const filters = {};
-
-  if (headers['x-token']) {
-    filters.hash = headers['x-token'];
-  } else if (headers['x-flix']) {
-    filters.uri = headers['x-flix'];
-  }
-
-  return filters;
-}
+const { findFlix, generateFilters } = require("../utils/query");
 
 module.exports = (config, { strapi }) => {
   return async (context, next) => {
     try {
-      const filters = generateFilter(context.request.header);
+      const filters = generateFilters(context.request.header);
       const [entry] = await findFlix(filters);
 
       if (!entry) {

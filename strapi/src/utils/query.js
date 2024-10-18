@@ -3,6 +3,18 @@ const createQuery = (query = '', replacements = {}) => {
   return query.replace(regex, (matched) => replacements[matched]);
 };
 
+const generateFilters = (headers) => {
+  const filters = {};
+
+  if (headers['x-token']) {
+    filters.hash = headers['x-token'];
+  } else if (headers['x-flix']) {
+    filters.uri = headers['x-flix'];
+  }
+
+  return filters;
+}
+
 const findFlix = async (filters) => {
   return strapi.entityService.findMany('api::flix.flix', {
     populate: {
@@ -14,12 +26,7 @@ const findFlix = async (filters) => {
         },
       },
       theme: {
-        populate: {
-          primary: true,
-          secondary: true,
-          tertiary: true,
-          font: true,
-        },
+        populate: '*',
       },
       data: true,
       labels: true,
@@ -34,5 +41,6 @@ const findFlix = async (filters) => {
 
 module.exports = {
   createQuery,
+  generateFilters,
   findFlix
 };

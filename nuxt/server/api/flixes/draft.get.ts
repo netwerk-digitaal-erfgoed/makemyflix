@@ -44,7 +44,7 @@ export default defineEventHandler<Promise<Flix | null>>(async event => {
   const headers = generateHeaders(event);
 
   if (headers['x-token']) {
-    return $fetch<Flix>(`${backendUrl}/setup`, {
+    return $fetch<Flix>(`${backendUrl}/flixes`, {
       headers,
     });
   }
