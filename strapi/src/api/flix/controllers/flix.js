@@ -21,6 +21,24 @@ module.exports = createCoreController('api::flix.flix', ({ strapi }) => ({
       return ctx.badRequest('No token provided');
     }
 
+    // Make sure the uri is unique by checking the count of flixes with same name
+    let { branding: { name }, uri, id } = ctx.request.body.data;
+
+    const count = await strapi.entityService.count('api::flix.flix', {
+      filters: {
+        branding: {
+          name
+        },
+        id: {
+          $ne: id
+        }
+      }
+    });
+
+    if (count) {
+      ctx.request.body.data.uri = `${uri}-${count}`;
+    }
+
     return super.update(ctx);
   }
 }))
