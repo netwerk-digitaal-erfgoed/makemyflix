@@ -109,6 +109,7 @@ export const useFlixStore = defineStore('flix', () => {
     const response = await useSaveFlix(currentFlix.value);
     if (response?.flix) {
       currentFlix.value = response.flix;
+      currentToken.value = response.hash;
       return response.hash;
     }
     return;
@@ -127,6 +128,7 @@ export const useFlixStore = defineStore('flix', () => {
     if (response?.flix) {
       isPreview.value = false;
       currentFlix.value = response.flix;
+      currentToken.value = response.hash;
       return response.hash;
     }
   };
