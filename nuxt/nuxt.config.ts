@@ -21,9 +21,9 @@ export default defineNuxtConfig({
   },
   modules: ['@pinia/nuxt', '@nuxtjs/google-fonts'],
   runtimeConfig: {
-    app: {
+    token: '',
+    public: {
       backendUrl: '',
-      token: '',
     },
   },
   ssr: false,

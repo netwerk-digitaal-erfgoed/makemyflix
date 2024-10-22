@@ -4,7 +4,27 @@
   }
 }
 
+@mixin preview-container-down {
+  @container preview (max-width: 64rem) {
+    @content;
+  }
+}
+
 @mixin flex-column {
   display: flex;
   flex-direction: column;
+}
+
+@mixin responsive-typography {
+  h1 {
+    font-size: var(--font-size-l);
+  }
+
+  h2 {
+    font-size: var(--font-size-m);
+  }
+
+  h3 {
+    font-size: var(--font-size-base);
+  }
 }

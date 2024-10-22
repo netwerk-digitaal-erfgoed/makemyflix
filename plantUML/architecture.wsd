@@ -1,0 +1,20 @@
+@startuml "architecture"
+skinparam defaultTextAlignment center
+skinparam ArrowColor #0099ff
+left to right direction
+skinparam linetype ortho
+'skinparam nodesep 5
+skinparam ranksep 125
+
+package "MMF" {
+  rectangle "Strapi" as strapi
+  rectangle "Postgres Database" as db
+  rectangle "Nuxt" as nuxt
+}
+collections "Datasources" as sources
+
+' Relaties
+nuxt --- strapi
+strapi -r- db
+strapi <-d- sources
+@enduml
