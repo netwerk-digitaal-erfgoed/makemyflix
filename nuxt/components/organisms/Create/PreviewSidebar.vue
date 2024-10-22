@@ -15,17 +15,20 @@
           </template>
           <template #default>
             <MoleculesFormInput
-              v-model="primaryColor"
+              :modelValue="tempFlix.theme?.primary"
+              @update:modelValue="onThemeChange('primary', $event)"
               type="color"
               inline
               label="Primaire kleur" />
             <MoleculesFormInput
-              v-model="secondaryColor"
+              :modelValue="tempFlix.theme?.secondary"
+              @update:modelValue="onThemeChange('secondary', $event)"
               type="color"
               inline
               label="Secundaire kleur" />
             <MoleculesFormInput
-              v-model="tertiaryColor"
+              :modelValue="tempFlix.theme?.tertiary"
+              @update:modelValue="onThemeChange('tertiary', $event)"
               type="color"
               inline
               label="Tertiaire kleur" />
@@ -38,7 +41,8 @@
           </template>
           <template #default>
             <MoleculesFormInput
-              v-model="font"
+              :modelValue="tempFlix.theme?.font"
+              @update:modelValue="onThemeChange('font', $event)"
               type="select"
               :options="supportedFonts" />
           </template>
@@ -57,24 +61,30 @@
         <AtomsAccordeon
           header="Naam"
           :initial="true">
-          <MoleculesFormInput v-model="title" />
+          <MoleculesFormInput
+            :modelValue="tempFlix.branding?.intro.title"
+            @update:modelValue="onBrandingChange('title', $event)" />
         </AtomsAccordeon>
         <div class="divider"></div>
         <AtomsAccordeon header="Flix omschrijving">
-          <MoleculesFormInput v-model="description" />
+          <MoleculesFormInput
+            :modelValue="tempFlix.branding?.intro.description"
+            @update:modelValue="onBrandingChange('description', $event)" />
         </AtomsAccordeon>
         <div class="divider"></div>
         <AtomsAccordeon header="Flix logo (optioneel)">
           <MoleculesFormUpload
             id="input-logo"
-            v-model="logo"
+            :modelValue="tempFlix.branding?.logo"
+            @update:modelValue="onFileUpload('logo', $event)"
             prompt="Selecteer vanuit je browser of sleep in dit vlak om te uploaden" />
         </AtomsAccordeon>
         <div class="divider"></div>
         <AtomsAccordeon header="Flix banner (optioneel)">
           <MoleculesFormUpload
             id="input-banner"
-            v-model="banner"
+            :modelValue="tempFlix.branding?.banner"
+            @update:modelValue="onFileUpload('banner', $event)"
             prompt="Selecteer vanuit je browser of sleep in dit vlak om te uploaden" />
         </AtomsAccordeon>
       </template>
@@ -112,28 +122,36 @@
 
 <script setup lang="ts">
 /**
+ * Constants
+ */
+const DEFAULT: Flix = {
+  publishedAt: null,
+  branding: {
+    name: '',
+    intro: {
+      title: '',
+      description: '',
+    },
+    logo: null,
+    banner: null,
+  } as Branding,
+  theme: {
+    primary: '#ffffff',
+    secondary: '#000000',
+    tertiary: '#f2f5ff',
+    font: 'Poppins',
+  } as Theme,
+  uri: '',
+};
+
+/**
  * State & props
  */
 const flixStore = useFlixStore();
 const { currentFlix, currentViewport, isPublishable } = storeToRefs(flixStore);
+const tempFlix = ref<Flix>(currentFlix.value ?? DEFAULT);
 
-// Local values
-const title = ref<string>(currentFlix.value.branding?.name ?? '');
-const description = ref<string>(currentFlix.value.branding?.intro?.description ?? '');
-const logo = ref<UploadedImage>(currentFlix.value.branding?.logo ?? null);
-const banner = ref<UploadedImage>(currentFlix.value.branding?.banner ?? null);
-const primaryColor = ref<string>(currentFlix.value.theme?.primary ?? '#ffffff');
-const secondaryColor = ref<string>(currentFlix.value.theme?.secondary ?? '#000000');
-const tertiaryColor = ref<string>(currentFlix.value.theme?.tertiary ?? '#f2f5ff');
-const font = ref<string>(currentFlix.value.theme?.font ?? 'Poppins');
-const debouncedSave = useDebounce(flixStore.saveDraft, 500);
-
-useSetStyling({
-  primary: primaryColor.value,
-  secondary: secondaryColor.value,
-  tertiary: tertiaryColor.value,
-  font: font.value,
-});
+useSetStyling(tempFlix.value.theme!);
 
 /**
  * Computed properties
@@ -146,87 +164,46 @@ const supportedFonts = computed<string[]>(() => {
   return ['Poppins', 'Times New Roman'];
 });
 
-/**
- * Sync the image to the server,
- */
-const syncImage = async (file?: File, oldFile?: File) => {
-  try {
-    // If the new File is the same as the old File, just return the old one
-    if (oldFile === file) {
-      return oldFile;
-    }
+const onBrandingChange = (prop: 'title' | 'description', value: string) => {
+  const branding = tempFlix.value?.branding ?? ({} as Branding);
+  branding.intro = branding.intro ?? ({} as Intro);
+  branding.intro[prop] = value;
 
-    // If the new file is empty, but the old file is not, remove the old file
-    if (!file && oldFile) {
-      await useDeleteImage(oldFile);
-      return;
-    }
-
-    // If the new file is not empty and different from the old file, upload the new file
-    if (file) {
-      const { id, name, url } = await useUploadImage(file);
-      return { id, name, url };
-    }
-  } catch (error) {
-    // Something went wrong, log the error and return;
-    console.error(error);
-    return;
+  // If the prop is title, we should also update the name and the uri
+  if (prop === 'title') {
+    branding.name = value;
+    tempFlix.value.uri = `${window.location.origin}/${useSlugify(value)}`;
   }
+  tempFlix.value.branding = branding;
 };
 
-/**
- * Watchers
- * TODO: Double check if it updates correctly in case the server alters a value
- */
+const onFileUpload = async (prop: 'logo' | 'banner', file: File | null) => {
+  const branding = tempFlix.value?.branding ?? ({} as Branding);
+  branding[prop] = file === null ? null : (await useUploadImage(file)) ?? null;
+  tempFlix.value.branding = branding;
+};
+
+const onThemeChange = (prop: 'primary' | 'secondary' | 'tertiary' | 'font', color: string) => {
+  const theme = tempFlix.value?.theme ?? ({} as Theme);
+  theme[prop] = color;
+  tempFlix.value.theme = theme;
+  useSetStyling(theme);
+};
+
+const updateStore = () => {
+  // Update the currentFlix with the tempFlix
+  currentFlix.value = tempFlix.value;
+  flixStore.saveDraft();
+};
+
+const debouncedSave = useDebounce(updateStore, 500);
+
 watch(
-  [title, description, logo, banner, primaryColor, secondaryColor, tertiaryColor, font],
-  async ([t, d, l, b, p, s, ter, f], [, , ol, ob]) => {
-    if (!currentFlix.value) {
-      return;
-    }
-
-    // If currentFlix has a branding object, use it else create a new one
-    const branding = currentFlix.value?.branding ?? ({} as Record<string, any>);
-
-    // Update the values
-    branding.name = t;
-    branding.intro = branding.intro ?? ({} as Record<string, any>);
-    branding.intro.title = t;
-    branding.intro.description = d;
-
-    // Update the logo / banner
-    branding.logo = await syncImage(l, ol);
-    branding.banner = await syncImage(b, ob);
-
-    // if currentFlix has a theme object, use it else create a new one
-    const theme = currentFlix.value?.theme ?? ({} as Record<string, any>);
-
-    // update the values
-    theme.primary = p;
-    theme.secondary = s;
-    theme.tertiary = ter;
-    theme.font = f;
-
-    // update the flix uri based on the title
-    // TODO: Add validation to the uri, should be unique
-    if (t) {
-      currentFlix.value.uri = `${window.location.origin}/${useSlugify(t)}`;
-    }
-
-    // Update the currentFlix
-    currentFlix.value.branding = branding;
-    currentFlix.value.theme = theme;
-
-    useSetStyling({
-      primary: p,
-      secondary: s,
-      tertiary: ter,
-      font: f,
-    });
-
-    // Update the flix
+  tempFlix,
+  async () => {
     debouncedSave();
   },
+  { deep: true },
 );
 </script>
 

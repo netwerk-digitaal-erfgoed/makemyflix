@@ -20,8 +20,8 @@ declare interface UploadedImage extends UploadedImageFormat {
 
 declare interface Branding {
   name: string;
-  logo?: UploadedImage;
-  banner?: UploadedImage;
+  logo: UploadedImage | null;
+  banner: UploadedImage | null;
   intro: Intro;
 }
 
