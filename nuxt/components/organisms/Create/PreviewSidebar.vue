@@ -113,7 +113,7 @@
     <div class="publish">
       <AtomsButton
         :disabled="!isPublishable"
-        @click="flixStore.publishDraft">
+        @click="flixStore.saveDraft(true)">
         PUBLICEER JOUW FLIX SITE
       </AtomsButton>
     </div>

@@ -99,38 +99,27 @@ export const useFlixStore = defineStore('flix', () => {
     }
   };
 
-  const saveDraft = async (): Promise<string | void> => {
+  const saveDraft = async (publish?: true): Promise<string | void> => {
     // No currentFlix to save, just return
     if (!currentFlix.value) {
       return;
     }
 
+    // Check if we are publishing
+    if (publish) {
+      currentFlix.value.publishedAt = useStrapiDate();
+      currentFlix.value.status = 'published';
+    }
+
     // Save the flix
     const response = await useSaveFlix(currentFlix.value);
     if (response?.flix) {
+      isPreview.value = !!publish;
       currentFlix.value = response.flix;
       currentToken.value = response.hash;
       return response.hash;
     }
     return;
-  };
-
-  const publishDraft = async (): Promise<void> => {
-    if (!currentFlix.value) {
-      return;
-    }
-
-    // Update publish state
-    currentFlix.value.publishedAt = useStrapiDate();
-    currentFlix.value.status = 'published';
-
-    const response = await useSaveFlix(currentFlix.value);
-    if (response?.flix) {
-      isPreview.value = false;
-      currentFlix.value = response.flix;
-      currentToken.value = response.hash;
-      return response.hash;
-    }
   };
 
   return {
@@ -146,6 +135,5 @@ export const useFlixStore = defineStore('flix', () => {
     setupFlix,
     createDraft,
     saveDraft,
-    publishDraft,
   };
 });
