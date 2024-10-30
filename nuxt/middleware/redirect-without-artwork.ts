@@ -15,6 +15,9 @@ export default defineNuxtRouteMiddleware(to => {
   // Note: We add the flix here since it's not going through AtomsNavigation
   return navigateTo({
     name: 'flix-category',
-    params: { flix: currentFlix!.id, category },
+    params: {
+      flix: currentFlix!.id,
+      category,
+    },
   });
 });

@@ -9,39 +9,38 @@
 <script setup lang="ts">
 const router = useRouter();
 const { $navigate } = useNuxtApp();
-const { currentFlix } = useFlixStore();
+const { currentFlix, isPreview } = useFlixStore();
 
 const props = withDefaults(
   defineProps<{
     direction?: string;
     to: To;
-    preview?: boolean;
   }>(),
   {
     direction: '',
   },
 );
 
-const destination = computed(() => {
-  const to = {
+const route = computed(() => {
+  const flixName = currentFlix.value?.uri.split('/').pop();
+  if (!flixName) {
+    return { href: '' };
+  }
+  const destination = {
     name: props.to.name,
     params: {
-      flix: currentFlix!.id,
+      flix: flixName,
       ...(props.to.params ?? {}),
     },
   };
-
-  return to;
+  return router.resolve(destination);
 });
 
-const route = computed(() => router.resolve(destination.value));
-
 const animateNavigation = () => {
-  if (props.preview) {
+  if (isPreview) {
     return;
   }
-
-  return $navigate(destination.value, props.direction);
+  return $navigate(route.href, props.direction);
 };
 </script>
 

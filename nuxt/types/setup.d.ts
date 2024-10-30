@@ -20,16 +20,22 @@ declare interface UploadedImage extends UploadedImageFormat {
 
 declare interface Branding {
   name: string;
-  logo: UploadedImage;
-  banner: UploadedImage;
+  logo: UploadedImage | null;
+  banner: UploadedImage | null;
   intro: Intro;
 }
 
 declare interface Theme {
-  primaryColor: string;
-  secondaryColor: string;
-  tertiaryColor: string;
-  fontFamily: string;
+  primary: string;
+  secondary: string;
+  tertiary: string;
+  font: string;
+}
+
+declare interface Queries {
+  endpointUrl: string;
+  categoryQuery: string;
+  itemsQuery: string;
 }
 
 declare interface Seo {
@@ -44,14 +50,18 @@ declare interface Seo {
 }
 
 declare interface Flix {
-  id: string;
+  id?: string;
   uri?: string;
-  fallback?: boolean;
+  data?: Queries;
+  fallbackIIIF?: boolean;
   theme?: Theme;
   branding?: Branding;
   sidenote?: string;
   labels?: Record<string, string>;
   seo?: Seo;
+  publishedAt: string | null;
+  status?: 'draft' | 'published';
+  hash?: string;
 }
 
 declare interface FlixData {

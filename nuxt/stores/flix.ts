@@ -3,7 +3,9 @@ export const useFlixStore = defineStore('flix', () => {
    * State
    */
   const currentFlix = ref<Flix>();
-  const config = useRuntimeConfig();
+  const currentToken = ref<string>();
+  const currentViewport = ref<PreviewMediaQuery>('laptop');
+  const isPreview = ref(false);
 
   /**
    * Computed Properties
@@ -17,7 +19,12 @@ export const useFlixStore = defineStore('flix', () => {
   });
 
   const supportIIIF = computed<boolean>(() => {
-    return currentFlix.value?.fallback ?? false;
+    return currentFlix.value?.fallbackIIIF ?? false;
+  });
+
+  // TODO: Add extra checks
+  const isPublishable = computed<boolean>(() => {
+    return !!(currentFlix.value && currentFlix.value.uri);
   });
 
   /**
@@ -28,108 +35,105 @@ export const useFlixStore = defineStore('flix', () => {
     return labels?.[label] ?? '';
   };
 
-  const fetchFlixes = async () => {
-    try {
-      const { data } = await $fetch<StrapiApiResponse<StrapiEntity<Flix>[]>>(`${config.app.backendUrl}/flixes`, {
-        headers: {
-          Authorization: `Bearer ${config.app.token}`,
-        },
-      });
-
-      return data.map(entry => {
-        const uri = entry.attributes.uri;
-        const path = uri?.replace(window.location.origin, '') ?? '';
-        const title = path?.replace(/^\/(.)/, (_: any, char: string) => char.toUpperCase()) ?? '';
-
-        return {
-          id: entry.id,
-          path,
-          title,
-        };
-      });
-    } catch (error) {
-      console.error('Error fetching flixes:', error);
-      return [];
-    }
-  };
-
   const resetData = () => {
+    // Reset the values back to default
     currentFlix.value = undefined;
+    currentToken.value = undefined;
+    isPreview.value = false;
+    currentViewport.value = 'laptop';
+
+    // Also clean up other stores
     useArtworkStore().resetData();
     useCategoryStore().resetData();
-    useThemeStore().resetData();
+
+    // Reset the styling
+    useResetStyling();
   };
 
-  const getSlugFromFlix = (flix: Flix | FlixData) => {
-    const uri = flix.uri;
-    if (!uri) {
-      return undefined;
-    }
-    return uri.replace(window.location.origin, '').split('/').filter(Boolean)[0];
-  };
-
-  const fetchFlix = async (flixUri: string) => {
+  const setupFlix = async (flix: string) => {
     try {
-      const flix = await $fetch<Flix | null>(`${config.app.backendUrl}/setup`, {
-        headers: {
-          Authorization: `Bearer ${config.app.token}`,
-          'X-flix': flixUri,
-        },
-      });
+      // Construct the flixUri
+      const flixUri = `${window.location.origin}/${flix}`;
 
-      if (!flix) {
-        return null;
+      // Check if the flixUri is the currentFlix, if so do nothing
+      if (currentFlix.value?.uri === flixUri) {
+        return;
       }
 
-      return flix;
+      // Reset the currentFlix
+      resetData();
+
+      // Origin path is not retrievable from the backend so we need to pass it
+      currentFlix.value = await $fetch<Flix>('/api/flixes/setup', { headers: { 'x-flix': flixUri } });
+
+      // Set the theming
+      useSetStyling(currentFlix.value.theme!);
+
+      // Set SEO
+      useSetSeo(currentFlix.value.seo);
     } catch (e) {
       console.error(e);
-      return null;
     }
   };
 
-  const setupFlix = async (flix: string, preview = false) => {
-    // Construct the flixUri
-    const flixUri = `${window.location.origin}/${flix}`;
+  const createDraft = async (token?: string): Promise<void> => {
+    try {
+      // If the current token is the same as being requested
+      // set the preview on true but don't fetch the draft
+      if (token && currentToken.value === token) {
+        isPreview.value = true;
+        return;
+      }
 
-    // Check if the flixUri is the currentFlix, if so do nothing
-    if (currentFlix.value?.uri === flixUri) {
+      // Reset the current data
+      resetData();
+
+      // Generate headers
+      const headers = useGenerateHeaders();
+
+      // Update the currentFlix with the draft
+      currentFlix.value = await $fetch<Flix>('/api/flixes/draft', { headers });
+      isPreview.value = true;
+    } catch (error) {
+      console.error('Error creating draft:', error);
+    }
+  };
+
+  const saveDraft = async (publish?: true): Promise<string | void> => {
+    // No currentFlix to save, just return
+    if (!currentFlix.value) {
       return;
     }
 
-    // Reset the currentFlix
-    resetData();
-
-    // Origin path is not retrievable from the backend so we need to pass it
-    const setup = await fetchFlix(flixUri);
-    if (!setup) {
-      return;
+    // Check if we are publishing
+    if (publish) {
+      currentFlix.value.publishedAt = useStrapiDate();
+      currentFlix.value.status = 'published';
     }
 
-    // Add the flixUri for the guard
-    setup.id = flix;
-    setup.uri = flixUri;
-
-    // Update the current flix
-    currentFlix.value = setup;
-
-    // Set the theming
-    useThemeStore().setThemeStyling(preview);
-
-    // Set SEO
-    useSetSeo(currentFlix.value.seo);
+    // Save the flix
+    const response = await useSaveFlix(currentFlix.value);
+    if (response?.flix) {
+      isPreview.value = !!publish;
+      currentFlix.value = response.flix;
+      currentToken.value = response.hash;
+      return response.hash;
+    }
+    return;
   };
 
   return {
     currentFlix,
+    currentViewport,
+    isPreview,
     branding,
     sidenote,
     supportIIIF,
-    fetchFlix,
-    setupFlix,
-    fetchFlixes,
+    isPublishable,
     generateLabel,
     resetData,
-    getSlugFromFlix,
+    setupFlix,
+    createDraft,
+    saveDraft,
   };
 });

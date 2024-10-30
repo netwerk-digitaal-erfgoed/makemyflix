@@ -1,13 +1,11 @@
 <template>
   <div
     v-if="artworks.length"
-    class="artwork-slider"
-    :class="[previewMediaQueryClassName]">
+    class="artwork-slider">
     <h1 class="artwork-title">{{ category.title }} {{ category.period }}</h1>
     <AtomsNavigation
       class="navigation-link"
-      :to="categoryPath"
-      :preview="preview">
+      :to="categoryPath">
       Toon alles
     </AtomsNavigation>
     <div
@@ -26,12 +24,10 @@
           :to="{
             name: 'flix-category-artwork',
             params: {
-              flix: flixStore.currentFlix?.id ?? '',
               category: category.slug,
               artwork: artwork.slug,
             },
-          }"
-          :preview="preview" />
+          }" />
       </swiper-slide>
     </MoleculesSlider>
   </div>
@@ -62,19 +58,14 @@ const artworksSliderProps = {
 /**
  * Deps
  */
-const flixBuilderStore = useFlixBuilderStore();
-const flixStore = useFlixStore();
-const artworkStore = useArtworkStore();
+const { findByCategory } = useArtworkStore();
 
 /**
  * State & Props
  */
 const props = defineProps<{
   category: Category;
-  preview?: boolean;
 }>();
-
-const { previewMediaQueryClassName } = storeToRefs(flixBuilderStore);
 
 /**
  * Computed properties
@@ -84,16 +75,10 @@ const categoryPath = computed(() => {
   return {
     name: 'flix-category',
     params: {
-      flix: flixStore.currentFlix?.id,
       category: props.category.slug,
     },
   } as To;
 });
-
-/**
- * Methods
- */
-const { findByCategory } = artworkStore;
 </script>
 
 <style scoped lang="scss">
@@ -167,10 +152,7 @@ const { findByCategory } = artworkStore;
   @include artwork-slider-sm();
 }
 
-.preview {
-  &-tablet,
-  &-cellphone {
-    @include artwork-slider-sm();
-  }
+@include preview-container-down {
+  @include artwork-slider-sm();
 }
 </style>

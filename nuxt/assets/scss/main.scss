@@ -1,4 +1,3 @@
-// TODO: Should we just keep the h1-h3 in uppercase, since that is mostly used
 h1 {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-semibold);
@@ -14,36 +13,16 @@ h3 {
   font-weight: var(--font-weight-semibold);
 }
 
-@mixin responsive-typography {
-  h1 {
-    font-size: var(--font-size-l);
-  }
-
-  h2 {
-    font-size: var(--font-size-m);
-  }
-
-  h3 {
-    font-size: var(--font-size-base);
-  }
-}
-
 @include sm-screen-down {
-  @include responsive-typography()
-}
-
-#preview {
-  &.preview-tablet,
-  &.preview-cellphone {
-    @include responsive-typography()
-  }
+  @include responsive-typography();
 }
 
 body {
   background-color: var(--background-color);
 }
 
-body, #preview {
+body,
+.preview {
   color: var(--text-color);
   font-family: var(--font-family);
   font-size: var(--font-size-base);
@@ -89,6 +68,24 @@ a {
 
 .hide-element {
   display: none;
+}
+
+.scroller {
+  scrollbar-color: lightgray rgba(0, 0, 0, 0);
+  scrollbar-width: thin;
+}
+
+.scroller::-webkit-scrollbar {
+  width: var(--space-2);
+}
+
+.scroller::-webkit-scrollbar-thumb {
+  background: lightgray;
+  border-radius: var(--space-1);
+}
+
+.scroller::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);
 }
 
 /**

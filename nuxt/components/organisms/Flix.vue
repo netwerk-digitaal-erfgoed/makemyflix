@@ -3,8 +3,7 @@
     <MoleculesBrandingHeader />
     <OrganismsCategorySlider
       :categories="categories"
-      class="elevated"
-      :preview="preview" />
+      class="elevated" />
     <MoleculesBrandingIntro class="elevated" />
     <section class="categories">
       <div class="container">
@@ -14,8 +13,7 @@
           class="category">
           <OrganismsArtworkSlider
             class="slider"
-            :category="category"
-            :preview="preview" />
+            :category="category" />
         </div>
       </div>
     </section>
@@ -28,25 +26,13 @@
  */
 const categoriesStore = useCategoryStore();
 const artworkStore = useArtworkStore();
-
-/**
- * State & Props
- */
-const props = defineProps<{
-  preview?: boolean;
-}>();
-
 const { categories } = storeToRefs(categoriesStore);
 
 /**
  * Computed properties
  */
 const renderableCategories = computed(() => {
-  if (!props.preview) {
-    return categories.value;
-  }
-
-  return categories.value.slice(0, 2);
+  return categories.value;
 });
 
 /**

@@ -7,9 +7,7 @@
       :key="category.id"
       class="category-slide"
       :style="slideStyles">
-      <AtomsCategoryTeaser
-        :category="category"
-        :preview="preview" />
+      <AtomsCategoryTeaser :category="category" />
     </swiper-slide>
   </MoleculesSlider>
 </template>
@@ -17,7 +15,6 @@
 <script setup lang="ts">
 defineProps<{
   categories: Array<Category>;
-  preview?: boolean;
 }>();
 
 const categoriesSliderProps = {
@@ -46,6 +43,18 @@ const slideStyles = computed(() => {
 
     &:hover {
       width: var(--max-width-slide) !important;
+    }
+
+    @include preview-container-down {
+      &:hover {
+        width: 100% !important;
+      }
+    }
+
+    @include sm-screen-down {
+      &:hover {
+        width: 100% !important;
+      }
     }
   }
 

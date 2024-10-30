@@ -598,6 +598,32 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiCategoryMetaCategoryMeta extends Schema.CollectionType {
+  collectionName: 'category_metas';
+  info: {
+    singularName: 'category-meta';
+    pluralName: 'category-metas';
+    displayName: 'Category Meta';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+  };
+  attributes: {
+    uri: Attribute.String & Attribute.Required;
+    slug: Attribute.String & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::category-meta.category-meta', 'oneToOne', 'admin::user'> & Attribute.Private;
+    updatedBy: Attribute.Relation<'api::category-meta.category-meta', 'oneToOne', 'admin::user'> & Attribute.Private;
+  };
+}
+
 export interface ApiFlixFlix extends Schema.CollectionType {
   collectionName: 'flixes';
   info: {
@@ -607,44 +633,47 @@ export interface ApiFlixFlix extends Schema.CollectionType {
     description: '';
   };
   options: {
-    draftAndPublish: false;
+    draftAndPublish: true;
   };
   attributes: {
-    title: Attribute.String & Attribute.Required;
-    backgroundColor: Attribute.String & Attribute.CustomField<'plugin::color-picker.color'>;
+    hash: Attribute.String & Attribute.Unique;
     branding: Attribute.Component<'branding.branding'>;
-    fonts: Attribute.JSON &
-      Attribute.CustomField<
-        'plugin::multi-select.multi-select',
-        [
-          'Roboto',
-          'Open Sans',
-          'Lato',
-          'Montserrat',
-          'Roboto Condensed',
-          'Oswald',
-          'Poppins',
-          'Raleway',
-          'Slabo 27px',
-          'PT Sans',
-          'Noto Sans',
-          'Roboto Mono',
-          'Roboto Slab',
-          'Ubuntu',
-          'Merriweather',
-          'Lora',
-          'Playfair Display',
-          'Inter',
-          'Nunito',
-          'PT Serif',
-        ]
-      >;
-    uri: Attribute.String & Attribute.Required;
+    uri: Attribute.String & Attribute.Required & Attribute.Unique;
     data: Attribute.Component<'data-connection.data-connection'> & Attribute.Required;
+    theme: Attribute.Component<'theming.theming'>;
+    labels: Attribute.Component<'theming.labels'>;
+    seo: Attribute.Component<'seo.seo'>;
+    fallbackIIIF: Attribute.Boolean & Attribute.Required & Attribute.DefaultTo<true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::flix.flix', 'oneToOne', 'admin::user'> & Attribute.Private;
     updatedBy: Attribute.Relation<'api::flix.flix', 'oneToOne', 'admin::user'> & Attribute.Private;
+  };
+}
+
+export interface ApiItemMetaItemMeta extends Schema.CollectionType {
+  collectionName: 'item_metas';
+  info: {
+    singularName: 'item-meta';
+    pluralName: 'item-metas';
+    displayName: 'Item Meta';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+  };
+  attributes: {
+    uri: Attribute.String & Attribute.Required;
+    categoryId: Attribute.BigInteger & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::item-meta.item-meta', 'oneToOne', 'admin::user'> & Attribute.Private;
+    updatedBy: Attribute.Relation<'api::item-meta.item-meta', 'oneToOne', 'admin::user'> & Attribute.Private;
   };
 }
 
@@ -687,7 +716,9 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::category-meta.category-meta': ApiCategoryMetaCategoryMeta;
       'api::flix.flix': ApiFlixFlix;
+      'api::item-meta.item-meta': ApiItemMetaItemMeta;
       'api::side-note.side-note': ApiSideNoteSideNote;
     }
   }

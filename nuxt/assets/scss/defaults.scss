@@ -6,6 +6,9 @@
 
   --blues-blue: #0A3DFA;
   --blues-blue-5: rgba(10, 61, 250, 0.05);
+  --dark-gray: #454545;
+
+  --red-10: rgba(255, 0, 0, 0.1);
 
   --black-20: rgba(0, 0, 0, 0.2);
   --black-30: rgba(0, 0, 0, 0.3);
@@ -37,6 +40,7 @@
 
   // Spacing & Dimensions
   --space-0: 0.0625rem; // 1px
+  --space-a: 0.125rem;
 
   @for $i from 1 through 40 {
     $increment: 0.25rem;
@@ -52,4 +56,17 @@
   --transition-slider: 0.15s ease-in-out;
   --transition-accordeon: 0.4s ease-in-out;
   --transition-state: all 0.3s ease;
+
+  // Preview
+  --preview-width: 23.75rem;
+  --tablet-width: 64rem;
+  --tablet-height: 44.5rem;
+  --tablet-screen-width: 54rem;
+  --tablet-screen-height: 41.5rem;
+  --phone-width: 26.75rem;
+  --phone-height: 54.25rem;
+  --phone-screen-width: 23.5rem;
+  --phone-screen-height: 50.75rem;
+  --phone-header-width: 12.75rem; 
+  --phone-power-btn-top: 12.5rem;
 }

@@ -1,7 +1,5 @@
 <template>
-  <fieldset
-    class="sidebar"
-    :disabled="!ready">
+  <fieldset class="sidebar">
     <div class="title">
       <h2>Flix bouwer</h2>
     </div>
@@ -17,24 +15,23 @@
           </template>
           <template #default>
             <MoleculesFormInput
-              v-model="newFlix.primaryColor"
+              :modelValue="tempFlix.theme?.primary"
+              @update:modelValue="onThemeChange('primary', $event)"
               type="color"
               inline
               label="Primaire kleur" />
             <MoleculesFormInput
-              v-model="newFlix.secondaryColor"
+              :modelValue="tempFlix.theme?.secondary"
+              @update:modelValue="onThemeChange('secondary', $event)"
               type="color"
               inline
               label="Secundaire kleur" />
             <MoleculesFormInput
-              v-model="newFlix.tertiaryColor"
+              :modelValue="tempFlix.theme?.tertiary"
+              @update:modelValue="onThemeChange('tertiary', $event)"
               type="color"
               inline
               label="Tertiaire kleur" />
-            <!-- <MoleculesFormInput
-              type="color"
-              inline
-              label="Accenten" /> -->
           </template>
         </AtomsAccordeon>
         <div class="divider"></div>
@@ -44,9 +41,10 @@
           </template>
           <template #default>
             <MoleculesFormInput
-              v-model="newFlix.fontFamily"
+              :modelValue="tempFlix.theme?.font"
+              @update:modelValue="onThemeChange('font', $event)"
               type="select"
-              :options="typographyOptions" />
+              :options="supportedFonts" />
           </template>
         </AtomsAccordeon>
       </template>
@@ -63,24 +61,30 @@
         <AtomsAccordeon
           header="Naam"
           :initial="true">
-          <MoleculesFormInput v-model="newFlix.title" />
+          <MoleculesFormInput
+            :modelValue="tempFlix.branding?.intro.title"
+            @update:modelValue="onBrandingChange('title', $event)" />
         </AtomsAccordeon>
         <div class="divider"></div>
         <AtomsAccordeon header="Flix omschrijving">
-          <MoleculesFormInput v-model="newFlix.description" />
+          <MoleculesFormInput
+            :modelValue="tempFlix.branding?.intro.description"
+            @update:modelValue="onBrandingChange('description', $event)" />
         </AtomsAccordeon>
         <div class="divider"></div>
         <AtomsAccordeon header="Flix logo (optioneel)">
           <MoleculesFormUpload
             id="input-logo"
-            v-model="newFlix.logo"
+            :modelValue="tempFlix.branding?.logo"
+            @update:modelValue="onFileUpload('logo', $event)"
             prompt="Selecteer vanuit je browser of sleep in dit vlak om te uploaden" />
         </AtomsAccordeon>
         <div class="divider"></div>
         <AtomsAccordeon header="Flix banner (optioneel)">
           <MoleculesFormUpload
             id="input-banner"
-            v-model="newFlix.banner"
+            :modelValue="tempFlix.branding?.banner"
+            @update:modelValue="onFileUpload('banner', $event)"
             prompt="Selecteer vanuit je browser of sleep in dit vlak om te uploaden" />
         </AtomsAccordeon>
       </template>
@@ -95,28 +99,23 @@
       <template #default>
         <div class="responsive-view-buttons">
           <button
-            v-for="device in devices"
-            :key="device"
+            v-for="viewport in supportedViewports"
+            :key="viewport"
             type="button"
             class="responsive-view-button"
-            :class="{ active: previewView === device }"
-            @click="previewView = device">
-            <Icon
-              :icon="`mdi:${device}`"
-              :width="responsiveButtonIconSize"
-              :height="responsiveButtonIconSize" />
+            :class="{ active: currentViewport === viewport }"
+            @click="currentViewport = viewport">
+            <Icon :icon="`mdi:${viewport}`" />
           </button>
         </div>
       </template>
     </AtomsAccordeon>
-    <div
-      class="publish"
-      v-if="ready">
+    <div class="publish">
       <AtomsButton
-        :disabled="!publishable"
-        @click="emit('publish')"
-        >PUBLICEER JOUW FLIX SITE</AtomsButton
-      >
+        :disabled="!isPublishable"
+        @click="flixStore.saveDraft(true)">
+        PUBLICEER JOUW FLIX SITE
+      </AtomsButton>
     </div>
   </fieldset>
 </template>
@@ -125,139 +124,87 @@
 /**
  * Constants
  */
-const responsiveButtonIconSize = '1.8em';
-const typographyOptions = ['Poppins', 'Times New Roman'];
-const devices: PreviewMediaQuery[] = ['laptop', 'tablet', 'cellphone'];
+const DEFAULT: Flix = {
+  publishedAt: null,
+  branding: {
+    name: '',
+    intro: {
+      title: '',
+      description: '',
+    },
+    logo: null,
+    banner: null,
+  } as Branding,
+  theme: {
+    primary: '#ffffff',
+    secondary: '#000000',
+    tertiary: '#f2f5ff',
+    font: 'Poppins',
+  } as Theme,
+  uri: '',
+};
 
 /**
- * Deps
+ * State & props
  */
 const flixStore = useFlixStore();
-const flixBuilderStore = useFlixBuilderStore();
-const themeStore = useThemeStore();
+const { currentFlix, currentViewport, isPublishable } = storeToRefs(flixStore);
+const tempFlix = ref<Flix>(currentFlix.value ?? DEFAULT);
 
-/**
- * State
- */
-const props = defineProps<{
-  ready?: boolean;
-}>();
-const emit = defineEmits(['publish']);
-const { newFlix, previewView } = storeToRefs(flixBuilderStore);
-const { currentFlix } = storeToRefs(flixStore);
+useSetStyling(tempFlix.value.theme!);
 
 /**
  * Computed properties
  */
-const publishable = computed(() => {
-  return props.ready && flixBuilderStore.newFlixSlug !== 'nieuwe-flix';
+const supportedViewports = computed<PreviewMediaQuery[]>(() => {
+  return ['laptop', 'tablet', 'cellphone'];
 });
 
-/**
- * Methods
- */
-const objectUrls: Record<string, string> = {};
-const syncUploadedImage = (type: 'logo' | 'banner', image: UploadedImage | File | null | undefined) => {
-  if (image instanceof File) {
-    if (objectUrls[type]) {
-      URL.revokeObjectURL(objectUrls[type]);
-    }
+const supportedFonts = computed<string[]>(() => {
+  return ['Poppins', 'Times New Roman'];
+});
 
-    if (!currentFlix.value!.branding) {
-      currentFlix.value!.branding = {} as any;
-    }
+const onBrandingChange = (prop: 'title' | 'description', value: string) => {
+  const branding = tempFlix.value?.branding ?? ({} as Branding);
+  branding.intro = branding.intro ?? ({} as Intro);
+  branding.intro[prop] = value;
 
-    if (!currentFlix.value!.branding?.[type]) {
-      currentFlix.value!.branding![type] = {} as any;
-    }
-
-    const url = URL.createObjectURL(image);
-    objectUrls[type] = url;
-    currentFlix.value!.branding![type].url = url;
-  } else if (image == null) {
-    const url = objectUrls[type];
-
-    if (url) {
-      URL.revokeObjectURL(url);
-      delete objectUrls[type];
-    }
-
-    if (currentFlix.value?.branding?.[type]) {
-      delete currentFlix.value!.branding![type];
-    }
+  // If the prop is title, we should also update the name and the uri
+  if (prop === 'title') {
+    branding.name = value;
+    tempFlix.value.uri = `${window.location.origin}/${useSlugify(value)}`;
   }
+  tempFlix.value.branding = branding;
 };
 
-const update = useDebounce(flixBuilderStore.saveDraftFlix, 1000);
+const onFileUpload = async (prop: 'logo' | 'banner', file: File | null) => {
+  const branding = tempFlix.value?.branding ?? ({} as Branding);
+  branding[prop] = file === null ? null : (await useUploadImage(file)) ?? null;
+  tempFlix.value.branding = branding;
+};
 
-/**
- * Watchers
- */
+const onThemeChange = (prop: 'primary' | 'secondary' | 'tertiary' | 'font', color: string) => {
+  const theme = tempFlix.value?.theme ?? ({} as Theme);
+  theme[prop] = color;
+  tempFlix.value.theme = theme;
+  useSetStyling(theme);
+};
 
-// debounced update upon input change
+const updateStore = () => {
+  // Update the currentFlix with the tempFlix
+  currentFlix.value = tempFlix.value;
+  flixStore.saveDraft();
+};
+
+const debouncedSave = useDebounce(updateStore, 500);
+
 watch(
-  newFlix,
-  () => {
-    if (props.ready) {
-      update();
-    }
+  tempFlix,
+  async () => {
+    debouncedSave();
   },
   { deep: true },
 );
-
-// syncs theme input changes so that colors and fonts are immediately reflected in the preview
-watch(
-  () => flixBuilderStore.newFlixTheme,
-  () => {
-    themeStore.resetData();
-    themeStore.setThemeStyling(true);
-  },
-);
-
-// syncs intro input changes so that they are immediately reflected in the preview
-watch(
-  () => [newFlix.value.title, newFlix.value.description],
-  ([t, d]) => {
-    if (!currentFlix.value) {
-      return;
-    }
-
-    if (!currentFlix.value.branding) {
-      currentFlix.value.branding = {} as any;
-    }
-
-    currentFlix.value.branding!.name = t ?? '';
-
-    if (!currentFlix.value.branding!.intro) {
-      currentFlix.value.branding!.intro = {} as any;
-    }
-
-    currentFlix.value.branding!.intro!.title = t ?? '';
-    currentFlix.value.branding!.intro!.description = d ?? '';
-
-    if (flixBuilderStore.newFlixSlug) {
-      currentFlix.value.id = flixBuilderStore.newFlixSlug;
-    }
-  },
-);
-
-// syncs images so that image uploads are immediately reflected in the preview
-watch(
-  () => [newFlix.value.logo, newFlix.value.banner],
-  ([logo, banner]) => {
-    syncUploadedImage('logo', logo);
-    syncUploadedImage('banner', banner);
-  },
-);
-
-/**
- * Lifecycle hooks
- */
-onUnmounted(() => {
-  for (const key in objectUrls) {
-    URL.revokeObjectURL(objectUrls[key]);
-  }
-});
 </script>
 
 <style lang="scss" scoped>
@@ -314,6 +261,8 @@ onUnmounted(() => {
   transition: var(--transition-state);
 
   svg {
+    width: var(--space-10);
+    height: var(--space-10);
     transition: var(--transition-state);
   }
 
