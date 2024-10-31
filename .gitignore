@@ -1,4 +1,5 @@
 # Root .gitignore
+.env
 
 # Node.js
 node_modules/

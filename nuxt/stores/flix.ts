@@ -5,7 +5,7 @@ export const useFlixStore = defineStore('flix', () => {
   const currentFlix = ref<Flix>();
   const currentToken = ref<string>();
   const currentViewport = ref<PreviewMediaQuery>('laptop');
-  const isPreview = ref(false);
+  const isPreview = ref(true);
 
   /**
    * Computed Properties
@@ -39,7 +39,7 @@ export const useFlixStore = defineStore('flix', () => {
     // Reset the values back to default
     currentFlix.value = undefined;
     currentToken.value = undefined;
-    isPreview.value = false;
+    isPreview.value = true;
     currentViewport.value = 'laptop';
 
     // Also clean up other stores
@@ -106,15 +106,13 @@ export const useFlixStore = defineStore('flix', () => {
     }
 
     // Check if we are publishing
-    if (publish) {
-      currentFlix.value.publishedAt = useStrapiDate();
-      currentFlix.value.status = 'published';
-    }
+    currentFlix.value.publishedAt = publish ? useStrapiDate() : null;
+    currentFlix.value.status = publish ? 'published' : 'draft';
+    isPreview.value = !publish;
 
     // Save the flix
     const response = await useSaveFlix(currentFlix.value);
     if (response?.flix) {
-      isPreview.value = !!publish;
       currentFlix.value = response.flix;
       currentToken.value = response.hash;
       return response.hash;
