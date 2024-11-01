@@ -34,10 +34,12 @@ for development purposes we use the docker compose approach to make this easier 
 
 2. **Set up environment variables:**
 
-    Copy the example environment file and modify it as needed:
+    Copy the example environment files and modify them as needed:
 
     ```sh
     cp .env.example .env
+    cp nuxt/.env.example nuxt/.env
+    cp strapi/.env.example strapi/.env
     ```
 
 3. **Run the project:**
