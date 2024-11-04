@@ -51,7 +51,6 @@ export const useFlixStore = defineStore('flix', () => {
   };
 
   const setupFlix = async (flix: string) => {
-    console.warn('Flix.ts#SetupFlix');
     try {
       // Construct the flixUri
       const flixUri = `${window.location.origin}/${flix}`;
