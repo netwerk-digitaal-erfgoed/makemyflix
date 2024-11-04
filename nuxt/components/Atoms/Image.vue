@@ -6,7 +6,6 @@
 </template>
 
 <script setup lang="ts">
-const config = useRuntimeConfig();
 const { supportIIIF } = storeToRefs(useFlixStore());
 const props = withDefaults(
   defineProps<{
