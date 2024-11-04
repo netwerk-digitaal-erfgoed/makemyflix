@@ -8,16 +8,16 @@ export default defineNuxtRouteMiddleware(to => {
   const artworkStore = useArtworkStore();
   const currentArtwork = artworkStore.findBySlug(artwork);
 
+  // If we have a current artwork, do nothing
   if (currentArtwork) {
     return;
   }
 
-  // Note: We add the flix here since it's not going through AtomsNavigation
-  return navigateTo({
-    name: 'flix-category',
-    params: {
-      flix: currentFlix!.id,
-      category,
-    },
-  });
+  // If we have a currentFlix and a category, navigate to that
+  if (currentFlix && category) {
+    return navigateTo(`${currentFlix!.uri}/${category}`, { external: true });
+  }
+
+  // Worst case scenario, navigate to the home page
+  return '/';
 });

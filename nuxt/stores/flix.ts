@@ -5,7 +5,7 @@ export const useFlixStore = defineStore('flix', () => {
   const currentFlix = ref<Flix>();
   const currentToken = ref<string>();
   const currentViewport = ref<PreviewMediaQuery>('laptop');
-  const isPreview = ref(true);
+  const isPreview = ref(false);
 
   /**
    * Computed Properties
@@ -39,7 +39,7 @@ export const useFlixStore = defineStore('flix', () => {
     // Reset the values back to default
     currentFlix.value = undefined;
     currentToken.value = undefined;
-    isPreview.value = true;
+    isPreview.value = false;
     currentViewport.value = 'laptop';
 
     // Also clean up other stores

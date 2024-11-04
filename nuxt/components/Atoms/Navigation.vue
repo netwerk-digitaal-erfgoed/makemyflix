@@ -9,7 +9,7 @@
 <script setup lang="ts">
 const router = useRouter();
 const { $navigate } = useNuxtApp();
-const { currentFlix, isPreview } = useFlixStore();
+const { currentFlix, isPreview } = storeToRefs(useFlixStore());
 
 const props = withDefaults(
   defineProps<{
@@ -37,10 +37,10 @@ const route = computed(() => {
 });
 
 const animateNavigation = () => {
-  if (isPreview) {
+  if (isPreview.value) {
     return;
   }
-  return $navigate(route.href, props.direction);
+  return $navigate(route.value, props.direction);
 };
 </script>
 
