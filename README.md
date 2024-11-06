@@ -66,6 +66,23 @@ This is not something that is part of the installation and needs to be done afte
 
     Unfortunately Nuxt needs to reload to get the new setup, so restart the docker compose to do so using `docker compose restart`
 
+4. **Stopping services**
+    Use (ctrl-c and) `docker compose down`to stop the running services and remove the containers.
+
+## Using MakeMyFlix
+
+1. **Create an new Flix**
+    Goto http://localhost:1000/create/ to create a new flix by entering the SPARQL-endpoint URL and the category and item queries (detail information on how to build these queries will be added, look at https://github.com/netwerk-digitaal-erfgoed/heritageflix-configs for examples)
+
+2. **Configure the design**
+    After saving the new Flix in step 1 you will enter the preview configuration dialog where you can personalize the UI of the Flix.
+    
+    _Note: In this step you a token parameter is added in as part of the URL. You can update the new Flix by specifying this token. So save this token to updated the Flix in the future. To edit the queries use: `http://localhost:1000/create?token=<saved token>`. To edit the personalization use: `http://localhost:1000/create/preview?token=<saved token>`_
+
+3. **Running the flix**
+    Finaly the new Flix will be available at http://localhost:1000/<name-of-the-flix> using the name of the Flix specified in step 2.
+
+
 ## Contributing
 We welcome contributions! Please follow these steps to contribute:
 
