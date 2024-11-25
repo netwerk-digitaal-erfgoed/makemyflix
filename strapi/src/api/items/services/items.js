@@ -115,6 +115,8 @@ module.exports = () => ({
     const transformedItems = [];
     for (const item of items) {
       const properties = generateProperties(item);
+      properties['originalLink'] = { value: item.heritageObject };
+
       const slug = slugify(item.name || '');
       const id =
         itemMetas.find(meta => meta.uri === item.heritageObject)?.id ||

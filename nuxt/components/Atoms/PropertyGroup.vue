@@ -4,7 +4,7 @@
     <AtomsProperty
       v-for="property in properties"
       :key="property"
-      :label="property.label"
+      :label="property.label ?? property.value"
       :value="property.value"
       :allow-link="allowLink" />
   </div>
