@@ -28,8 +28,16 @@ const props = withDefaults(
 
 const imageUrl = computed<string>(() => {
   const { identifier, region, size, rotation, quality, format } = props;
-  if (!supportIIIF.value || useIsIIIF(identifier)) {
+  if (!supportIIIF.value) {
     return identifier;
+  }
+
+  if (useIsIIIF(identifier)) {
+    const parts = identifier.split('/');
+    parts[parts.length - 4] = region;
+    parts[parts.length - 3] = size;
+    parts[parts.length - 2] = rotation;
+    return parts.join('/');
   }
   return `/api/images/${btoa(identifier)}/${region}/${size}/${rotation}/${quality}.${format}`;
 });
