@@ -22,6 +22,9 @@
     },
     "publisherURI": {
       "type": "string"
+    },
+    "originalLink": {
+      "type": "string"
     }
   }
 }
