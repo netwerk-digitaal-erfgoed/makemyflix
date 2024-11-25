@@ -22,7 +22,7 @@ const props = withDefaults(
 );
 
 const route = computed(() => {
-  const flixName = currentFlix.value?.uri.split('/').pop();
+  const flixName = currentFlix.value?.uri?.split('/').pop();
   if (!flixName) {
     return { href: '' };
   }
