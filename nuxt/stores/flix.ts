@@ -99,7 +99,7 @@ export const useFlixStore = defineStore('flix', () => {
     }
   };
 
-  const saveDraft = async (publish?: true): Promise<string | void> => {
+  const saveDraft = async (publish?: true): Promise<Record<string, any> | undefined> => {
     // No currentFlix to save, just return
     if (!currentFlix.value) {
       return;
@@ -115,9 +115,8 @@ export const useFlixStore = defineStore('flix', () => {
     if (response?.flix) {
       currentFlix.value = response.flix;
       currentToken.value = response.hash;
-      return response.hash;
     }
-    return;
+    return response;
   };
 
   return {
