@@ -8,17 +8,20 @@ export default defineEventHandler(async event => {
   const headers = generateHeaders(event);
   const url = `${backendUrl}/flixes${body.id ? `/${body.id}` : ''}`;
   const method = body.id ? 'PUT' : 'POST';
-  const { data } = await $fetch<StrapiApiResponse<StrapiEntity<Flix>>>(url, {
+  const response = await $fetch<Record<string, any>>(url, {
     method,
     headers,
     body: JSON.stringify({ data: body }),
   });
 
-  return {
-    flix: {
-      ...body,
-      id: data.id,
-    },
-    hash: data.attributes.hash,
-  };
+  if (response?.id) {
+    return {
+      flix: {
+        ...body,
+        id: response.id,
+      },
+      hash: response.hash,
+    };
+  }
+  return response;
 });
