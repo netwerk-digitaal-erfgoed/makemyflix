@@ -73,29 +73,39 @@ await flixStore.createDraft(query.token);
  * Methods
  */
 const nextStep = async () => {
-  const { data } = unref(currentFlix);
-
-  if (!data.endpointUrl || !data.categoryQuery || !data.itemsQuery) {
-    showErrors.value = true;
-    errorMessages.value = 'Gelieve alle velden in te vullen.';
-    return;
-  }
   // Save the current flix
-  const token = await flixStore.saveDraft(query.token);
+  const response = await flixStore.saveDraft(query.token);
 
-  // If there was an error, show a generic message.
-  // Note: Don't show the actual error to the user, since it's most likely an issue for us, unlike validation errors
-  if (!token) {
-    showErrors.value = true;
-    errorMessages.value = 'Er is iets fout gegaan bij het opslaan, controlleer alle velden en probeer het opnieuw.';
-  } else {
-    // Goto the next step
-    navigateTo({
-      path: `/create/preview`,
-      query: {
-        token,
-      },
-    });
+  // Only do things if we get a response
+  if (response) {
+    // Error or not, we update the path if we don't have a token yet.
+    if (!query.token && response.hash) {
+      await navigateTo(
+        {
+          path: `/create`,
+          query: {
+            token: response.hash,
+          },
+        },
+        {
+          replace: true,
+        },
+      );
+    }
+
+    // Check if the response has a message, if so update showErrors and errorMessages
+    if (response.code) {
+      showErrors.value = true;
+      errorMessages.value = useHumanReableMessage(response.code);
+    } else {
+      // Goto the next step
+      await navigateTo({
+        path: `/create/preview`,
+        query: {
+          token: response.hash,
+        },
+      });
+    }
   }
 };
 </script>
