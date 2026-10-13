@@ -8,8 +8,10 @@ module.exports = [
         useDefaults: true,
         directives: {
           'connect-src': ["'self'", 'https:'],
-          'img-src': ["'self'", 'data:', 'blob:', 'market-assets.strapi.io', process.env.S3_PUBLIC_URL],
-          'media-src': ["'self'", 'data:', 'blob:', 'market-assets.strapi.io', process.env.S3_PUBLIC_URL],
+          // S3_ENDPOINT as well as S3_PUBLIC_URL: the public URL may redirect to the storage
+          // endpoint, and browsers check the redirect target against the policy too.
+          'img-src': ["'self'", 'data:', 'blob:', 'market-assets.strapi.io', process.env.S3_PUBLIC_URL, process.env.S3_ENDPOINT],
+          'media-src': ["'self'", 'data:', 'blob:', 'market-assets.strapi.io', process.env.S3_PUBLIC_URL, process.env.S3_ENDPOINT],
           upgradeInsecureRequests: null,
         },
       },
